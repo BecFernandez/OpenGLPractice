@@ -63,69 +63,85 @@ unsigned int LoadTexture(const char * Texture, unsigned int format, unsigned int
 	return texID;
 }
 
-Sprite::Sprite(float x, float y, float z, float r, float g, float b, unsigned int w, unsigned int h, const char * texName)
+Sprite::Sprite(glm::vec4 a_position,
+		glm::vec4 a_colour,
+		unsigned int a_uiWidth, unsigned int a_uiHeight, const char* a_szTexName)
 {
-	if(texName != NULL)
-		texture = LoadTexture(texName, GL_RGBA, NULL, NULL, NULL);  
-	this->centrex = x;
-	this->centrey = y;
-	this->centrez = z;
+	if(a_szTexName != nullptr)
+		m_uiTexture = LoadTexture(a_szTexName, GL_RGBA, NULL, NULL, NULL);  
+	else
+		m_uiTexture = 0;
+	
+	m_oCentrePos = a_position;
 
-	this->width= w;
-	this->height = h;
+	m_uiWidth= a_uiWidth;
+	m_uiHeight = a_uiHeight;
 
+	//set up four corners based on centre pos, width and height
+	//will prob change this to just set up around zero
+	//then in update will place in world using matrix math
+	//
+	//also setting up texture coords
 	for(int i = 0; i < 4; i++)
 	{
-		corners[i].posz = z;
-		corners[i].r = r;
-		corners[i].g = g;
-		corners[i].b = b;
-		corners[i].a = 1.0f;
+		m_corners[i].position.z = a_position.z;
+		m_corners[i].position.w = 1;
+		m_corners[i].colour = a_colour;
+
 		if(i/2)
 		{
-			corners[i].posx = centrex - width*0.5;
-			corners[i].u = 0;
+			m_corners[i].position.x = m_oCentrePos.x - m_uiWidth*0.5;
+			m_corners[i].texCoords.s = 0;
 		}
 		else
 		{
-			corners[i].posx = centrex + width*0.5;
-			corners[i].u = 1;
+			m_corners[i].position.x = m_oCentrePos.x + m_uiWidth*0.5;
+			m_corners[i].texCoords.s = 1;
 		}
 		if(i%3)
 		{
-			corners[i].posy = centrey + height*0.5;
-			corners[i].v = 1;
+			m_corners[i].position.y = m_oCentrePos.y + m_uiHeight*0.5;
+			m_corners[i].texCoords.t = 1;
 		}
 		else
 		{
-			corners[i].posy = centrey - height*0.5;
-			corners[i].v = 0;
+			m_corners[i].position.y = m_oCentrePos.y - m_uiHeight*0.5;
+			m_corners[i].texCoords.t = 0;
 		}
 	}
 }
 
+void Sprite::Update()
+{
+
+}
+
 void Sprite::Draw(GLuint VBO, GLuint IBO, GLSLProgram *shader)
 {
+	//copy vertices to GPU in case they have changed
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
 	GLvoid *vBuffer = glMapBuffer(GL_ARRAY_BUFFER, GL_WRITE_ONLY);
-	memcpy(vBuffer, corners, sizeof(Vertex)*4);
+	memcpy(vBuffer, m_corners, sizeof(Vertex)*4);
 	glUnmapBuffer(GL_ARRAY_BUFFER);
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO);
 
-	glEnableClientState(GL_VERTEX_ARRAY);
+	glBindTexture(GL_TEXTURE_2D, m_uiTexture);
+
 	glEnableVertexAttribArray(0);
 	glEnableVertexAttribArray(1);
-	glVertexAttribPointer(0, 3, GL_FLOAT,GL_FALSE, sizeof(struct Vertex), (void*)0);
-	glVertexAttribPointer(1, 4, GL_FLOAT,GL_FALSE, sizeof(struct Vertex), (void*)(sizeof(float)*3));
-
+	glEnableVertexAttribArray(2);
+	glVertexAttribPointer(0, 4, GL_FLOAT,GL_FALSE, sizeof(struct Vertex), (void*)0);
+	glVertexAttribPointer(1, 4, GL_FLOAT,GL_FALSE, sizeof(struct Vertex), (void*)(sizeof(glm::vec4)));
+	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(struct Vertex), (void*)(sizeof(glm::vec4)*2));
 
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, (void*)0);
 
+	glDisableVertexAttribArray(2);
+	glDisableVertexAttribArray(1);
 	glDisableVertexAttribArray(0);
 
-
-	glDisableClientState(GL_VERTEX_ARRAY);
+	glBindTexture(GL_TEXTURE_2D, 0);
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);

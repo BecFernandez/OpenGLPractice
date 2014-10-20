@@ -7,24 +7,27 @@
 
 struct Vertex
 {
-	float posx, posy, posz;
-	float r, g, b,a;
-	float u, v;
+	glm::vec4 position; 
+	glm::vec4 colour;
+	glm::vec2 texCoords;
 };
 
 class Sprite
 {
 private:
-	Vertex corners[4];
-	float centrex, centrey, centrez;
-	unsigned int texture;
-	unsigned int width, height;
+	Vertex m_corners[4]; //all my sprites are squares
+	glm::vec4 m_oCentrePos; //used to calculate all four edges
+	unsigned int m_uiTexture;
+	unsigned int m_uiWidth, m_uiHeight;
+	
 
 public:
-	Sprite(float x, float y, float z,
-		float r, float g, float b,
-		unsigned int width, unsigned int height, const char* texName);
+	Sprite(glm::vec4 a_position,
+		glm::vec4 a_colour,
+		unsigned int a_uiWidth, unsigned int a_uiHeight, const char* a_szTexName);
 	void Draw(GLuint VBO, GLuint IBO, GLSLProgram *shader);
+	//will change this to take in delta time
+	void Update();
 };
 
 unsigned int LoadTexture(const char * Texture, unsigned int format, 

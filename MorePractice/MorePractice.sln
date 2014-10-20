@@ -1,7 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Studio 2010
+# Visual C++ Express 2010
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MorePractice", "MorePractice\MorePractice.vcxproj", "{31F5F752-8FBC-4B30-8D5D-00D65A78339E}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CommonOpenGLCode", "CommonOpenGLCode\CommonOpenGLCode.vcxproj", "{8FC79638-B005-4AE7-84A7-44E401E3BE9E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -13,6 +15,10 @@ Global
 		{31F5F752-8FBC-4B30-8D5D-00D65A78339E}.Debug|Win32.Build.0 = Debug|Win32
 		{31F5F752-8FBC-4B30-8D5D-00D65A78339E}.Release|Win32.ActiveCfg = Release|Win32
 		{31F5F752-8FBC-4B30-8D5D-00D65A78339E}.Release|Win32.Build.0 = Release|Win32
+		{8FC79638-B005-4AE7-84A7-44E401E3BE9E}.Debug|Win32.ActiveCfg = Debug|Win32
+		{8FC79638-B005-4AE7-84A7-44E401E3BE9E}.Debug|Win32.Build.0 = Debug|Win32
+		{8FC79638-B005-4AE7-84A7-44E401E3BE9E}.Release|Win32.ActiveCfg = Release|Win32
+		{8FC79638-B005-4AE7-84A7-44E401E3BE9E}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

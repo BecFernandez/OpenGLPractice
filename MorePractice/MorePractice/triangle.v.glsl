@@ -1,18 +1,18 @@
 #version 330
 
-in vec3 vertexPosition;
+in vec4 vertexPosition;
 in vec4 vertexColour;
-in vec3 vertexTexCoord;
+in vec2 vertexTexCoord;
 
-out vec3 TexCoord;
+out vec2 TexCoord;
 out vec4 colour;
 
 uniform mat4 RotationMatrix;
 
 void main()
 {
-	//TexCoord = vertexTexCoord;
+	TexCoord = vertexTexCoord;
 	
-	gl_Position = vec4(vertexPosition, 1.0);
+	gl_Position = vertexPosition;
 	colour = vertexColour;
 }

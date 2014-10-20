@@ -68,29 +68,29 @@ int main()
 
 	glClearColor(0.0, 0.0, 0.2, 1.0);
 
-	//load shaders
-	
+	//load shaders, compile and link	
 	shaders.compileShaderFromFile("triangle.v.glsl", VERTEX);
 	shaders.compileShaderFromFile("triangle.f.glsl", FRAGMENT);
-	shaders.bindAttribLocation(0, "VertexPosition");
-	shaders.bindAttribLocation(1, "VertexColour");
 	shaders.link();
 	shaders.use();
 
-	//create VBO and IBO for sprites
+	//create VBO and IBO for sprites - they are out here so all sprites can share buffers
 	GLuint spriteVBO;
 	glGenBuffers(1, &spriteVBO);
 	glBindBuffer(GL_ARRAY_BUFFER, spriteVBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(struct Vertex)*4, NULL, GL_STATIC_DRAW);
+	//stream draw is to tell OpenGL that the data in this buffer will be modified every frame
+	glBufferData(GL_ARRAY_BUFFER, sizeof(struct Vertex)*4, NULL, GL_STREAM_DRAW);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
 
 	int spriteIndices[6] = {0, 1, 2, 0, 2, 3};
 	GLuint spriteIBO;
 	glGenBuffers(1, &spriteIBO);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, spriteIBO);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(int)*6, &spriteIndices[0], GL_STATIC_DRAW);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
 	//set up sprite
-	Sprite fuzz(0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1, 1, "pic.jpg");
+	Sprite fuzz(glm::vec4(0, 0, 0, 0), glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), 1, 1, "pic.jpg");
 	float angle = 0;
 
 	glEnable(GL_BLEND);
@@ -100,11 +100,7 @@ int main()
 	{
 		//update
 
-		//angle+= 0.01;
 		
-		//mat4 rotationMatrix = glm::rotate(mat4(1.0f), angle, vec3(0.0f, 0.0f, 1.0f));
-
-		//shaders.setUniform("RotationMatrix", rotationMatrix);
 
 		//draw
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);

@@ -18,9 +18,6 @@
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ShaderLoader.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Sprite.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -34,9 +31,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="ShaderLoader.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Sprite.h">
       <Filter>Header Files</Filter>
     </ClInclude>
