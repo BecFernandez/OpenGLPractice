@@ -1,6 +1,7 @@
 #include "Sprite.h"
 #include <FreeImage.h>
 #include <iostream>
+#include <gtc\matrix_transform.hpp>
 
 unsigned int LoadTexture(const char * Texture, unsigned int format, unsigned int* width, unsigned int* height, unsigned int *bpp)
 {
@@ -63,19 +64,15 @@ unsigned int LoadTexture(const char * Texture, unsigned int format, unsigned int
 	return texID;
 }
 
-Sprite::Sprite(glm::vec4 a_position,
+Sprite::Sprite(glm::vec3 a_position,
 		glm::vec4 a_colour,
-		unsigned int a_uiWidth, unsigned int a_uiHeight, const char* a_szTexName)
+		unsigned int a_uiWidth, unsigned int a_uiHeight, const char* a_szTexName) 
+		: m_oCentrePos(a_position), m_uiWidth(a_uiWidth), m_uiHeight(a_uiHeight)
 {
 	if(a_szTexName != nullptr)
 		m_uiTexture = LoadTexture(a_szTexName, GL_RGBA, NULL, NULL, NULL);  
 	else
 		m_uiTexture = 0;
-	
-	m_oCentrePos = a_position;
-
-	m_uiWidth= a_uiWidth;
-	m_uiHeight = a_uiHeight;
 
 	//set up four corners based on centre pos, width and height
 	//will prob change this to just set up around zero
@@ -84,28 +81,28 @@ Sprite::Sprite(glm::vec4 a_position,
 	//also setting up texture coords
 	for(int i = 0; i < 4; i++)
 	{
-		m_corners[i].position.z = a_position.z;
+		m_corners[i].position.z = 0;
 		m_corners[i].position.w = 1;
 		m_corners[i].colour = a_colour;
 
 		if(i/2)
 		{
-			m_corners[i].position.x = m_oCentrePos.x - m_uiWidth*0.5;
+			m_corners[i].position.x =  m_uiWidth *0.5 * -1;
 			m_corners[i].texCoords.s = 0;
 		}
 		else
 		{
-			m_corners[i].position.x = m_oCentrePos.x + m_uiWidth*0.5;
+			m_corners[i].position.x = m_uiWidth*0.5;
 			m_corners[i].texCoords.s = 1;
 		}
 		if(i%3)
 		{
-			m_corners[i].position.y = m_oCentrePos.y + m_uiHeight*0.5;
+			m_corners[i].position.y = m_uiHeight*0.5;
 			m_corners[i].texCoords.t = 1;
 		}
 		else
 		{
-			m_corners[i].position.y = m_oCentrePos.y - m_uiHeight*0.5;
+			m_corners[i].position.y = m_uiHeight*0.5 * -1;
 			m_corners[i].texCoords.t = 0;
 		}
 	}
@@ -113,7 +110,8 @@ Sprite::Sprite(glm::vec4 a_position,
 
 void Sprite::Update()
 {
-
+	//so in here I really just need to modify the world matrix
+	m_globalTransform = glm::translate(glm::mat4(1), glm::vec3(m_oCentrePos.x, m_oCentrePos.y, m_oCentrePos.z));
 }
 
 void Sprite::Draw(GLuint VBO, GLuint IBO, GLSLProgram *shader)
@@ -127,6 +125,8 @@ void Sprite::Draw(GLuint VBO, GLuint IBO, GLSLProgram *shader)
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO);
 
 	glBindTexture(GL_TEXTURE_2D, m_uiTexture);
+
+	shader->setUniform("world", this->m_globalTransform);
 
 	glEnableVertexAttribArray(0);
 	glEnableVertexAttribArray(1);

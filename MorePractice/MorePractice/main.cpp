@@ -90,21 +90,29 @@ int main()
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
 	//set up sprite
-	Sprite fuzz(glm::vec4(0, 0, 0, 0), glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), 1, 1, "pic.jpg");
+	Sprite fuzz(glm::vec3(1024/2, 768/2, 0), glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), 51, 86, "ship.png");
 	float angle = 0;
 
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
+	//create projection matrix
+	glm::mat4 projectionMatrix = glm::ortho(0.0f, 1024.0f, 0.0f, 768.0f);
+
 	while(glfwGetWindowParam(GLFW_OPENED) != 0 && !windowClosed)
 	{
 		//update
-
+		fuzz.Update();
 		
 
 		//draw
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		shaders.use();
+		//set projection view matrix
+		shaders.setUniform("projectionView", projectionMatrix);
+
+
+
 		fuzz.Draw(spriteVBO, spriteIBO, &shaders);
 
 		glfwSwapBuffers();
