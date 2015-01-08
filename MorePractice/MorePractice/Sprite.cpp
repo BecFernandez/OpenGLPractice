@@ -67,7 +67,7 @@ unsigned int LoadTexture(const char * Texture, unsigned int format, unsigned int
 Sprite::Sprite(glm::vec3 a_position,
 		glm::vec4 a_colour,
 		unsigned int a_uiWidth, unsigned int a_uiHeight, const char* a_szTexName) 
-		: m_oCentrePos(a_position), m_uiWidth(a_uiWidth), m_uiHeight(a_uiHeight)
+		: m_oCentrePos(a_position), m_uiWidth(a_uiWidth), m_uiHeight(a_uiHeight), m_fRotationAngle(0)
 {
 	if(a_szTexName != nullptr)
 		m_uiTexture = LoadTexture(a_szTexName, GL_RGBA, NULL, NULL, NULL);  
@@ -87,22 +87,22 @@ Sprite::Sprite(glm::vec3 a_position,
 
 		if(i/2)
 		{
-			m_corners[i].position.x =  m_uiWidth *0.5 * -1;
+			m_corners[i].position.x =  (float)m_uiWidth *0.5f * (float)-1;
 			m_corners[i].texCoords.s = 0;
 		}
 		else
 		{
-			m_corners[i].position.x = m_uiWidth*0.5;
+			m_corners[i].position.x = (float)m_uiWidth*0.5f;
 			m_corners[i].texCoords.s = 1;
 		}
 		if(i%3)
 		{
-			m_corners[i].position.y = m_uiHeight*0.5;
+			m_corners[i].position.y = (float)m_uiHeight*0.5f;
 			m_corners[i].texCoords.t = 1;
 		}
 		else
 		{
-			m_corners[i].position.y = m_uiHeight*0.5 * -1;
+			m_corners[i].position.y = (float)m_uiHeight*0.5f * (float)-1;
 			m_corners[i].texCoords.t = 0;
 		}
 	}
@@ -111,7 +111,8 @@ Sprite::Sprite(glm::vec3 a_position,
 void Sprite::Update()
 {
 	//so in here I really just need to modify the world matrix
-	m_globalTransform = glm::translate(glm::mat4(1), glm::vec3(m_oCentrePos.x, m_oCentrePos.y, m_oCentrePos.z));
+	m_globalTransform = glm::translate(glm::mat4(1), glm::vec3(m_oCentrePos.x, m_oCentrePos.y, m_oCentrePos.z)) *
+		glm::rotate(glm::mat4(1), m_fRotationAngle, glm::vec3(0, 0, 1));
 }
 
 void Sprite::Draw(GLuint VBO, GLuint IBO, GLSLProgram *shader)

@@ -22,6 +22,7 @@ private:
 	
 protected:
 	glm::vec3 m_oCentrePos;
+	float m_fRotationAngle;
 
 public:
 	Sprite(glm::vec3 a_position,
@@ -29,7 +30,7 @@ public:
 		unsigned int a_uiWidth, unsigned int a_uiHeight, const char* a_szTexName);
 	void Draw(GLuint VBO, GLuint IBO, GLSLProgram *shader);
 	//will change this to take in delta time
-	void Update();
+	virtual void Update();
 };
 
 unsigned int LoadTexture(const char * Texture, unsigned int format, 
@@ -37,10 +38,3 @@ unsigned int LoadTexture(const char * Texture, unsigned int format,
 
 
 #endif
-
-/*
-OK, let's change this up so we're using matrices to place and move everything around.
-So I need a camera matrix for the world, a view matrix for the world, and a global matrix for each object
-
-
-*/

@@ -4,7 +4,7 @@
 #include <glm.hpp>
 #include <gtc\matrix_transform.hpp>
 #include "ShaderLoader.h"
-#include "Sprite.h"
+#include "Player.h"
 
 using glm::vec3;
 using glm::mat4;
@@ -90,7 +90,7 @@ int main()
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
 	//set up sprite
-	Sprite fuzz(glm::vec3(1024/2, 768/2, 0), glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), 51, 86, "ship.png");
+	Player fuzz(glm::vec3(1024/2, 768/2, 0), glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), 51, 86, "ship.png");
 	float angle = 0;
 
 	glEnable(GL_BLEND);
