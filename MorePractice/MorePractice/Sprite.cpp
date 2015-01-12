@@ -108,6 +108,16 @@ Sprite::Sprite(glm::vec3 a_position,
 	}
 }
 
+glm::vec3 Sprite::getCentrePos()
+{
+	return m_oCentrePos;
+}
+
+float Sprite::getRotationAngle()
+{
+	return m_fRotationAngle;
+}
+
 void Sprite::Update()
 {
 	//so in here I really just need to modify the world matrix

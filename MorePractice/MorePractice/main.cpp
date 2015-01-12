@@ -5,6 +5,7 @@
 #include <gtc\matrix_transform.hpp>
 #include "ShaderLoader.h"
 #include "Player.h"
+#include "Enemy.h"
 
 using glm::vec3;
 using glm::mat4;
@@ -90,7 +91,9 @@ int main()
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
 	//set up sprite
+	//image credit to Itsomi on deviantart - http://www.deviantart.com/art/Viper-MkII-sprite-59124754
 	Player fuzz(glm::vec3(1024/2, 768/2, 0), glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), 51, 86, "ship.png");
+	Enemy cylon(glm::vec3(100, 100, 0), glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), 51, 86, "cylon.png");
 	float angle = 0;
 
 	glEnable(GL_BLEND);
@@ -103,7 +106,7 @@ int main()
 	{
 		//update
 		fuzz.Update();
-		
+		cylon.Update(fuzz.getCentrePos());
 
 		//draw
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -114,6 +117,7 @@ int main()
 
 
 		fuzz.Draw(spriteVBO, spriteIBO, &shaders);
+		cylon.Draw(spriteVBO, spriteIBO, &shaders);
 
 		glfwSwapBuffers();
 	}

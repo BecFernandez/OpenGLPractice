@@ -28,6 +28,8 @@ public:
 	Sprite(glm::vec3 a_position,
 		glm::vec4 a_colour,
 		unsigned int a_uiWidth, unsigned int a_uiHeight, const char* a_szTexName);
+	glm::vec3 getCentrePos();
+	float getRotationAngle();
 	void Draw(GLuint VBO, GLuint IBO, GLSLProgram *shader);
 	//will change this to take in delta time
 	virtual void Update();
