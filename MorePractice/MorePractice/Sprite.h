@@ -25,14 +25,18 @@ protected:
 	float m_fRotationAngle;
 
 public:
+	Sprite();
 	Sprite(glm::vec3 a_position,
 		glm::vec4 a_colour,
 		unsigned int a_uiWidth, unsigned int a_uiHeight, const char* a_szTexName);
 	glm::vec3 getCentrePos();
+	void setCentrePos(glm::vec3 a_oCentrePos);
 	float getRotationAngle();
-	void Draw(GLuint VBO, GLuint IBO, GLSLProgram *shader);
+	void setRotationAngle(float a_fRotationAngle);
+	virtual void Draw(GLuint VBO, GLuint IBO, GLSLProgram *shader);
 	//will change this to take in delta time
 	virtual void Update();
+	void setTexture(const char* a_szTexName);
 };
 
 unsigned int LoadTexture(const char * Texture, unsigned int format, 

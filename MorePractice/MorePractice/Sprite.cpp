@@ -64,6 +64,39 @@ unsigned int LoadTexture(const char * Texture, unsigned int format, unsigned int
 	return texID;
 }
 
+Sprite::Sprite() : m_oCentrePos(glm::vec3(0)), m_uiWidth(10), m_uiHeight(30), m_fRotationAngle(0)
+{
+	m_uiTexture = 0;
+
+	for(int i = 0; i < 4; i++)
+	{
+		m_corners[i].position.z = 0;
+		m_corners[i].position.w = 1;
+		m_corners[i].colour = glm::vec4(1, 1, 1, 1);
+
+		if(i/2)
+		{
+			m_corners[i].position.x =  (float)m_uiWidth *0.5f * (float)-1;
+			m_corners[i].texCoords.s = 0;
+		}
+		else
+		{
+			m_corners[i].position.x = (float)m_uiWidth*0.5f;
+			m_corners[i].texCoords.s = 1;
+		}
+		if(i%3)
+		{
+			m_corners[i].position.y = (float)m_uiHeight*0.5f;
+			m_corners[i].texCoords.t = 1;
+		}
+		else
+		{
+			m_corners[i].position.y = (float)m_uiHeight*0.5f * (float)-1;
+			m_corners[i].texCoords.t = 0;
+		}
+	}
+}
+
 Sprite::Sprite(glm::vec3 a_position,
 		glm::vec4 a_colour,
 		unsigned int a_uiWidth, unsigned int a_uiHeight, const char* a_szTexName) 
@@ -113,9 +146,19 @@ glm::vec3 Sprite::getCentrePos()
 	return m_oCentrePos;
 }
 
+void Sprite::setCentrePos(glm::vec3 a_oCentrePos)
+{
+	m_oCentrePos = a_oCentrePos;
+}
+
 float Sprite::getRotationAngle()
 {
 	return m_fRotationAngle;
+}
+
+void Sprite::setRotationAngle(float a_fRotationAngle)
+{
+	m_fRotationAngle = a_fRotationAngle;
 }
 
 void Sprite::Update()
@@ -156,4 +199,12 @@ void Sprite::Draw(GLuint VBO, GLuint IBO, GLSLProgram *shader)
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
+}
+
+void Sprite::setTexture(const char* a_szTexName)
+{
+	if(a_szTexName != nullptr)
+		m_uiTexture = LoadTexture(a_szTexName, GL_RGBA, NULL, NULL, NULL);  
+	else
+		m_uiTexture = 0;
 }
