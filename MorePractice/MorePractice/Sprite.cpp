@@ -74,9 +74,7 @@ Sprite::Sprite(glm::vec3 a_position,
 	else
 		m_uiTexture = 0;
 
-	//set up four corners based on centre pos, width and height
-	//will prob change this to just set up around zero
-	//then in update will place in world using matrix math
+	//set up four corners 
 	//
 	//also setting up texture coords
 	for(int i = 0; i < 4; i++)
@@ -118,7 +116,7 @@ float Sprite::getRotationAngle()
 	return m_fRotationAngle;
 }
 
-void Sprite::Update()
+void Sprite::Update(double a_dDeltaTime)
 {
 	//so in here I really just need to modify the world matrix
 	m_globalTransform = glm::translate(glm::mat4(1), glm::vec3(m_oCentrePos.x, m_oCentrePos.y, m_oCentrePos.z)) *

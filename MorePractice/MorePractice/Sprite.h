@@ -2,7 +2,7 @@
 #define __SPRITE_H__
 
 #include <GL\glew.h>
-#include <GL\glfw.h>
+#include <GL\glfw3.h>
 #include "ShaderLoader.h"
 
 struct Vertex
@@ -30,9 +30,9 @@ public:
 		unsigned int a_uiWidth, unsigned int a_uiHeight, const char* a_szTexName);
 	glm::vec3 getCentrePos();
 	float getRotationAngle();
-	void Draw(GLuint VBO, GLuint IBO, GLSLProgram *shader);
+	virtual void Draw(GLuint VBO, GLuint IBO, GLSLProgram *shader);
 	//will change this to take in delta time
-	virtual void Update();
+	virtual void Update(double a_dDeltaTime);
 };
 
 unsigned int LoadTexture(const char * Texture, unsigned int format, 
