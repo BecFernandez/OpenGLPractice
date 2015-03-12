@@ -67,7 +67,8 @@ unsigned int LoadTexture(const char * Texture, unsigned int format, unsigned int
 Sprite::Sprite(glm::vec3 a_position,
 		glm::vec4 a_colour,
 		unsigned int a_uiWidth, unsigned int a_uiHeight, const char* a_szTexName) 
-		: m_oCentrePos(a_position), m_uiWidth(a_uiWidth), m_uiHeight(a_uiHeight), m_fRotationAngle(0)
+		: m_oCentrePos(a_position), m_uiWidth(a_uiWidth), m_uiHeight(a_uiHeight), m_fRotationAngle(0), m_oVelocity(glm::vec2(0, 0)),
+		m_oAcceleration(glm::vec2(0, 0))
 {
 	if(a_szTexName != nullptr)
 		m_uiTexture = LoadTexture(a_szTexName, GL_RGBA, NULL, NULL, NULL);  
@@ -118,6 +119,17 @@ float Sprite::getRotationAngle()
 
 void Sprite::Update(double a_dDeltaTime)
 {
+	//wrap sprite around the screen when they move off
+	if(m_oCentrePos.x < 0)
+		m_oCentrePos.x = 800;
+	else if(m_oCentrePos.x > 800)
+		m_oCentrePos.x = 0;
+	if(m_oCentrePos.y < 0)
+		m_oCentrePos.y = 600;
+	else if(m_oCentrePos.y > 600)
+		m_oCentrePos.y = 0;
+
+
 	//so in here I really just need to modify the world matrix
 	m_globalTransform = glm::translate(glm::mat4(1), glm::vec3(m_oCentrePos.x, m_oCentrePos.y, m_oCentrePos.z)) *
 		glm::rotate(glm::mat4(1), m_fRotationAngle, glm::vec3(0, 0, 1));
@@ -154,4 +166,32 @@ void Sprite::Draw(GLuint VBO, GLuint IBO, GLSLProgram *shader)
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
+}
+
+AABB Sprite::getAABB()
+{
+	AABB box;
+	box.min.x = box.max.x = m_oCentrePos.x;
+	box.min.y = box.max.y = m_oCentrePos.y;
+	for(unsigned int i = 0; i < 4; ++i)
+	{
+		glm::vec4 temp = m_globalTransform * m_corners[i].position;
+		if(temp.x < box.min.x)
+			box.min.x = temp.x;
+		if(temp.y < box.min.y)
+			box.min.y = temp.y;
+		if(temp.x > box.max.x)
+			box.max.x = temp.x;
+		if(temp.y > box.max.y)
+			box.max.y = temp.y;
+	}
+	return box;
+}
+
+void Sprite::changeColour(glm::vec4 a_oNewColour)
+{
+	for(unsigned int i = 0; i < 4; ++i)
+	{
+		m_corners[i].colour = a_oNewColour;
+	}
 }

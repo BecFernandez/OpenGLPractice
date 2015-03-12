@@ -4,6 +4,7 @@
 #include <GL\glew.h>
 #include <GL\glfw3.h>
 #include "ShaderLoader.h"
+#include "Physics.h"
 
 struct Vertex
 {
@@ -23,6 +24,8 @@ private:
 protected:
 	glm::vec3 m_oCentrePos;
 	float m_fRotationAngle;
+	glm::vec2 m_oVelocity;
+	glm::vec2 m_oAcceleration;
 
 public:
 	Sprite(glm::vec3 a_position,
@@ -33,6 +36,8 @@ public:
 	virtual void Draw(GLuint VBO, GLuint IBO, GLSLProgram *shader);
 	//will change this to take in delta time
 	virtual void Update(double a_dDeltaTime);
+	AABB getAABB();
+	void changeColour(glm::vec4 a_oNewColour);
 };
 
 unsigned int LoadTexture(const char * Texture, unsigned int format, 

@@ -74,6 +74,9 @@ int main()
 
 	glClearColor(0.1, 0.0, 0.2, 0.0);
 
+	SoundSystemClass sounds;
+	
+
 
 	//load shaders, compile and link	
 	shaders.compileShaderFromFile("triangle.v.glsl", VERTEX);
@@ -96,10 +99,16 @@ int main()
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(int)*6, &spriteIndices[0], GL_STATIC_DRAW);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 	
+	std::vector<Bullet> bullets;
+
 	//set up sprite
 	//image credit to Itsomi on deviantart - http://www.deviantart.com/art/Viper-MkII-sprite-59124754
-	Player fuzz(glm::vec3(800/2, 600/2, 0), glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), 51, 86, "ship.png");
-	Enemy cylon(glm::vec3(100, 100, 0), glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), 51, 86, "cylon.png");
+	Player fuzz(glm::vec3(800/2, 600/2, 0), glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), 51, 86, "ship.png", &bullets, sounds);
+	Enemy **cylons = new Enemy*[3];
+	for(int i = 0; i < 3; i++)
+	{
+		cylons[i] = new Enemy(glm::vec3(rand()%800, rand()%600, 0), glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), 51, 86, "cylon.png", &bullets, sounds);
+	}
 	float angle = 0;
 	
 	glEnable(GL_BLEND);
@@ -114,8 +123,37 @@ int main()
 		currentTime = glfwGetTime();
 		double deltaTime = currentTime - lastTime;
 		//update
-		fuzz.Update(deltaTime);
-		cylon.Update(fuzz.getCentrePos(), deltaTime);
+		fuzz.Update(deltaTime, sounds);
+		for(int i = 0; i < 3; i++)
+			cylons[i]->Update(fuzz.getCentrePos(), deltaTime, sounds);
+
+		//collisions - player & bullets
+		for(unsigned int i = 0; i < bullets.size(); ++i)
+		{
+			if(AABBvsAABB(bullets[i].getAABB(), fuzz.getAABB()))
+			{
+				fuzz.changeColour(glm::vec4(1, 0, 0, 1));
+			}
+			//collisions bullets and cylons
+			for(unsigned int j = 0; j < 3; ++j)
+			{
+				if(AABBvsAABB(bullets[i].getAABB(), cylons[j]->getAABB()))
+				{
+					cylons[j]->changeColour(glm::vec4(0, 1, 0, 1));
+				}
+			}
+		}
+		
+
+		////collisions player and cylons
+		//for(unsigned int i = 0; i < 3; ++i)
+		//{
+		//	if(AABBvsAABB(cylons[i]->getAABB(), fuzz.getAABB()))
+		//	{
+		//		cylons[i]->changeColour(glm::vec4(0, 1, 0, 1));
+		//		fuzz.changeColour(glm::vec4(1, 0, 0, 1));
+		//	}
+		//}
 
 		//draw
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -123,10 +161,9 @@ int main()
 		//set projection view matrix
 		shaders.setUniform("projectionView", projectionMatrix);
 
-	
-
 		fuzz.Draw(spriteVBO, spriteIBO, &shaders);
-		cylon.Draw(spriteVBO, spriteIBO, &shaders);
+		for(int i = 0; i < 3; i++)
+			cylons[i]->Draw(spriteVBO, spriteIBO, &shaders);
 
 		glfwSwapBuffers(window);
 		glfwPollEvents();

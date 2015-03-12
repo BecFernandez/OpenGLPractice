@@ -3,12 +3,13 @@
 #include <cmath>
 
 Enemy::Enemy(glm::vec3 a_position, glm::vec4 a_colour, unsigned int a_uiWidth, unsigned int a_uiHeight,
-	const char *a_szTexName) : Sprite(a_position, a_colour, a_uiWidth, a_uiHeight, a_szTexName), m_fSpeed(0), m_fFireCoolDown(0)
+	const char *a_szTexName, std::vector<Bullet> *a_pBullets, SoundSystemClass a_sounds) : Sprite(a_position, a_colour, a_uiWidth, a_uiHeight, a_szTexName), 
+	m_fSpeed(0), m_fFireCoolDown((rand()%10)*0.1), m_pBullets(a_pBullets)
 {
-
+	a_sounds.createSound(&m_pLaser, "cylonLaser.wav");
 }
 
-void Enemy::Update(glm::vec3 a_oPlayerPos, double a_dDeltaTime)
+void Enemy::Update(glm::vec3 a_oPlayerPos, double a_dDeltaTime, SoundSystemClass a_sounds)
 {
 	if(m_fFireCoolDown > 0)
 		m_fFireCoolDown -= a_dDeltaTime;
@@ -45,26 +46,27 @@ void Enemy::Update(glm::vec3 a_oPlayerPos, double a_dDeltaTime)
 			Bullet newBullet(shootPos, glm::vec4(1.0, 1.0, 1.0, 1.0), 5, 15, "laser.png");
 			newBullet.Fire(shootPos, m_fRotationAngle);
 			//add to vector
-			bullets.push_back(newBullet);
+			m_pBullets->push_back(newBullet);
 			shootPos.x += 2*offset.x;
 			shootPos.y += 2*offset.y;
 			Bullet newBullet2(shootPos, glm::vec4(1.0, 1.0, 1.0, 1.0), 5, 15, "laser.png");
 			newBullet2.Fire(shootPos, m_fRotationAngle);
 			//add to vector
-			bullets.push_back(newBullet2);
+			m_pBullets->push_back(newBullet2);
 			//fire bullet
-			m_fFireCoolDown = 0.3;
+			m_fFireCoolDown = 0.7;
+			a_sounds.playSound(m_pLaser, false);
 		}
 
 
 	Sprite::Update(a_dDeltaTime);
 
-	for(int i = 0; i < bullets.size(); i++)
+	for(int i = 0; i < m_pBullets->size(); i++)
 	{
-		bullets[i].Update(a_dDeltaTime);
-		if(bullets[i].isOffScreen())
+		m_pBullets->operator[](i).Update(a_dDeltaTime);
+		if(m_pBullets->operator[](i).isOffScreen())
 		{
-			bullets.erase(bullets.begin() + i);
+			m_pBullets->erase(m_pBullets->begin() + i);
 			i--;
 		}
 	}
@@ -73,8 +75,8 @@ void Enemy::Update(glm::vec3 a_oPlayerPos, double a_dDeltaTime)
 void Enemy::Draw(GLuint VBO, GLuint IBO, GLSLProgram *shader)
 {
 	Sprite::Draw(VBO, IBO, shader);
-	for(int i = 0; i < bullets.size(); i++)
+	for(int i = 0; i < m_pBullets->size(); i++)
 	{
-		bullets[i].Draw(VBO, IBO, shader);
+		m_pBullets->operator[](i).Draw(VBO, IBO, shader);
 	}
 }
