@@ -9,11 +9,12 @@ private:
 	bool m_bOffScreen;
 
 public:
-	Bullet(glm::vec3 a_position, glm::vec4 a_colour, unsigned int a_uiWidth, unsigned int a_uiHeight,
+	Bullet();
+	Bullet(const glm::vec3 a_position, const glm::vec4 a_colour, const unsigned int a_uiWidth, const unsigned int a_uiHeight,
 		const char *a_szTexName);
-	void Update(double a_dDeltaTime);
-	void Fire(glm::vec3 a_position, float a_fRotation);
-	bool isOffScreen() { return m_bOffScreen;}
+	void Update(const double a_dDeltaTime);
+	void Fire(const glm::vec3 a_position, const float a_fRotation);
+	bool isOffScreen() const { return m_bOffScreen;}
 };
 
 #endif

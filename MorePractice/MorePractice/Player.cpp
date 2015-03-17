@@ -1,7 +1,7 @@
 #include "Player.h"
 #include <gtc\matrix_transform.hpp>
 
-Player::Player(glm::vec3 a_position, glm::vec4 a_colour, unsigned int a_uiWidth, unsigned int a_uiHeight,
+Player::Player(const glm::vec3 a_position, const glm::vec4 a_colour, const unsigned int a_uiWidth, const unsigned int a_uiHeight,
 	const char *a_szTexName, std::vector<Bullet> *a_pBullets, SoundSystemClass a_sounds) : Sprite(a_position, a_colour, a_uiWidth, a_uiHeight, a_szTexName), 
 	m_fSpeed(0), m_fFireCoolDown(0), m_pBullets(a_pBullets)
 {
@@ -9,7 +9,7 @@ Player::Player(glm::vec3 a_position, glm::vec4 a_colour, unsigned int a_uiWidth,
 }
 
 
-void Player::Update(double a_dDeltaTime, SoundSystemClass a_sounds)
+void Player::Update(const double a_dDeltaTime, SoundSystemClass a_sounds)
 {
 	//update velocity
 	m_oVelocity.x += m_oAcceleration.x * a_dDeltaTime;
@@ -103,7 +103,7 @@ void Player::Update(double a_dDeltaTime, SoundSystemClass a_sounds)
 	}
 }
 
-void Player::Draw(GLuint VBO, GLuint IBO, GLSLProgram *shader)
+void Player::Draw(const GLuint VBO, const GLuint IBO, GLSLProgram *shader) const
 {
 	Sprite::Draw(VBO, IBO, shader);
 	for(int i = 0; i < m_pBullets->size(); i++)

@@ -28,19 +28,27 @@ protected:
 	glm::vec2 m_oAcceleration;
 
 public:
-	Sprite(glm::vec3 a_position,
-		glm::vec4 a_colour,
-		unsigned int a_uiWidth, unsigned int a_uiHeight, const char* a_szTexName);
-	glm::vec3 getCentrePos();
-	float getRotationAngle();
-	virtual void Draw(GLuint VBO, GLuint IBO, GLSLProgram *shader);
+	Sprite();
+	Sprite(const glm::vec3 a_position,
+		const glm::vec4 a_colour,
+		const unsigned int a_uiWidth, const unsigned int a_uiHeight, const char* a_szTexName);
+	void InitSprite(const glm::vec3 a_position,
+		const glm::vec4 a_colour,
+		const unsigned int a_uiWidth, const unsigned const int a_uiHeight, const char* a_szTexName);
+	void InitSprite(const glm::vec3 a_position,
+		const glm::vec4 a_colour,
+		const unsigned int a_uiWidth, const unsigned int a_uiHeight, const unsigned int a_uiTexture);
+	glm::vec3 getCentrePos() const;
+	float getRotationAngle() const;
+	virtual void Draw(const GLuint VBO, const GLuint IBO, GLSLProgram *shader) const;
 	//will change this to take in delta time
-	virtual void Update(double a_dDeltaTime);
-	AABB getAABB();
-	void changeColour(glm::vec4 a_oNewColour);
+	virtual void Update(const double a_dDeltaTime);
+	AABB getAABB() const;
+	void changeColour(const glm::vec4 a_oNewColour);
+	void setSpriteUVCoords(const float a_fUleft, const float a_fVbottom, const float a_fUright, const float a_iVtop);
 };
 
-unsigned int LoadTexture(const char * Texture, unsigned int format, 
+unsigned int LoadTexture(const char * Texture, const unsigned int format, 
 	unsigned int *width, unsigned int *height, unsigned int *bpp);
 
 
