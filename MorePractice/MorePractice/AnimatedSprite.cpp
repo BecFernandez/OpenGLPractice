@@ -21,7 +21,11 @@ void AnimatedSprite::Update(const double a_dDeltaTime)
 	//if timer goes past certain value
 	if(m_fCurrentTime >= m_fTimePerFrame)
 	{
-		m_fCurrentTime = 0;
+		//to ensure animation plays at the correct speed - excess time carries over into next frame
+		while(m_fCurrentTime >= m_fTimePerFrame)
+		{
+			m_fCurrentTime -= m_fTimePerFrame;
+		}
 		//move to next frame
 		m_iCurrentFrame++;
 		if(m_iCurrentFrame >= m_iNumCols * m_iNumRows)
