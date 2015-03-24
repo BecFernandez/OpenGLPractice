@@ -5,6 +5,7 @@
 #include "GameScreen.h"
 #include <stack>
 #include "MainMenuScreen.h"
+#include "Text.h"
 
 bool windowClosed = false;
 bool fullscreen = false;
@@ -70,7 +71,8 @@ int main()
 	
 	screens.push(mms);
 	
-	
+	//Text t(glm::vec3(0, 0, 0), glm::vec4(1.0, 0.0, 0.0, 1.0), 40, 40, "arial_0.png", "arial.fnt");
+
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	

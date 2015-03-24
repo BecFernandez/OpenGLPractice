@@ -14,7 +14,7 @@ public:
 	Screen();
 	Screen(SoundSystemClass* a_pSounds, GLSLProgram *a_pShaders); 
 	virtual Screen* Update(const double a_dDeltaTime);
-	virtual void Draw() const = 0;
+	virtual void Draw() = 0;
 
 protected:
 	SoundSystemClass* m_pSounds;

@@ -71,7 +71,7 @@ Screen* GameScreen::Update(const double a_fDeltaTime)
 	return this;
 }
 
-void GameScreen::Draw() const
+void GameScreen::Draw()
 {
 	m_pShaders->use();
 	//set projection view matrix - once per frame

@@ -16,7 +16,7 @@ public:
 	GameScreen();
 	GameScreen(SoundSystemClass* a_pSounds, GLSLProgram *a_pShaders);
 	Screen* Update(const double a_dDeltaTime);
-	void Draw() const;
+	void Draw();
 };
 
 #endif

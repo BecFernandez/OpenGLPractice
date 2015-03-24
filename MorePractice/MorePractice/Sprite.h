@@ -18,14 +18,16 @@ class Sprite
 private:
 	Vertex m_corners[4]; //all my sprites are rectangles
 	unsigned int m_uiTexture;
-	unsigned int m_uiWidth, m_uiHeight;
 	glm::mat4 m_globalTransform;
 	
 protected:
+	unsigned int m_uiWidth, m_uiHeight;
 	glm::vec3 m_oCentrePos;
 	float m_fRotationAngle;
 	glm::vec2 m_oVelocity;
 	glm::vec2 m_oAcceleration;
+	unsigned int m_uiTextureWidth;
+	unsigned int m_uiTextureHeight;
 
 public:
 	Sprite();
@@ -43,6 +45,8 @@ public:
 	virtual void Draw(const GLuint VBO, const GLuint IBO, GLSLProgram *shader) const;
 	//will change this to take in delta time
 	virtual void Update(const double a_dDeltaTime);
+	void UpdateCorners(unsigned int a_uiWidth, unsigned int a_uiHeight);
+	void UpdateCornersGrounded(unsigned int a_uiWidth, unsigned int a_uiHeight);
 	AABB getAABB() const;
 	void changeColour(const glm::vec4 a_oNewColour);
 	void setSpriteUVCoords(const float a_fUleft, const float a_fVbottom, const float a_fUright, const float a_iVtop);

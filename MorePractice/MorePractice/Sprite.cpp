@@ -77,7 +77,7 @@ Sprite::Sprite(const glm::vec3 a_position,
 		m_oAcceleration(glm::vec2(0, 0))
 {
 	if(a_szTexName != nullptr)
-		m_uiTexture = LoadTexture(a_szTexName, GL_RGBA, NULL, NULL, NULL);  
+		m_uiTexture = LoadTexture(a_szTexName, GL_RGBA, &m_uiTextureWidth, &m_uiTextureHeight, NULL);  
 	else
 		m_uiTexture = 0;
 
@@ -194,6 +194,52 @@ void Sprite::InitSprite(const glm::vec3 a_position, const glm::vec4 a_colour,
 		{
 			m_corners[i].position.y = (float)m_uiHeight*0.5f * (float)-1;
 			m_corners[i].texCoords.t = 0;
+		}
+	}
+}
+
+void Sprite::UpdateCorners(unsigned int a_uiWidth, unsigned int a_uiHeight)
+{
+	for(int i = 0; i < 4; i++)
+	{
+		if(i/2)
+		{
+			m_corners[i].position.x =  (float)a_uiWidth *0.5f * (float)-1;
+		}
+		else
+		{
+			m_corners[i].position.x = (float)a_uiWidth*0.5f;
+		}
+		if(i%3)
+		{
+			m_corners[i].position.y = (float)a_uiHeight*0.5f;
+		}
+		else
+		{
+			m_corners[i].position.y = (float)a_uiHeight*0.5 * (float)-1;
+		}
+	}
+}
+
+void Sprite::UpdateCornersGrounded(unsigned int a_uiWidth, unsigned int a_uiHeight)
+{
+	for(int i = 0; i < 4; i++)
+	{
+		if(i/2)
+		{
+			m_corners[i].position.x =  (float)a_uiWidth *0.5f * (float)-1;
+		}
+		else
+		{
+			m_corners[i].position.x = (float)a_uiWidth*0.5f;
+		}
+		if(i%3)
+		{
+			m_corners[i].position.y = (float)a_uiHeight;
+		}
+		else
+		{
+			m_corners[i].position.y = 0;
 		}
 	}
 }

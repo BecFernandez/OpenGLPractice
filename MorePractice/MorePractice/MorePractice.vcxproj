@@ -74,6 +74,7 @@
     <ClCompile Include="Screen.cpp" />
     <ClCompile Include="SoundSystemClass.cpp" />
     <ClCompile Include="Sprite.cpp" />
+    <ClCompile Include="Text.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="triangle.f.glsl" />
@@ -90,6 +91,7 @@
     <ClInclude Include="Screen.h" />
     <ClInclude Include="SoundSystemClass.h" />
     <ClInclude Include="Sprite.h" />
+    <ClInclude Include="Text.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CommonOpenGLCode\CommonOpenGLCode.vcxproj">
