@@ -1,26 +1,16 @@
 #include <GL\glew.h>
-#include <GL\glfw.h>
+#include <GL\glfw3.h>
 #include <iostream>
-#include <glm.hpp>
 #include <gtc\matrix_transform.hpp>
-#include "ShaderLoader.h"
-#include "Player.h"
-#include "Enemy.h"
-
-using glm::vec3;
-using glm::mat4;
+#include "GameScreen.h"
+#include <stack>
+#include "MainMenuScreen.h"
+#include "Text.h"
 
 bool windowClosed = false;
 bool fullscreen = false;
-GLSLProgram shaders;
 
-static int GLFWCALL windowCloseListener()
-{
-	windowClosed = true;
-	return 0;
-}
-
-bool init()
+bool init(GLFWwindow*& window)
 {
 	GLenum err = glfwInit();
 	if(!err)
@@ -28,16 +18,16 @@ bool init()
 		std::cerr << "Error initialising glfw" << std::endl;
 		return false;
 	}
+	window = glfwCreateWindow(800, 600, "Prac", NULL, NULL);
+	
+	if(!window)
+	{
+		glfwTerminate();
+		return false;
+	}
 
-	glfwOpenWindowHint(GLFW_WINDOW_NO_RESIZE, GL_TRUE); //investigate resizing with glfw
-	glfwOpenWindow(1024, 768, 
-		8,8,8,8, //bits per colour channel
-		24, //depth bits
-		8, //stencil bits
-		fullscreen? GLFW_FULLSCREEN:GLFW_WINDOW);
-	glfwSetWindowTitle("Prac");
+	glfwMakeContextCurrent(window);
 	glfwSwapInterval(1);
-	glfwSetWindowCloseCallback(&windowCloseListener);
 
 	GLenum gerr = glewInit();
 	if(GLEW_OK != gerr)
@@ -46,83 +36,93 @@ bool init()
 		std::cerr << "Error initialising glew: " << glewGetErrorString(gerr) << std::endl;
 		return false;
 	}
+
+	glEnable(GL_DEPTH_TEST); // Depth Testing
+    glDepthFunc(GL_LEQUAL);
+    glDisable(GL_CULL_FACE);
+    glCullFace(GL_BACK);
 	return true;
-}
-
-void update(float dt)
-{
-	
-}
-
-void draw(float dt)
-{
-	
 }
 
 int main()
 {
-	if(!init())
+	GLFWwindow* window = nullptr;
+	if(!init(window))
 	{
 		system("pause");
 		exit(0);
 	}
 
-	glClearColor(0.0, 0.0, 0.2, 1.0);
+	glClearColor(0.0, 0.0, 0.0, 0.0);
 
+	//set up audio engine
+	SoundSystemClass sounds;
+
+	GLSLProgram shaders;
 	//load shaders, compile and link	
 	shaders.compileShaderFromFile("triangle.v.glsl", VERTEX);
 	shaders.compileShaderFromFile("triangle.f.glsl", FRAGMENT);
 	shaders.link();
 	shaders.use();
 
-	//create VBO and IBO for sprites - they are out here so all sprites can share buffers
-	GLuint spriteVBO;
-	glGenBuffers(1, &spriteVBO);
-	glBindBuffer(GL_ARRAY_BUFFER, spriteVBO);
-	//stream draw is to tell OpenGL that the data in this buffer will be modified every frame
-	glBufferData(GL_ARRAY_BUFFER, sizeof(struct Vertex)*4, NULL, GL_STREAM_DRAW);
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
-
-	int spriteIndices[6] = {0, 1, 2, 0, 2, 3};
-	GLuint spriteIBO;
-	glGenBuffers(1, &spriteIBO);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, spriteIBO);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(int)*6, &spriteIndices[0], GL_STATIC_DRAW);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-
-	//set up sprite
-	//image credit to Itsomi on deviantart - http://www.deviantart.com/art/Viper-MkII-sprite-59124754
-	Player fuzz(glm::vec3(1024/2, 768/2, 0), glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), 51, 86, "ship.png");
-	Enemy cylon(glm::vec3(100, 100, 0), glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), 51, 86, "cylon.png");
-	float angle = 0;
+	//create screen state machine
+	std::stack<Screen*> screens;
+	MainMenuScreen *mms = new MainMenuScreen(&sounds, &shaders);
+	
+	screens.push(mms);
+	
+	//Text t(glm::vec3(0, 0, 0), glm::vec4(1.0, 0.0, 0.0, 1.0), 40, 40, "arial_0.png", "arial.fnt");
 
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
+	
 	//create projection matrix
-	glm::mat4 projectionMatrix = glm::ortho(0.0f, 1024.0f, 0.0f, 768.0f);
+	glm::mat4 projectionMatrix = glm::ortho(0.0f, 800.0f, 0.0f, 600.0f);
+	double lastTime = glfwGetTime(), currentTime;
 
-	while(glfwGetWindowParam(GLFW_OPENED) != 0 && !windowClosed)
+	while(!glfwWindowShouldClose(window) && !screens.empty())
 	{
-		//update
-		fuzz.Update();
-		cylon.Update(fuzz.getCentrePos());
+		//calculate delta time
+		currentTime = glfwGetTime();
+		double deltaTime = currentTime - lastTime;
 
 		//draw
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		shaders.use();
-		//set projection view matrix
-		shaders.setUniform("projectionView", projectionMatrix);
+		
+		screens.top()->Draw();
 
+		glfwSwapBuffers(window);
+		
+		//update
+		Screen* next =screens.top()->Update(deltaTime);
+		//if returned screen is null, pop current screen
+		if(next == nullptr)
+		{
+			Screen *toDelete = screens.top();
+			screens.pop();
+			delete toDelete;
+		}
+		//else if screen is different to current screen, push new screen onto stack
+		else if(next != screens.top())
+		{
+			screens.push(next);
+		}
+		//else continue with current top of stack
 
-
-		fuzz.Draw(spriteVBO, spriteIBO, &shaders);
-		cylon.Draw(spriteVBO, spriteIBO, &shaders);
-
-		glfwSwapBuffers();
+		
+		glfwPollEvents();
+		lastTime = currentTime;
 	}
 
-	glDeleteBuffers(1, &spriteIBO);
-	glDeleteBuffers(1, &spriteVBO);
+	//clear out all screens
+	while(!screens.empty())
+	{
+		Screen* c = screens.top();
+		screens.pop();
+		delete c;
+	}
+
+	glfwDestroyWindow(window);
+	glfwTerminate();
 	return 0;
 }

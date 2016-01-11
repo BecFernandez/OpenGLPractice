@@ -3,7 +3,7 @@
 #include <iostream>
 #include <gtc\matrix_transform.hpp>
 
-unsigned int LoadTexture(const char * Texture, unsigned int format, unsigned int* width, unsigned int* height, unsigned int *bpp)
+unsigned int LoadTexture(const char * Texture, const unsigned int format, unsigned int* width, unsigned int* height, unsigned int *bpp)
 {
 	FIBITMAP* bitmap = NULL;
 
@@ -64,52 +64,24 @@ unsigned int LoadTexture(const char * Texture, unsigned int format, unsigned int
 	return texID;
 }
 
-Sprite::Sprite() : m_oCentrePos(glm::vec3(0)), m_uiWidth(10), m_uiHeight(30), m_fRotationAngle(0)
+Sprite::Sprite() : m_oCentrePos(glm::vec3(0, 0, 0)), m_uiWidth(0), m_uiHeight(0),  m_fRotationAngle(0), m_fScale(1), m_oVelocity(glm::vec2(0, 0)),
+		m_oAcceleration(glm::vec2(0, 0)), m_uiTexture(0)
 {
-	m_uiTexture = 0;
 
-	for(int i = 0; i < 4; i++)
-	{
-		m_corners[i].position.z = 0;
-		m_corners[i].position.w = 1;
-		m_corners[i].colour = glm::vec4(1, 1, 1, 1);
-
-		if(i/2)
-		{
-			m_corners[i].position.x =  (float)m_uiWidth *0.5f * (float)-1;
-			m_corners[i].texCoords.s = 0;
-		}
-		else
-		{
-			m_corners[i].position.x = (float)m_uiWidth*0.5f;
-			m_corners[i].texCoords.s = 1;
-		}
-		if(i%3)
-		{
-			m_corners[i].position.y = (float)m_uiHeight*0.5f;
-			m_corners[i].texCoords.t = 1;
-		}
-		else
-		{
-			m_corners[i].position.y = (float)m_uiHeight*0.5f * (float)-1;
-			m_corners[i].texCoords.t = 0;
-		}
-	}
 }
 
-Sprite::Sprite(glm::vec3 a_position,
-		glm::vec4 a_colour,
-		unsigned int a_uiWidth, unsigned int a_uiHeight, const char* a_szTexName) 
-		: m_oCentrePos(a_position), m_uiWidth(a_uiWidth), m_uiHeight(a_uiHeight), m_fRotationAngle(0)
+Sprite::Sprite(const glm::vec3 a_position,
+		const glm::vec4 a_colour,
+		const unsigned int a_uiWidth, const unsigned int a_uiHeight, const char* a_szTexName) 
+		: m_oCentrePos(a_position), m_uiWidth(a_uiWidth), m_uiHeight(a_uiHeight), m_fRotationAngle(0), m_fScale(1), m_oVelocity(glm::vec2(0, 0)),
+		m_oAcceleration(glm::vec2(0, 0))
 {
 	if(a_szTexName != nullptr)
-		m_uiTexture = LoadTexture(a_szTexName, GL_RGBA, NULL, NULL, NULL);  
+		m_uiTexture = LoadTexture(a_szTexName, GL_RGBA, &m_uiTextureWidth, &m_uiTextureHeight, NULL);  
 	else
 		m_uiTexture = 0;
 
-	//set up four corners based on centre pos, width and height
-	//will prob change this to just set up around zero
-	//then in update will place in world using matrix math
+	//set up four corners 
 	//
 	//also setting up texture coords
 	for(int i = 0; i < 4; i++)
@@ -141,34 +113,166 @@ Sprite::Sprite(glm::vec3 a_position,
 	}
 }
 
-glm::vec3 Sprite::getCentrePos()
+void Sprite::InitSprite(const glm::vec3 a_position, const glm::vec4 a_colour, 
+	const unsigned int a_uiWidth, const unsigned int a_uiHeight, const char* a_szTexName)
+{
+	m_oCentrePos = a_position;
+	m_uiWidth = a_uiWidth;
+	m_uiHeight = a_uiHeight;
+
+	if(a_szTexName != nullptr)
+		m_uiTexture = LoadTexture(a_szTexName, GL_RGBA, NULL, NULL, NULL);  
+	else
+		m_uiTexture = 0;
+
+	//set up four corners 
+	//
+	//also setting up texture coords
+	for(int i = 0; i < 4; i++)
+	{
+		m_corners[i].position.z = 0;
+		m_corners[i].position.w = 1;
+		m_corners[i].colour = a_colour;
+
+		if(i/2)
+		{
+			m_corners[i].position.x =  (float)m_uiWidth *0.5f * (float)-1;
+			m_corners[i].texCoords.s = 0;
+		}
+		else
+		{
+			m_corners[i].position.x = (float)m_uiWidth*0.5f;
+			m_corners[i].texCoords.s = 1;
+		}
+		if(i%3)
+		{
+			m_corners[i].position.y = (float)m_uiHeight*0.5f;
+			m_corners[i].texCoords.t = 1;
+		}
+		else
+		{
+			m_corners[i].position.y = (float)m_uiHeight*0.5f * (float)-1;
+			m_corners[i].texCoords.t = 0;
+		}
+	}
+}
+
+void Sprite::InitSprite(const glm::vec3 a_position, const glm::vec4 a_colour, 
+	const unsigned int a_uiWidth, const unsigned int a_uiHeight, const unsigned int a_uiTexture)
+{
+	m_oCentrePos = a_position;
+	m_uiWidth = a_uiWidth;
+	m_uiHeight = a_uiHeight;
+
+	m_uiTexture = a_uiTexture;
+
+	//set up four corners 
+	//
+	//also setting up texture coords
+	for(int i = 0; i < 4; i++)
+	{
+		m_corners[i].position.z = 0;
+		m_corners[i].position.w = 1;
+		m_corners[i].colour = a_colour;
+
+		if(i/2)
+		{
+			m_corners[i].position.x =  (float)m_uiWidth *0.5f * (float)-1;
+			m_corners[i].texCoords.s = 0;
+		}
+		else
+		{
+			m_corners[i].position.x = (float)m_uiWidth*0.5f;
+			m_corners[i].texCoords.s = 1;
+		}
+		if(i%3)
+		{
+			m_corners[i].position.y = (float)m_uiHeight*0.5f;
+			m_corners[i].texCoords.t = 1;
+		}
+		else
+		{
+			m_corners[i].position.y = (float)m_uiHeight*0.5f * (float)-1;
+			m_corners[i].texCoords.t = 0;
+		}
+	}
+}
+
+void Sprite::UpdateCorners(unsigned int a_uiWidth, unsigned int a_uiHeight)
+{
+	for(int i = 0; i < 4; i++)
+	{
+		if(i/2)
+		{
+			m_corners[i].position.x =  (float)a_uiWidth *0.5f * (float)-1;
+		}
+		else
+		{
+			m_corners[i].position.x = (float)a_uiWidth*0.5f;
+		}
+		if(i%3)
+		{
+			m_corners[i].position.y = (float)a_uiHeight*0.5f;
+		}
+		else
+		{
+			m_corners[i].position.y = (float)a_uiHeight*0.5 * (float)-1;
+		}
+	}
+}
+
+void Sprite::UpdateCornersGrounded(unsigned int a_uiWidth, unsigned int a_uiHeight)
+{
+	for(int i = 0; i < 4; i++)
+	{
+		if(i/2)
+		{
+			m_corners[i].position.x =  (float)a_uiWidth *0.5f * (float)-1;
+		}
+		else
+		{
+			m_corners[i].position.x = (float)a_uiWidth*0.5f;
+		}
+		if(i%3)
+		{
+			m_corners[i].position.y = (float)a_uiHeight;
+		}
+		else
+		{
+			m_corners[i].position.y = 0;
+		}
+	}
+}
+
+glm::vec3 Sprite::getCentrePos() const
 {
 	return m_oCentrePos;
 }
 
-void Sprite::setCentrePos(glm::vec3 a_oCentrePos)
-{
-	m_oCentrePos = a_oCentrePos;
-}
-
-float Sprite::getRotationAngle()
+float Sprite::getRotationAngle() const
 {
 	return m_fRotationAngle;
 }
 
-void Sprite::setRotationAngle(float a_fRotationAngle)
+void Sprite::Update(const double a_dDeltaTime)
 {
-	m_fRotationAngle = a_fRotationAngle;
-}
+	//wrap sprite around the screen when they move off
+	if(m_oCentrePos.x < 0)
+		m_oCentrePos.x = 800;
+	else if(m_oCentrePos.x > 800)
+		m_oCentrePos.x = 0;
+	if(m_oCentrePos.y < 0)
+		m_oCentrePos.y = 600;
+	else if(m_oCentrePos.y > 600)
+		m_oCentrePos.y = 0;
 
-void Sprite::Update()
-{
+
 	//so in here I really just need to modify the world matrix
 	m_globalTransform = glm::translate(glm::mat4(1), glm::vec3(m_oCentrePos.x, m_oCentrePos.y, m_oCentrePos.z)) *
-		glm::rotate(glm::mat4(1), m_fRotationAngle, glm::vec3(0, 0, 1));
+		glm::rotate(glm::mat4(1), m_fRotationAngle, glm::vec3(0, 0, 1)) * glm::scale(glm::mat4(1), glm::vec3(m_fScale, m_fScale, 1));
 }
 
-void Sprite::Draw(GLuint VBO, GLuint IBO, GLSLProgram *shader)
+void Sprite::Draw(const GLuint VBO, const GLuint IBO, GLSLProgram *shader) const
 {
 	//copy vertices to GPU in case they have changed
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
@@ -201,10 +305,38 @@ void Sprite::Draw(GLuint VBO, GLuint IBO, GLSLProgram *shader)
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
-void Sprite::setTexture(const char* a_szTexName)
+AABB Sprite::getAABB() const
 {
-	if(a_szTexName != nullptr)
-		m_uiTexture = LoadTexture(a_szTexName, GL_RGBA, NULL, NULL, NULL);  
-	else
-		m_uiTexture = 0;
+	AABB box;
+	box.min.x = box.max.x = m_oCentrePos.x;
+	box.min.y = box.max.y = m_oCentrePos.y;
+	for(unsigned int i = 0; i < 4; ++i)
+	{
+		glm::vec4 temp = m_globalTransform * m_corners[i].position;
+		if(temp.x < box.min.x)
+			box.min.x = temp.x;
+		if(temp.y < box.min.y)
+			box.min.y = temp.y;
+		if(temp.x > box.max.x)
+			box.max.x = temp.x;
+		if(temp.y > box.max.y)
+			box.max.y = temp.y;
+	}
+	return box;
+}
+
+void Sprite::changeColour(const glm::vec4 a_oNewColour)
+{
+	for(unsigned int i = 0; i < 4; ++i)
+	{
+		m_corners[i].colour = a_oNewColour;
+	}
+}
+
+void Sprite::setSpriteUVCoords(const float a_fUleft, const float a_fVbottom, const float a_fUright, const float a_fVtop)
+{
+	m_corners[0].texCoords.s = m_corners[1].texCoords.s = a_fUright;
+	m_corners[2].texCoords.s = m_corners[3].texCoords.s = a_fUleft;
+	m_corners[0].texCoords.t = m_corners[3].texCoords.t = a_fVbottom;
+	m_corners[1].texCoords.t = m_corners[2].texCoords.t = a_fVtop;
 }

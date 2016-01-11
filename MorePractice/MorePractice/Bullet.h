@@ -5,15 +5,19 @@
 
 class Bullet: public Sprite
 {
+private:
+	bool m_bOffScreen;
+	bool m_bActive;
+
 public:
 	Bullet();
-	Bullet(glm::vec3 a_position, glm::vec4 a_colour, unsigned int a_uiWidth, unsigned int a_uiHeight,
+	Bullet(const glm::vec3 a_position, const glm::vec4 a_colour, const unsigned int a_uiWidth, const unsigned int a_uiHeight,
 		const char *a_szTexName);
-	void Fire(float a_fRotationAngle, glm::vec3 a_position);
-	void Update();
-	bool isActive();
-private:
-	bool m_bActive;
+	void Update(const double a_dDeltaTime);
+	void Fire(const glm::vec3 a_position, const float a_fRotation);
+	bool isOffScreen() const { return m_bOffScreen;}
+	void SetInactive() { m_bActive = false; }
+	bool GetActive() const { return m_bActive; }
 };
 
 #endif
