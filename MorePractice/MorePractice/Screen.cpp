@@ -27,7 +27,7 @@ Screen::Screen(SoundSystemClass* a_pSounds, GLSLProgram *a_pShaders) : m_pSounds
 Screen* Screen::Update(const double m_fDeltaTime)
 {
 	//update animations
-	for(int i =0; i < m_animations.size(); i++)
+	for(unsigned int i =0; i < m_animations.size(); i++)
 	{
 		m_animations[i].Update(m_fDeltaTime);
 		if(!m_animations[i].IsStillRunning())

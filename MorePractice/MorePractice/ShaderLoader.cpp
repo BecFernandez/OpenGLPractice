@@ -36,7 +36,8 @@ bool GLSLProgram::compileShaderFromFile(const char* filename, GLSLShaderType typ
 	}
 
 	//load shader in from file
-	FILE *input = fopen(filename, "rb");
+	FILE *input;
+	fopen_s(&input, filename, "rb");
 	if(input == NULL) 
 	{
 		std::cerr << "Error opening file " << filename << std::endl;

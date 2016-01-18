@@ -6,8 +6,8 @@ Bullet::Bullet() : Sprite(), m_bOffScreen(false)
 
 }
 
-Bullet::Bullet(const glm::vec3 a_position, const glm::vec4 a_colour, const unsigned int a_uiWidth, const unsigned int a_uiHeight,
-	const char *a_szTexName) : Sprite(a_position, a_colour, a_uiWidth, a_uiHeight, a_szTexName), m_bOffScreen(true), m_bActive(true)
+Bullet::Bullet(const float a_fPower, const glm::vec3 a_position, const glm::vec4 a_colour, const unsigned int a_uiWidth, const unsigned int a_uiHeight,
+	const char *a_szTexName) : Sprite(a_position, a_colour, a_uiWidth, a_uiHeight, a_szTexName), m_bOffScreen(true), m_bActive(true), m_fPower(a_fPower)
 {
 
 }

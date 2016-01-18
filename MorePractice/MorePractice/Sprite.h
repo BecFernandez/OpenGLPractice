@@ -29,6 +29,7 @@ protected:
 	glm::vec2 m_oAcceleration;
 	unsigned int m_uiTextureWidth;
 	unsigned int m_uiTextureHeight;
+	void changeColour(const glm::vec4 a_oNewColour);
 
 public:
 	Sprite();
@@ -37,7 +38,7 @@ public:
 		const unsigned int a_uiWidth, const unsigned int a_uiHeight, const char* a_szTexName);
 	void InitSprite(const glm::vec3 a_position,
 		const glm::vec4 a_colour,
-		const unsigned int a_uiWidth, const unsigned const int a_uiHeight, const char* a_szTexName);
+		const unsigned int a_uiWidth, const unsigned int a_uiHeight, const char* a_szTexName);
 	void InitSprite(const glm::vec3 a_position,
 		const glm::vec4 a_colour,
 		const unsigned int a_uiWidth, const unsigned int a_uiHeight, const unsigned int a_uiTexture);
@@ -49,7 +50,6 @@ public:
 	void UpdateCorners(unsigned int a_uiWidth, unsigned int a_uiHeight);
 	void UpdateCornersGrounded(unsigned int a_uiWidth, unsigned int a_uiHeight);
 	AABB getAABB() const;
-	void changeColour(const glm::vec4 a_oNewColour);
 	void setSpriteUVCoords(const float a_fUleft, const float a_fVbottom, const float a_fUright, const float a_iVtop);
 };
 

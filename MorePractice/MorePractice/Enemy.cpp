@@ -2,9 +2,9 @@
 #include <gtc\matrix_transform.hpp>
 #include <cmath>
 
-Enemy::Enemy(const float a_fHealth, const glm::vec3 a_position, const glm::vec4 a_colour, const unsigned int a_uiWidth, const unsigned int a_uiHeight,
+Enemy::Enemy(const float a_fPower, const float a_fHealth, const glm::vec3 a_position, const glm::vec4 a_colour, const unsigned int a_uiWidth, const unsigned int a_uiHeight,
 	const char *a_szTexName, std::vector<Bullet*> *a_pBullets, SoundSystemClass a_sounds) : Sprite(a_position, a_colour, a_uiWidth, a_uiHeight, a_szTexName), 
-	m_fSpeed(0), m_fFireCoolDown((rand() % 10)*0.1), m_pBullets(a_pBullets), m_bAlive(true), m_fHealth(a_fHealth), m_fOriginalHealth(a_fHealth)
+	m_fSpeed(0), m_fFireCoolDown((rand() % 10)*0.1), m_pBullets(a_pBullets), m_bAlive(true), m_fHealth(a_fHealth), m_fOriginalHealth(a_fHealth), m_fPower(a_fPower)
 {
 	a_sounds.createSound(&m_pLaser, "cylonLaser.wav");
 }
@@ -45,7 +45,7 @@ void Enemy::Update(const glm::vec3 a_oPlayerPos, const double a_dDeltaTime, Soun
 			shootPos.x -= offset.x;
 			shootPos.y -= offset.y;
 			//create new bullet
-			Bullet *newBullet = new Bullet(shootPos, glm::vec4(1.0, 1.0, 1.0, 1.0), 5, 15, "laser.png");
+			Bullet *newBullet = new Bullet(m_fPower, shootPos, glm::vec4(1.0, 1.0, 1.0, 1.0), 5, 15, "laser.png");
 			newBullet->Fire(shootPos, m_fRotationAngle);
 			//add to vector
 			m_pBullets->push_back(newBullet);
@@ -53,7 +53,7 @@ void Enemy::Update(const glm::vec3 a_oPlayerPos, const double a_dDeltaTime, Soun
 			shootPos.x += 2*offset.x;
 			shootPos.y += 2*offset.y;
 			//create new bullet
-			Bullet *newBullet2 = new Bullet(shootPos, glm::vec4(1.0, 1.0, 1.0, 1.0), 5, 15, "laser.png");
+			Bullet *newBullet2 = new Bullet(m_fPower, shootPos, glm::vec4(1.0, 1.0, 1.0, 1.0), 5, 15, "laser.png");
 			newBullet2->Fire(shootPos, m_fRotationAngle);
 			//add to vector
 			m_pBullets->push_back(newBullet2);
@@ -67,7 +67,7 @@ void Enemy::Update(const glm::vec3 a_oPlayerPos, const double a_dDeltaTime, Soun
 	Sprite::Update(a_dDeltaTime);
 
 	//update bullets
-	for(int i = 0; i < m_pBullets->size(); i++)
+	for(unsigned int i = 0; i < m_pBullets->size(); i++)
 	{
 		m_pBullets->operator[](i)->Update(a_dDeltaTime);
 		//remove any bullets that have gone off screen
@@ -83,7 +83,7 @@ void Enemy::Update(const glm::vec3 a_oPlayerPos, const double a_dDeltaTime, Soun
 void Enemy::Draw(const GLuint VBO, const GLuint IBO, GLSLProgram *shader) const
 {
 	Sprite::Draw(VBO, IBO, shader);
-	for(int i = 0; i < m_pBullets->size(); i++)
+	for(unsigned int i = 0; i < m_pBullets->size(); i++)
 	{
 		m_pBullets->operator[](i)->Draw(VBO, IBO, shader);
 	}

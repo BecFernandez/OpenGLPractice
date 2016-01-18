@@ -11,7 +11,6 @@ Text::Text(const glm::vec3 a_position,
 		Sprite(a_position, a_colour, a_uiWidth, a_uiHeight, a_szTexName)
 {
 	//need to load in all text from xml file
-	char szBuffer[128];
 	std::ifstream ins(a_szXMLName);
 
 	std::stringstream buffer;

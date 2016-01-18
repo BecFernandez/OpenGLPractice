@@ -1,9 +1,9 @@
 #include "Player.h"
 #include <gtc\matrix_transform.hpp>
 
-Player::Player(const float a_fPower, const glm::vec3 a_position, const glm::vec4 a_colour, const unsigned int a_uiWidth, const unsigned int a_uiHeight,
+Player::Player(const float a_fPower, const float a_fHealth, const glm::vec3 a_position, const glm::vec4 a_colour, const unsigned int a_uiWidth, const unsigned int a_uiHeight,
 	const char *a_szTexName, std::vector<Bullet*> *a_pBullets, SoundSystemClass a_sounds) : Sprite(a_position, a_colour, a_uiWidth, a_uiHeight, a_szTexName), 
-	m_fSpeed(0), m_fFireCoolDown(0), m_pBullets(a_pBullets), m_fPower(a_fPower)
+	m_fSpeed(0), m_fFireCoolDown(0), m_pBullets(a_pBullets), m_fPower(a_fPower), m_fHealth(a_fHealth), m_fOriginalHealth(a_fHealth), m_bAlive(true)
 {
 	a_sounds.createSound(&m_pLaser, "laser.wav");
 }
@@ -28,12 +28,6 @@ void Player::Update(const double a_dDeltaTime, SoundSystemClass a_sounds)
 	//move forward
 	if(glfwGetKey(glfwGetCurrentContext(), 'W'))
 	{
-		////rotate "forward 3 units" by current rotation
-		//glm::vec4 temp = glm::rotate(glm::mat4(1), m_fRotationAngle + 90, glm::vec3(0, 0, 1)) 
-		//	* glm::vec4(3, 0, 0, 1);
-		////add correctly facing forward vector to existing position
-		//m_oCentrePos.x += temp.x;
-		//m_oCentrePos.y += temp.y;
 		m_oAcceleration.x = 150;
 		m_oAcceleration.y = 150;
 	}
@@ -68,7 +62,7 @@ void Player::Update(const double a_dDeltaTime, SoundSystemClass a_sounds)
 		shootPos.x -= offset.x;
 		shootPos.y -= offset.y;
 		//create new bullet
-		Bullet *newBullet = new Bullet(shootPos, glm::vec4(1.0, 1.0, 1.0, 1.0), 5, 15, "laser.png");
+		Bullet *newBullet = new Bullet(m_fPower, shootPos, glm::vec4(1.0, 1.0, 1.0, 1.0), 5, 15, "laser.png");
 		newBullet->Fire(shootPos, m_fRotationAngle);
 		//add to vector
 		m_pBullets->push_back(newBullet);
@@ -76,7 +70,7 @@ void Player::Update(const double a_dDeltaTime, SoundSystemClass a_sounds)
 		shootPos.x += 2*offset.x;
 		shootPos.y += 2*offset.y;
 		//create another bullet
-		Bullet *newBullet2 = new Bullet(shootPos, glm::vec4(1.0, 1.0, 1.0, 1.0), 5, 15, "laser.png");
+		Bullet *newBullet2 = new Bullet(m_fPower, shootPos, glm::vec4(1.0, 1.0, 1.0, 1.0), 5, 15, "laser.png");
 		newBullet2->Fire(shootPos, m_fRotationAngle);
 		//add to vector
 		m_pBullets->push_back(newBullet2);
@@ -91,7 +85,7 @@ void Player::Update(const double a_dDeltaTime, SoundSystemClass a_sounds)
 	Sprite::Update(a_dDeltaTime);
 
 	//update bullets
-	for(int i = 0; i < m_pBullets->size(); i++)
+	for(unsigned int i = 0; i < m_pBullets->size(); i++)
 	{
 		m_pBullets->operator[](i)->Update(a_dDeltaTime);
 		//remove any bullets that have gone off screen or have collided with anything
@@ -107,8 +101,19 @@ void Player::Update(const double a_dDeltaTime, SoundSystemClass a_sounds)
 void Player::Draw(const GLuint VBO, const GLuint IBO, GLSLProgram *shader) const
 {
 	Sprite::Draw(VBO, IBO, shader);
-	for(int i = 0; i < m_pBullets->size(); i++)
+	for(unsigned int i = 0; i < m_pBullets->size(); i++)
 	{
 		m_pBullets->operator[](i)->Draw(VBO, IBO, shader);
+	}
+}
+
+void Player::Hurt(const float a_fDamage)
+{
+	m_fHealth -= a_fDamage;
+	if (m_fHealth < 0) {
+		m_bAlive = false;
+	}
+	else {
+		this->changeColour(glm::vec4(1, m_fHealth / m_fOriginalHealth, m_fHealth / m_fOriginalHealth, 1));
 	}
 }
