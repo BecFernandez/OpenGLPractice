@@ -1,4 +1,6 @@
 #include "GameScreen.h"
+#include "LoseScreen.h"
+#include "WinScreen.h"
 
 GameScreen::GameScreen(SoundSystemClass* a_pSounds, GLSLProgram *a_pShaders) : Screen(a_pSounds, a_pShaders), 
 	m_player(10, 100, glm::vec3(800/2, 600/2, 0), glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), 51, 86, "ship.png", &m_playerBullets, *m_pSounds)
@@ -23,10 +25,16 @@ Screen* GameScreen::Update(const double a_fDeltaTime)
 	if (playerAlive) {
 		m_player.Update(a_fDeltaTime, *m_pSounds);
 
+		int aliveCount = 0;
 		for (int i = 0; i < 3; i++)
 		{
-			if (m_enemies[i]->IsAlive())
+			if (m_enemies[i]->IsAlive()) {
+				aliveCount++;
 				m_enemies[i]->Update(m_player.getCentrePos(), a_fDeltaTime, *m_pSounds);
+			}
+		}
+		if (aliveCount == 0) {
+			return new WinScreen(m_pSounds, m_pShaders);
 		}
 
 		//loop through all bullets
@@ -78,7 +86,7 @@ Screen* GameScreen::Update(const double a_fDeltaTime)
 
 	//player died in the last frame
 	if (playerAlive != m_player.IsAlive()) {
-		return nullptr;
+		return new LoseScreen(m_pSounds, m_pShaders);
 	}
 
 	Screen::Update(a_fDeltaTime);

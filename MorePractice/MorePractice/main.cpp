@@ -65,11 +65,10 @@ int main()
 	shaders.link();
 	shaders.use();
 
-	//create screen state machine
-	std::stack<Screen*> screens;
+	Screen* currentScreen;
+
 	MainMenuScreen *mms = new MainMenuScreen(&sounds, &shaders);
-	
-	screens.push(mms);
+	currentScreen = mms;
 	
 	//Text t(glm::vec3(0, 0, 0), glm::vec4(1.0, 0.0, 0.0, 1.0), 40, 40, "arial_0.png", "arial.fnt");
 
@@ -80,7 +79,7 @@ int main()
 	glm::mat4 projectionMatrix = glm::ortho(0.0f, 800.0f, 0.0f, 600.0f);
 	double lastTime = glfwGetTime(), currentTime;
 
-	while(!glfwWindowShouldClose(window) && !screens.empty())
+	while(!glfwWindowShouldClose(window) && currentScreen != nullptr)
 	{
 		//calculate delta time
 		currentTime = glfwGetTime();
@@ -89,37 +88,23 @@ int main()
 		//draw
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		
-		screens.top()->Draw();
+		currentScreen->Draw();
 
 		glfwSwapBuffers(window);
 		
 		//update
-		Screen* next =screens.top()->Update(deltaTime);
+		Screen* next = currentScreen->Update(deltaTime);
 		//if returned screen is null, pop current screen
-		if(next == nullptr)
+		if(next != currentScreen)
 		{
-			Screen *toDelete = screens.top();
-			screens.pop();
-			delete toDelete;
-		}
-		//else if screen is different to current screen, push new screen onto stack
-		else if(next != screens.top())
-		{
-			screens.push(next);
+			delete currentScreen;
+			currentScreen = next;
 		}
 		//else continue with current top of stack
 
 		
 		glfwPollEvents();
 		lastTime = currentTime;
-	}
-
-	//clear out all screens
-	while(!screens.empty())
-	{
-		Screen* c = screens.top();
-		screens.pop();
-		delete c;
 	}
 
 	glfwDestroyWindow(window);

@@ -15,7 +15,6 @@ class Text : public Sprite
 private:
 	std::vector<Character> m_characters;
 public:
-	Text();
 	Text(const glm::vec3 a_position,
 		const glm::vec4 a_colour,
 		const unsigned int a_uiWidth, const unsigned int a_uiHeight, const char* a_szTexName, const char *a_szXMLName);

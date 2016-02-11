@@ -7,7 +7,6 @@
 class MainMenuScreen : public Screen
 {
 public:
-	MainMenuScreen();
 	MainMenuScreen(SoundSystemClass *a_pSounds, GLSLProgram *a_pShaders);
 	Screen* Update(const double a_dDeltaTime);
 	void Draw();

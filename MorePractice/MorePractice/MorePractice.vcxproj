@@ -69,6 +69,7 @@
     <ClCompile Include="Bullet.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="GameScreen.cpp" />
+    <ClCompile Include="LoseScreen.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MainMenuScreen.cpp" />
     <ClCompile Include="Physics.cpp" />
@@ -77,6 +78,7 @@
     <ClCompile Include="SoundSystemClass.cpp" />
     <ClCompile Include="Sprite.cpp" />
     <ClCompile Include="Text.cpp" />
+    <ClCompile Include="WinScreen.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="triangle.f.glsl" />
@@ -87,6 +89,7 @@
     <ClInclude Include="Bullet.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="GameScreen.h" />
+    <ClInclude Include="LoseScreen.h" />
     <ClInclude Include="MainMenuScreen.h" />
     <ClInclude Include="Physics.h" />
     <ClInclude Include="Player.h" />
@@ -94,6 +97,7 @@
     <ClInclude Include="SoundSystemClass.h" />
     <ClInclude Include="Sprite.h" />
     <ClInclude Include="Text.h" />
+    <ClInclude Include="WinScreen.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CommonOpenGLCode\CommonOpenGLCode.vcxproj">
