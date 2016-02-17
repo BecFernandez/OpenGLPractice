@@ -68,6 +68,7 @@
     <ClCompile Include="AnimatedSprite.cpp" />
     <ClCompile Include="Bullet.cpp" />
     <ClCompile Include="Enemy.cpp" />
+    <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="GameScreen.cpp" />
     <ClCompile Include="LoseScreen.cpp" />
     <ClCompile Include="main.cpp" />
@@ -87,7 +88,9 @@
   <ItemGroup>
     <ClInclude Include="AnimatedSprite.h" />
     <ClInclude Include="Bullet.h" />
+    <ClInclude Include="Component.h" />
     <ClInclude Include="Enemy.h" />
+    <ClInclude Include="GameObject.h" />
     <ClInclude Include="GameScreen.h" />
     <ClInclude Include="LoseScreen.h" />
     <ClInclude Include="MainMenuScreen.h" />
