@@ -7,6 +7,12 @@
 
 class GameScreen : public Screen
 {
+public:
+	GameScreen(SoundSystemClass* a_pSounds, GLSLProgram *a_pShaders);
+	~GameScreen();
+	Screen* Update(const double a_dDeltaTime);
+	void Draw();
+
 private:
 	const unsigned int m_iCOLLISION_DAMAGE = 10;
 
@@ -14,10 +20,7 @@ private:
 	std::vector<Bullet*> m_enemyBullets;
 	Player m_player;
 	Enemy** m_enemies;
-public:
-	GameScreen(SoundSystemClass* a_pSounds, GLSLProgram *a_pShaders);
-	Screen* Update(const double a_dDeltaTime);
-	void Draw();
+
 };
 
 #endif

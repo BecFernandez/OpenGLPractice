@@ -12,6 +12,26 @@ GameScreen::GameScreen(SoundSystemClass* a_pSounds, GLSLProgram *a_pShaders) : S
 	}
 }
 
+GameScreen::~GameScreen()
+{
+	if (m_enemies != nullptr) {
+		for (int i = 0; i < 3; i++) {
+			delete m_enemies[i];
+		}
+		delete m_enemies;
+	}
+
+	for (int i = 0; i < m_playerBullets.size(); i++) {
+		delete m_playerBullets[i];
+	}
+	m_playerBullets.clear();
+
+	for (int i = 0; i < m_enemyBullets.size(); i++) {
+		delete m_enemyBullets[i];
+	}
+	m_enemyBullets.clear();
+}
+
 Screen* GameScreen::Update(const double a_fDeltaTime)
 {
 	if(glfwGetKey(glfwGetCurrentContext(), GLFW_KEY_ESCAPE))
@@ -96,9 +116,7 @@ Screen* GameScreen::Update(const double a_fDeltaTime)
 
 void GameScreen::Draw()
 {
-	m_pShaders->use();
-	//set projection view matrix - once per frame
-	m_pShaders->setUniform("projectionView", m_projectionMatrix);
+	Screen::Draw();
 
 	//draw player
 	if (m_player.IsAlive()) {

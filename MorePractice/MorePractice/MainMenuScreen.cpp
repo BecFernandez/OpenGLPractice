@@ -30,9 +30,8 @@ Screen* MainMenuScreen::Update(const double a_dDeltaTime)
 
 void MainMenuScreen::Draw()
 {
-	m_pShaders->use();
-	//set projection view matrix - once per frame
-	m_pShaders->setUniform("projectionView", m_projectionMatrix);
+	Screen::Draw();
+
 	m_gameTitle.Draw(m_uiSpriteVBO, m_uiSpriteIBO, m_pShaders);
 	m_t.DrawString(m_uiSpriteVBO, m_uiSpriteIBO, m_pShaders, "Hello  World");
 }

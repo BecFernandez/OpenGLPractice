@@ -24,6 +24,11 @@ Screen::Screen(SoundSystemClass* a_pSounds, GLSLProgram *a_pShaders) : m_pSounds
 	m_projectionMatrix = glm::ortho(0.0f, 800.0f, 0.0f, 600.0f);
 }
 
+Screen::~Screen()
+{
+
+}
+
 Screen* Screen::Update(const double m_fDeltaTime)
 {
 	//update animations
@@ -37,4 +42,11 @@ Screen* Screen::Update(const double m_fDeltaTime)
 		}
 	}
 	return this;
+}
+
+void Screen::Draw()
+{
+	m_pShaders->use();
+	//set projection view matrix - once per frame
+	m_pShaders->setUniform("projectionView", m_projectionMatrix);
 }

@@ -29,10 +29,7 @@ Screen* LoseScreen::Update(const double a_dDeltaTime)
 
 void LoseScreen::Draw()
 {
-	//why am I doing these two lines each time?? They should be in the base function
-	//since they are the same for all classes
-	m_pShaders->use();
-	m_pShaders->setUniform("projectionView", m_projectionMatrix);
+	Screen::Draw();
 
 	//would be a better idea for there to be a list of images and texts, right?
 	m_loseImage.Draw(m_uiSpriteVBO, m_uiSpriteIBO, m_pShaders);
