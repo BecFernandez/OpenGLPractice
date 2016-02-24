@@ -6,6 +6,4 @@ class PlayerObject : public GameObject
 public:
 	PlayerObject();
 	void Update();
-private:
-
 };

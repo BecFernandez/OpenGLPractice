@@ -75,6 +75,7 @@
     <ClCompile Include="MainMenuScreen.cpp" />
     <ClCompile Include="Physics.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="PlayerObject.cpp" />
     <ClCompile Include="Screen.cpp" />
     <ClCompile Include="SoundSystemClass.cpp" />
     <ClCompile Include="Sprite.cpp" />
@@ -97,6 +98,7 @@
     <ClInclude Include="MainMenuScreen.h" />
     <ClInclude Include="Physics.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="PlayerObject.h" />
     <ClInclude Include="Screen.h" />
     <ClInclude Include="SoundSystemClass.h" />
     <ClInclude Include="Sprite.h" />

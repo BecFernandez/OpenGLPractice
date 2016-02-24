@@ -2,7 +2,7 @@
 #include <FreeImage.h>
 #include <gtc\matrix_transform.hpp>
 
-unsigned int LoadTexture(const char * Texture, const unsigned int format, unsigned int* width, unsigned int* height, unsigned int *bpp)
+unsigned int LoadTexture2(const char * Texture, const unsigned int format, unsigned int* width, unsigned int* height, unsigned int *bpp)
 {
 	FIBITMAP* bitmap = NULL;
 
@@ -77,7 +77,7 @@ SpriteComponent::SpriteComponent(const glm::vec4 a_colour,
 	unsigned int width = (unsigned int)a_dimensions.x;
 	unsigned int height = (unsigned int)a_dimensions.y;
 	if (a_szTexName != nullptr)
-		m_uiTexture = LoadTexture(a_szTexName, GL_RGBA, &width, &height, NULL);
+		m_uiTexture = LoadTexture2(a_szTexName, GL_RGBA, &width, &height, NULL);
 	else
 		m_uiTexture = 0;
 
