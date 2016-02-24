@@ -9,7 +9,7 @@ public:
 	void AddComponent(Component* a_component);
 	void RemoveComponent(ComponentTypes a_type);
 	Component* GetComponent(ComponentTypes a_type);
-	void Update();
+	virtual void Update();
 private:
 	std::vector<Component*> m_components;
 };

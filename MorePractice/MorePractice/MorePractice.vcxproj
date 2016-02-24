@@ -78,6 +78,7 @@
     <ClCompile Include="Screen.cpp" />
     <ClCompile Include="SoundSystemClass.cpp" />
     <ClCompile Include="Sprite.cpp" />
+    <ClCompile Include="SpriteComponent.cpp" />
     <ClCompile Include="Text.cpp" />
     <ClCompile Include="WinScreen.cpp" />
   </ItemGroup>
@@ -99,6 +100,7 @@
     <ClInclude Include="Screen.h" />
     <ClInclude Include="SoundSystemClass.h" />
     <ClInclude Include="Sprite.h" />
+    <ClInclude Include="SpriteComponent.h" />
     <ClInclude Include="Text.h" />
     <ClInclude Include="WinScreen.h" />
   </ItemGroup>

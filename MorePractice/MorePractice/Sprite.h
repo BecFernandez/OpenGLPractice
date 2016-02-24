@@ -25,8 +25,10 @@ protected:
 	glm::vec3 m_oCentrePos;
 	float m_fRotationAngle;
 	float m_fScale;
+
 	glm::vec2 m_oVelocity;
 	glm::vec2 m_oAcceleration;
+
 	unsigned int m_uiTextureWidth;
 	unsigned int m_uiTextureHeight;
 	void changeColour(const glm::vec4 a_oNewColour);
