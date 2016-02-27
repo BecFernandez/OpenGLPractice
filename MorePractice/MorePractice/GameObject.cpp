@@ -41,9 +41,9 @@ Component* GameObject::GetComponent(ComponentTypes a_type) {
 	return nullptr;
 }
 
-void GameObject::Update()
+void GameObject::Update(const double a_dDeltaTime)
 {
 	for (int i = 0; i < m_components.size(); i++) {
-		m_components[i]->Update();
+		m_components[i]->Update(a_dDeltaTime);
 	}
 }

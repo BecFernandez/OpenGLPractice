@@ -15,8 +15,8 @@ void Player::Update(const double a_dDeltaTime, SoundSystemClass a_sounds)
 	m_oVelocity.x += m_oAcceleration.x * a_dDeltaTime;
 	m_oVelocity.y += m_oAcceleration.y * a_dDeltaTime;
 
-	glm::vec4 temp = glm::rotate(glm::mat4(1), m_fRotationAngle + 90, glm::vec3(0, 0, 1)) 
-			* glm::vec4(3, 0, 0, 1);
+	glm::vec4 temp = glm::rotate(glm::mat4(1), m_fRotationAngle + 90, glm::vec3(0, 0, 1))
+			* glm::vec4(1, 0, 0, 1);
 
 	//update position
 	m_oCentrePos.x += m_oVelocity.x * a_dDeltaTime * temp.x;
