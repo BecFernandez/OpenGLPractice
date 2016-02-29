@@ -1,5 +1,10 @@
 #include "GameObject.h"
 
+GameObject::GameObject() : m_bActive(true)
+{
+
+}
+
 GameObject::~GameObject()
 {
 	for (int i = 0; i < m_components.size(); i++) {
@@ -32,7 +37,7 @@ void GameObject::RemoveComponent(ComponentTypes a_type)
 	m_components.erase(m_components.begin() + indexToErase);
 }
 
-Component* GameObject::GetComponent(ComponentTypes a_type) {
+Component* GameObject::GetComponent(ComponentTypes a_type) const {
 	for (int i = 0; i < m_components.size(); i++) {
 		if (m_components[i]->GetComponentType() == a_type) {
 			return m_components[i];

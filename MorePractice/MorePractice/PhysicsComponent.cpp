@@ -1,29 +1,17 @@
 #include "PhysicsComponent.h"
 #include <gtc\matrix_transform.hpp>
 
-const float PhysicsComponent::m_fFrictionValue = 0.97;
-
 PhysicsComponent::PhysicsComponent() : Component(PHYSICS), m_position(0, 0, 0), m_fRotationSpeed(1), m_fRotationAngle(0),
-m_velocity(0, 0), m_acceleration(0, 0)
+m_velocity(0, 0), m_acceleration(0, 0), m_fFrictionValue(0.97)
 {
 
 }
 
-PhysicsComponent::PhysicsComponent(const glm::vec3 a_position, const float a_fRotationSpeed, const float a_fRotationAngle) :
+PhysicsComponent::PhysicsComponent(const glm::vec3 a_position, const float a_fRotationSpeed, const float a_fRotationAngle, const float a_fFrictionValue) :
 	Component(PHYSICS), m_position(a_position), m_fRotationSpeed(a_fRotationSpeed), m_fRotationAngle(a_fRotationAngle), 
-	m_velocity(0, 0), m_acceleration(0, 0)
+	m_velocity(0, 0), m_acceleration(0, 0), m_fFrictionValue(a_fFrictionValue)
 {
 
-}
-
-void PhysicsComponent::AddForce(const glm::vec2 a_force)
-{
-	m_acceleration += a_force;
-}
-
-void PhysicsComponent::AddRotation(const float a_fRotation)
-{
-	m_fRotationAngle += a_fRotation;
 }
 
 void PhysicsComponent::Update(const double a_dDelaTime)
