@@ -6,9 +6,9 @@ BulletManager::BulletManager(GLuint a_uiVBO, GLuint a_uiIBO, GLSLProgram *a_pSha
 
 }
 
-void BulletManager::Shoot(float a_fRotationAngle, glm::vec3 a_position) 
+void BulletManager::Shoot(int speed, float a_fRotationAngle, glm::vec3 a_position) 
 {
-	m_bullets.push_back(new BulletObject(a_fRotationAngle, a_position, m_uiVBO, m_uiIBO, m_pShaderProgram));
+	m_bullets.push_back(new BulletObject(speed, a_fRotationAngle, a_position, m_uiVBO, m_uiIBO, m_pShaderProgram));
 }
 
 void BulletManager::Update(const double a_dDeltaTime)

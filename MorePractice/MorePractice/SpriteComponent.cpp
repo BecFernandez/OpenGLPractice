@@ -66,7 +66,8 @@ unsigned int LoadTexture2(const char * Texture, const unsigned int format, unsig
 SpriteComponent::SpriteComponent(const glm::vec4 a_colour,
 	const glm::vec2 a_dimensions, const char* a_szTexName,
 	GLuint a_uiVBO, GLuint a_uiIBO, GLSLProgram* a_pShader) : Component(SPRITE),
-	m_dimensions(a_dimensions), m_uiVBO(a_uiVBO), m_uiIBO(a_uiIBO), m_pShader(a_pShader)
+	m_dimensions(a_dimensions), m_uiVBO(a_uiVBO), m_uiIBO(a_uiIBO), m_pShader(a_pShader), m_fRotationAngle(0),
+	m_fScale(1), m_position(glm::vec3())
 {
 	//load texture - at run time? Sounds like a bad idea - why don't I load all the textures when the game starts
 	//and here I just link to it?

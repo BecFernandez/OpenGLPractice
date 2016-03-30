@@ -2,7 +2,7 @@
 #include "SpriteComponent.h"
 #include "PhysicsComponent.h"
 
-BulletObject::BulletObject(float a_fRotationAngle, glm::vec3 a_startPos, GLuint a_uiVBO, GLuint a_uiIBO, GLSLProgram *a_pShader)
+BulletObject::BulletObject(int speed, float a_fRotationAngle, glm::vec3 a_startPos, GLuint a_uiVBO, GLuint a_uiIBO, GLSLProgram *a_pShader)
 {
 	AddComponent(new SpriteComponent(glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), glm::vec2(5.0f, 15.0f),
 		"laser.png", a_uiVBO, a_uiIBO, a_pShader));
@@ -10,7 +10,7 @@ BulletObject::BulletObject(float a_fRotationAngle, glm::vec3 a_startPos, GLuint 
 	AddComponent(m_physicsComponent);
 
 	//since the bullet has no friction I should only need to add force once
-	m_physicsComponent->AddForce(glm::vec2(150, 150));
+	m_physicsComponent->AddForce(glm::vec2(speed, speed));
 }
 
 void BulletObject::Update(const double a_dDeltaTime)

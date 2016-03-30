@@ -24,7 +24,7 @@ void Player::Update(const double a_dDeltaTime, SoundSystemClass a_sounds)
 	
 	//apply friction
 	m_oVelocity *= 0.97;
-
+	
 	//move forward
 	if(glfwGetKey(glfwGetCurrentContext(), 'W'))
 	{
@@ -81,7 +81,7 @@ void Player::Update(const double a_dDeltaTime, SoundSystemClass a_sounds)
 	}
 
 	
-
+	std::cout << m_oCentrePos.x << " " << m_oCentrePos.y << " player" << std::endl;
 	Sprite::Update(a_dDeltaTime);
 
 	//update bullets

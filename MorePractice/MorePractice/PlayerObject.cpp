@@ -7,12 +7,14 @@ PlayerObject::PlayerObject(BulletManager *a_pBulletManager, GLuint a_uiVBO, GLui
 {
 	AddComponent(new SpriteComponent(glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), glm::vec2(51.0f, 86.0f),
 		"ship.png", a_uiVBO, a_uiIBO, a_pShader));
-	AddComponent(new PhysicsComponent());
+	AddComponent(new PhysicsComponent(glm::vec3(400, 300, 0), 1.0f, 0.0f, 0.97f));
 }
 
 void PlayerObject::Update(const double a_dDeltaTime)
 {
 	GameObject::Update(a_dDeltaTime);
+
+	m_fFireCoolDown -= a_dDeltaTime;
 
 	//don't like calling this - should probably cache a reference or an index.
 	//but will worry about fixing it when refactoring component system 
@@ -59,7 +61,7 @@ void PlayerObject::shoot()
 		glm::vec4 offset = glm::rotate(glm::mat4(1), rotationAngle, glm::vec3(0, 0, 1))
 			* glm::vec4(10, 0, 0, 1);
 
-		m_pBulletManager->Shoot(rotationAngle, shootPos - glm::vec3(offset.x, offset.y, offset.z));
-		m_pBulletManager->Shoot(rotationAngle, shootPos + glm::vec3(2*offset.x, 2*offset.y, 2*offset.z));
+		m_pBulletManager->Shoot(M_BULLET_SPEED, rotationAngle, shootPos - glm::vec3(offset.x, offset.y, offset.z));
+		m_pBulletManager->Shoot(M_BULLET_SPEED, rotationAngle, shootPos + glm::vec3(2*offset.x, 2*offset.y, 2*offset.z));
 	}
 }

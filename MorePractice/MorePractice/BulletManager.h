@@ -5,7 +5,7 @@ class BulletManager
 {
 public:
 	BulletManager(GLuint a_uiVBO, GLuint a_uiIBO, GLSLProgram *a_pShaderProgram);
-	void Shoot(float a_fRotationAngle, glm::vec3 a_position);
+	void Shoot(int speed, float a_fRotationAngle, glm::vec3 a_position);
 	void Update(const double a_dDeltaTime);
 private:
 	GLuint m_uiVBO;

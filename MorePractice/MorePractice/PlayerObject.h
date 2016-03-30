@@ -13,4 +13,5 @@ private:
 	BulletManager *m_pBulletManager;
 	float m_fFireCoolDown;
 	void shoot();
+	static const int M_BULLET_SPEED = 30000;
 };

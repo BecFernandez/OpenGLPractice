@@ -90,7 +90,7 @@ int main()
 		
 		currentScreen->Draw();
 
-		glfwSwapBuffers(window);
+		
 		
 		//update
 		Screen* next = currentScreen->Update(deltaTime);
@@ -101,7 +101,7 @@ int main()
 			currentScreen = next;
 		}
 		//else continue with current top of stack
-
+		glfwSwapBuffers(window);
 		
 		glfwPollEvents();
 		lastTime = currentTime;

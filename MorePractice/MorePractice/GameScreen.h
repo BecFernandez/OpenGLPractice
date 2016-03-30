@@ -5,6 +5,9 @@
 #include "Player.h"
 #include "Enemy.h"
 
+#include "BulletManager.h"
+#include "GameObject.h"
+
 class GameScreen : public Screen
 {
 public:
@@ -18,9 +21,11 @@ private:
 
 	std::vector<Bullet*> m_playerBullets;
 	std::vector<Bullet*> m_enemyBullets;
-	Player m_player;
+	//Player m_player;
 	Enemy** m_enemies;
 
+	BulletManager *m_pBulletManager;
+	std::vector<GameObject*> m_gameObjects;
 };
 
 #endif

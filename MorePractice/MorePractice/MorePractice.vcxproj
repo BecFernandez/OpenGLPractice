@@ -70,6 +70,7 @@
     <ClCompile Include="BulletManager.cpp" />
     <ClCompile Include="BulletObject.cpp" />
     <ClCompile Include="Enemy.cpp" />
+    <ClCompile Include="EnemyObject.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="GameScreen.cpp" />
     <ClCompile Include="LoseScreen.cpp" />
@@ -97,6 +98,7 @@
     <ClInclude Include="BulletObject.h" />
     <ClInclude Include="Component.h" />
     <ClInclude Include="Enemy.h" />
+    <ClInclude Include="EnemyObject.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="GameScreen.h" />
     <ClInclude Include="LoseScreen.h" />
