@@ -2,11 +2,13 @@
 #define __GAMESCREEN_H__
 
 #include "Screen.h"
-#include "Player.h"
+#include "PlayerObject.h"
 #include "Enemy.h"
 
 #include "BulletManager.h"
-#include "GameObject.h"
+#include "PhysicsComponent.h"
+#include "SpriteComponent.h"
+#include "HealthComponent.h"
 
 class GameScreen : public Screen
 {
@@ -21,11 +23,15 @@ private:
 
 	std::vector<Bullet*> m_playerBullets;
 	std::vector<Bullet*> m_enemyBullets;
-	//Player m_player;
+	PlayerObject* m_player;
 	Enemy** m_enemies;
 
 	BulletManager *m_pBulletManager;
 	std::vector<GameObject*> m_gameObjects;
+
+	PhysicsComponent *m_pPhysicsComponents;
+	SpriteComponent *m_pSpriteComponents;
+	HealthComponent *m_pHealthComponents;
 };
 
 #endif

@@ -65,7 +65,7 @@ unsigned int LoadTexture2(const char * Texture, const unsigned int format, unsig
 
 SpriteComponent::SpriteComponent(const glm::vec4 a_colour,
 	const glm::vec2 a_dimensions, const char* a_szTexName,
-	GLuint a_uiVBO, GLuint a_uiIBO, GLSLProgram* a_pShader) : Component(SPRITE),
+	GLuint a_uiVBO, GLuint a_uiIBO, GLSLProgram* a_pShader, bool a_bActive) : Component(SPRITE, a_bActive),
 	m_dimensions(a_dimensions), m_uiVBO(a_uiVBO), m_uiIBO(a_uiIBO), m_pShader(a_pShader), m_fRotationAngle(0),
 	m_fScale(1), m_position(glm::vec3())
 {
@@ -145,35 +145,37 @@ void SpriteComponent::Update(double a_dDeltaTime)
 
 void SpriteComponent::Draw() const
 {
-	//copy vertices to GPU in case they have changed
-	glBindBuffer(GL_ARRAY_BUFFER, m_uiVBO);
-	GLvoid *vBuffer = glMapBuffer(GL_ARRAY_BUFFER, GL_WRITE_ONLY);
-	memcpy(vBuffer, m_corners, sizeof(Vertex) * 4);
-	glUnmapBuffer(GL_ARRAY_BUFFER);
+	if (m_bActive) {
+		//copy vertices to GPU in case they have changed
+		glBindBuffer(GL_ARRAY_BUFFER, m_uiVBO);
+		GLvoid *vBuffer = glMapBuffer(GL_ARRAY_BUFFER, GL_WRITE_ONLY);
+		memcpy(vBuffer, m_corners, sizeof(Vertex) * 4);
+		glUnmapBuffer(GL_ARRAY_BUFFER);
 
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_uiIBO);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_uiIBO);
 
-	glBindTexture(GL_TEXTURE_2D, m_uiTexture);
+		glBindTexture(GL_TEXTURE_2D, m_uiTexture);
 
-	m_pShader->setUniform("world", this->m_globalTransform);
+		m_pShader->setUniform("world", this->m_globalTransform);
 
-	glEnableVertexAttribArray(0);
-	glEnableVertexAttribArray(1);
-	glEnableVertexAttribArray(2);
-	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, sizeof(struct Vertex), (void*)0);
-	glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, sizeof(struct Vertex), (void*)(sizeof(glm::vec4)));
-	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(struct Vertex), (void*)(sizeof(glm::vec4) * 2));
+		glEnableVertexAttribArray(0);
+		glEnableVertexAttribArray(1);
+		glEnableVertexAttribArray(2);
+		glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, sizeof(struct Vertex), (void*)0);
+		glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, sizeof(struct Vertex), (void*)(sizeof(glm::vec4)));
+		glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(struct Vertex), (void*)(sizeof(glm::vec4) * 2));
 
-	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, (void*)0);
+		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, (void*)0);
 
-	glDisableVertexAttribArray(2);
-	glDisableVertexAttribArray(1);
-	glDisableVertexAttribArray(0);
+		glDisableVertexAttribArray(2);
+		glDisableVertexAttribArray(1);
+		glDisableVertexAttribArray(0);
 
-	glBindTexture(GL_TEXTURE_2D, 0);
+		glBindTexture(GL_TEXTURE_2D, 0);
 
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
+	}
 }
 
 void SpriteComponent::ChangeColour(const glm::vec4 a_NewColour)

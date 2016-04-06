@@ -7,8 +7,8 @@ m_velocity(0, 0), m_acceleration(0, 0), m_fFrictionValue(0.97)
 
 }
 
-PhysicsComponent::PhysicsComponent(const glm::vec3 a_position, const float a_fRotationSpeed, const float a_fRotationAngle, const float a_fFrictionValue) :
-	Component(PHYSICS), m_position(a_position), m_fRotationSpeed(a_fRotationSpeed), m_fRotationAngle(a_fRotationAngle), 
+PhysicsComponent::PhysicsComponent(const glm::vec3 a_position, const float a_fRotationSpeed, const float a_fRotationAngle, const float a_fFrictionValue, bool a_bActive) :
+	Component(PHYSICS, a_bActive), m_position(a_position), m_fRotationSpeed(a_fRotationSpeed), m_fRotationAngle(a_fRotationAngle), 
 	m_velocity(0, 0), m_acceleration(0, 0), m_fFrictionValue(a_fFrictionValue)
 {
 

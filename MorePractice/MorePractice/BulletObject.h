@@ -6,8 +6,9 @@
 class BulletObject : public GameObject
 {
 public:
-	BulletObject(int speed, float a_fRotationAngle, glm::vec3 a_startPos, GLuint a_uiVBO, GLuint a_uiIBO, GLSLProgram *a_pShader);
+	BulletObject(GLuint a_uiVBO, GLuint a_uiIBO, GLSLProgram *a_pShader);
 	void Update(const double a_dDeltaTime);
+	void Shoot(int speed, float a_fRotationAngle, glm::vec3 a_startPos);
 private:
 	PhysicsComponent* m_physicsComponent;
 };
