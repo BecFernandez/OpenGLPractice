@@ -82,6 +82,7 @@
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="PlayerObject.cpp" />
     <ClCompile Include="Screen.cpp" />
+    <ClCompile Include="ShipObject.cpp" />
     <ClCompile Include="SoundSystemClass.cpp" />
     <ClCompile Include="Sprite.cpp" />
     <ClCompile Include="SpriteComponent.cpp" />
@@ -110,6 +111,7 @@
     <ClInclude Include="Player.h" />
     <ClInclude Include="PlayerObject.h" />
     <ClInclude Include="Screen.h" />
+    <ClInclude Include="ShipObject.h" />
     <ClInclude Include="SoundSystemClass.h" />
     <ClInclude Include="Sprite.h" />
     <ClInclude Include="SpriteComponent.h" />

@@ -1,15 +1,15 @@
 #pragma once
 
-#include "GameObject.h"
+#include "PlayerObject.h"
 #include "BulletManager.h"
 
-class EnemyObject : public GameObject
+const float ENEMY_F_FIRE_COOL_DOWN_MAX = 0.7f;
+
+class EnemyObject : public ShipObject
 {
 public:
-	EnemyObject(BulletManager *a_pBulletManager, GLuint a_uiVBO, GLuint a_uiIBO, GLSLProgram *a_pShader);
+	EnemyObject(PlayerObject* a_player, BulletManager *a_pBulletManager, GLuint a_uiVBO, GLuint a_uiIBO, GLSLProgram *a_pShader);
 	void Update(const double a_dDeltaTime);
-
 private:
-	BulletManager *m_pBulletManager;
-	float m_fFireCoolDown;
+	PlayerObject* m_player;
 };

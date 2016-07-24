@@ -10,9 +10,9 @@ GameScreen::GameScreen(SoundSystemClass* a_pSounds, GLSLProgram *a_pShaders) : S
 {
 	m_pPhysicsComponents = new PhysicsComponent[14]{ 
 		{ glm::vec3(400, 300, 0), 1.0f, 0.0f, 0.97f },  
-		{},
-		{},
-		{},
+		{glm::vec3(100, 100, 0), 1.0f},
+		{ glm::vec3(600, 100, 0), 1.0f },
+		{ glm::vec3(600, 500, 0), 1.0f },
 		//yeeeeep, this is shit
 		{ glm::vec3(), 1, 0.0f, 1, false },
 		{ glm::vec3(), 1, 0.0f, 1, false },
@@ -59,7 +59,7 @@ GameScreen::GameScreen(SoundSystemClass* a_pSounds, GLSLProgram *a_pShaders) : S
 	//m_enemies = new Enemy*[3];
 	for (int i = 0; i < 3; i++)
 	{
-		m_gameObjects.push_back(new EnemyObject(m_pBulletManager, m_uiSpriteVBO, m_uiSpriteIBO, m_pShaders));
+		m_gameObjects.push_back(new EnemyObject(m_player, m_pBulletManager, m_uiSpriteVBO, m_uiSpriteIBO, m_pShaders));
 		m_gameObjects[i + 1]->AddComponent(m_pPhysicsComponents + i + 1);
 		m_gameObjects[i + 1]->AddComponent(m_pSpriteComponents + i + 1);
 		m_gameObjects[i + 1]->AddComponent(m_pHealthComponents + i + 1);

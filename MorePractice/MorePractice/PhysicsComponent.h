@@ -11,6 +11,7 @@ public:
 	void Update(const double a_dDeltaTime);
 
 	//these are going to have to be public - I need to get and set them from the bullet object
+	//actually thinking about moving these into the object itself since they are needed by a few different components.
 	glm::vec3 m_position;
 	float m_fRotationAngle;
 

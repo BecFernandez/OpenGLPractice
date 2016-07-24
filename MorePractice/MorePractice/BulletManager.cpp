@@ -33,8 +33,8 @@ void BulletManager::Shoot(int speed, float a_fRotationAngle, glm::vec3 a_positio
 			}
 			if (!m_bullets[m_iLastAssignedBullet].IsActive()) {
 				m_bullets[m_iLastAssignedBullet].Shoot(speed, a_fRotationAngle, a_position);
+				break;
 			}
-			break;
 		}
 	}
 }

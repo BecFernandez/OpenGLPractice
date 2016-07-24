@@ -3,22 +3,35 @@
 #include "PhysicsComponent.h"
 #include "HealthComponent.h"
 
-EnemyObject::EnemyObject(BulletManager *a_pBulletManager, GLuint a_uiVBO, GLuint a_uiIBO, GLSLProgram *a_pShader) : m_pBulletManager(a_pBulletManager)
+EnemyObject::EnemyObject(PlayerObject* a_player, BulletManager *a_pBulletManager, GLuint a_uiVBO, GLuint a_uiIBO, GLSLProgram *a_pShader) : ShipObject(ENEMY_F_FIRE_COOL_DOWN_MAX, a_pBulletManager, a_uiVBO, a_uiIBO, a_pShader), m_player(a_player)
 {
 
 }
 
 void EnemyObject::Update(double a_dDeltaTime)
 {
-	m_fFireCoolDown -= a_dDeltaTime;
-
 	PhysicsComponent* physicsComponent = dynamic_cast<PhysicsComponent*>(GameObject::GetComponent(PHYSICS));
-	SpriteComponent* spriteComponent = dynamic_cast<SpriteComponent*>(GameObject::GetComponent(SPRITE));
-	if (spriteComponent != nullptr) {
-		if (physicsComponent != nullptr) {
-			//Is there a better way to get these components to work together? I feel it's likely to happen a lot.
-			spriteComponent->m_position = physicsComponent->m_position;
-			spriteComponent->m_fRotationAngle = physicsComponent->m_fRotationAngle;
-		}
+	glm::vec3 playerPos = m_player->GetPosition();
+
+	glm::vec3 toPlayer = playerPos - physicsComponent->m_position;
+
+	float aimAngle = atan2(toPlayer.y, toPlayer.x);
+
+	if (aimAngle*180.0 / 3.14159 > physicsComponent->m_fRotationAngle + 90)
+		physicsComponent->AddRotation(3);
+	else if (aimAngle*180.0 / 3.14159 < physicsComponent->m_fRotationAngle + 90)
+		physicsComponent->AddRotation(-3);
+
+	if (physicsComponent->m_fRotationAngle + 90 > 180)
+		physicsComponent->AddRotation(-360);
+	else if (physicsComponent->m_fRotationAngle + 90 < -180)
+		physicsComponent->AddRotation(360);
+
+	physicsComponent->AddForce(glm::vec2(50, 50));
+
+	if (glm::distance(playerPos, physicsComponent->m_position) < 200) {
+		ShipObject::shoot();
 	}
+
+	ShipObject::Update(a_dDeltaTime);
 }
