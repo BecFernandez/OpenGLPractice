@@ -69,6 +69,7 @@
     <ClCompile Include="Bullet.cpp" />
     <ClCompile Include="BulletManager.cpp" />
     <ClCompile Include="BulletObject.cpp" />
+    <ClCompile Include="ColliderComponent.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="EnemyObject.cpp" />
     <ClCompile Include="GameObject.cpp" />
@@ -79,6 +80,7 @@
     <ClCompile Include="MainMenuScreen.cpp" />
     <ClCompile Include="Physics.cpp" />
     <ClCompile Include="PhysicsComponent.cpp" />
+    <ClCompile Include="PhysicsManager.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="PlayerObject.cpp" />
     <ClCompile Include="Screen.cpp" />
@@ -98,6 +100,7 @@
     <ClInclude Include="Bullet.h" />
     <ClInclude Include="BulletManager.h" />
     <ClInclude Include="BulletObject.h" />
+    <ClInclude Include="ColliderComponent.h" />
     <ClInclude Include="Component.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="EnemyObject.h" />
@@ -108,6 +111,7 @@
     <ClInclude Include="MainMenuScreen.h" />
     <ClInclude Include="Physics.h" />
     <ClInclude Include="PhysicsComponent.h" />
+    <ClInclude Include="PhysicsManager.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="PlayerObject.h" />
     <ClInclude Include="Screen.h" />

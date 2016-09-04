@@ -6,9 +6,11 @@
 #include "Enemy.h"
 
 #include "BulletManager.h"
+#include "PhysicsManager.h"
 #include "PhysicsComponent.h"
 #include "SpriteComponent.h"
 #include "HealthComponent.h"
+#include "ColliderComponent.h"
 
 class GameScreen : public Screen
 {
@@ -27,11 +29,13 @@ private:
 	Enemy** m_enemies;
 
 	BulletManager *m_pBulletManager;
+	PhysicsManager *m_pPhysicsManager;
 	std::vector<GameObject*> m_gameObjects;
 
 	PhysicsComponent *m_pPhysicsComponents;
 	SpriteComponent *m_pSpriteComponents;
 	HealthComponent *m_pHealthComponents;
+	ColliderComponent *m_pColliderComponents;
 };
 
 #endif

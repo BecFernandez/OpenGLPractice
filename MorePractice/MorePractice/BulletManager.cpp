@@ -1,7 +1,8 @@
 #include "BulletManager.h"
 
-BulletManager::BulletManager(GLuint a_uiVBO, GLuint a_uiIBO, GLSLProgram *a_pShaderProgram, PhysicsComponent *a_pPhysicsComponents, SpriteComponent *a_pSpriteComponents) :
-	m_uiVBO(a_uiVBO), m_uiIBO(a_uiIBO), m_pShaderProgram(a_pShaderProgram), m_pPhysicsComponents(a_pPhysicsComponents), m_pSpriteComponents(a_pSpriteComponents), m_iLastAssignedBullet(-1), m_uiNumActiveBullets(0)
+BulletManager::BulletManager(GLuint a_uiVBO, GLuint a_uiIBO, GLSLProgram *a_pShaderProgram, PhysicsComponent *a_pPhysicsComponents, SpriteComponent *a_pSpriteComponents, ColliderComponent *a_pColliderComponents) :
+	m_uiVBO(a_uiVBO), m_uiIBO(a_uiIBO), m_pShaderProgram(a_pShaderProgram), m_pPhysicsComponents(a_pPhysicsComponents), m_pSpriteComponents(a_pSpriteComponents), m_pColliderComponents(a_pColliderComponents),
+	m_iLastAssignedBullet(-1), m_uiNumActiveBullets(0)
 {
 	m_bullets = new BulletObject[10]{
 		//ok, this is shit - gotta find a better way of doing this.
@@ -19,6 +20,7 @@ BulletManager::BulletManager(GLuint a_uiVBO, GLuint a_uiIBO, GLSLProgram *a_pSha
 	for (unsigned int i = 0; i < 10; ++i) {
 		m_bullets[i].AddComponent(m_pPhysicsComponents + i);
 		m_bullets[i].AddComponent(m_pSpriteComponents + i);
+		m_bullets[i].AddComponent(m_pColliderComponents + i);
 	}
 }
 

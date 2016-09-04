@@ -1,6 +1,7 @@
 #include "SpriteComponent.h"
 #include <FreeImage.h>
 #include <gtc\matrix_transform.hpp>
+#include "GameObject.h"
 
 unsigned int LoadTexture2(const char * Texture, const unsigned int format, unsigned int* width, unsigned int* height, unsigned int *bpp)
 {
@@ -66,8 +67,7 @@ unsigned int LoadTexture2(const char * Texture, const unsigned int format, unsig
 SpriteComponent::SpriteComponent(const glm::vec4 a_colour,
 	const glm::vec2 a_dimensions, const char* a_szTexName,
 	GLuint a_uiVBO, GLuint a_uiIBO, GLSLProgram* a_pShader, bool a_bActive) : Component(SPRITE, a_bActive),
-	m_dimensions(a_dimensions), m_uiVBO(a_uiVBO), m_uiIBO(a_uiIBO), m_pShader(a_pShader), m_fRotationAngle(0),
-	m_fScale(1), m_position(glm::vec3())
+	m_dimensions(a_dimensions), m_uiVBO(a_uiVBO), m_uiIBO(a_uiIBO), m_pShader(a_pShader)
 {
 	//load texture - at run time? Sounds like a bad idea - why don't I load all the textures when the game starts
 	//and here I just link to it?
@@ -139,13 +139,13 @@ void SpriteComponent::UpdateCornersGrounded(unsigned int a_uiWidth, unsigned int
 
 void SpriteComponent::Update(double a_dDeltaTime)
 {
-	m_globalTransform = glm::translate(glm::mat4(1), glm::vec3(m_position.x, m_position.y, m_position.z)) *
-		glm::rotate(glm::mat4(1), m_fRotationAngle, glm::vec3(0, 0, 1)) * glm::scale(glm::mat4(1), glm::vec3(m_fScale, m_fScale, 1));
+	m_globalTransform = glm::translate(glm::mat4(1), glm::vec3(m_pGameObject->m_position.x, m_pGameObject->m_position.y, m_pGameObject->m_position.z)) *
+		glm::rotate(glm::mat4(1), m_pGameObject->m_fRotationAngle, glm::vec3(0, 0, 1)) * glm::scale(glm::mat4(1), glm::vec3(m_pGameObject->m_fScale, m_pGameObject->m_fScale, 1));
 }
 
 void SpriteComponent::Draw() const
 {
-	if (m_bActive) {
+	if (m_pGameObject->IsActive()) {
 		//copy vertices to GPU in case they have changed
 		glBindBuffer(GL_ARRAY_BUFFER, m_uiVBO);
 		GLvoid *vBuffer = glMapBuffer(GL_ARRAY_BUFFER, GL_WRITE_ONLY);

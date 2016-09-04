@@ -9,21 +9,21 @@ GameScreen::GameScreen(SoundSystemClass* a_pSounds, GLSLProgram *a_pShaders) : S
 //m_player(10, 100, glm::vec3(800 / 2, 600 / 2, 0), glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), 51, 86, "ship.png", &m_playerBullets, *m_pSounds)
 {
 	m_pPhysicsComponents = new PhysicsComponent[14]{ 
-		{ glm::vec3(400, 300, 0), 1.0f, 0.0f, 0.97f },  
-		{glm::vec3(100, 100, 0), 1.0f},
-		{ glm::vec3(600, 100, 0), 1.0f },
-		{ glm::vec3(600, 500, 0), 1.0f },
+		{ 1.0f },  
+		{ 1.0f },
+		{ 1.0f },
+		{ 1.0f },
 		//yeeeeep, this is shit
-		{ glm::vec3(), 1, 0.0f, 1, false },
-		{ glm::vec3(), 1, 0.0f, 1, false },
-		{ glm::vec3(), 1, 0.0f, 1, false },
-		{ glm::vec3(), 1, 0.0f, 1, false },
-		{ glm::vec3(), 1, 0.0f, 1, false },
-		{ glm::vec3(), 1, 0.0f, 1, false },
-		{ glm::vec3(), 1, 0.0f, 1, false },
-		{ glm::vec3(), 1, 0.0f, 1, false },
-		{ glm::vec3(), 1, 0.0f, 1, false },
-		{ glm::vec3(), 1, 0.0f, 1, false }
+		{ 1, 1, false },
+		{ 1, 1, false },
+		{ 1, 1, false },
+		{ 1, 1, false },
+		{ 1, 1, false },
+		{ 1, 1, false },
+		{ 1, 1, false },
+		{ 1, 1, false },
+		{ 1, 1, false },
+		{ 1, 1, false }
 	};
 	m_pSpriteComponents = new SpriteComponent[14]{ 
 		{ glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), glm::vec2(51.0f, 86.0f), "ship.png", m_uiSpriteVBO, m_uiSpriteIBO, m_pShaders },
@@ -48,21 +48,44 @@ GameScreen::GameScreen(SoundSystemClass* a_pSounds, GLSLProgram *a_pShaders) : S
 		{30}
 	};
 
-	m_pBulletManager = new BulletManager(m_uiSpriteVBO, m_uiSpriteIBO, m_pShaders, m_pPhysicsComponents + 4, m_pSpriteComponents + 4);
+	m_pColliderComponents = new ColliderComponent[14]{
+		{ PLAYER, glm::vec2(51.0f, 86.0f) },
+		{ ENEMY, glm::vec2(51.0f, 86.0f) },
+		{ ENEMY, glm::vec2(51.0f, 86.0f) },
+		{ ENEMY, glm::vec2(51.0f, 86.0f) },
+		{ BULLET, glm::vec2(5.0f, 15.0f) },
+		{ BULLET, glm::vec2(5.0f, 15.0f) },
+		{ BULLET, glm::vec2(5.0f, 15.0f) },
+		{ BULLET, glm::vec2(5.0f, 15.0f) },
+		{ BULLET, glm::vec2(5.0f, 15.0f) },
+		{ BULLET, glm::vec2(5.0f, 15.0f) },
+		{ BULLET, glm::vec2(5.0f, 15.0f) },
+		{ BULLET, glm::vec2(5.0f, 15.0f) },
+		{ BULLET, glm::vec2(5.0f, 15.0f) },
+		{ BULLET, glm::vec2(5.0f, 15.0f) }
+	};
 
-	m_player = new PlayerObject(m_pBulletManager, m_uiSpriteVBO, m_uiSpriteIBO, m_pShaders);
+	m_pBulletManager = new BulletManager(m_uiSpriteVBO, m_uiSpriteIBO, m_pShaders, m_pPhysicsComponents + 4, m_pSpriteComponents + 4, m_pColliderComponents + 4);
+	m_pPhysicsManager = new PhysicsManager();
+	for (unsigned int i = 0; i < 14; i++) {
+		m_pPhysicsManager->AddCollider(&m_pColliderComponents[i]);
+	}
+
+	m_player = new PlayerObject(glm::vec3(400, 300, 0), m_pBulletManager, m_uiSpriteVBO, m_uiSpriteIBO, m_pShaders);
 	m_player->AddComponent(m_pPhysicsComponents);
 	m_player->AddComponent(m_pSpriteComponents);
 	m_player->AddComponent(m_pHealthComponents);
+	m_player->AddComponent(m_pColliderComponents);
 	m_gameObjects.push_back(m_player);
 
 	//m_enemies = new Enemy*[3];
 	for (int i = 0; i < 3; i++)
 	{
-		m_gameObjects.push_back(new EnemyObject(m_player, m_pBulletManager, m_uiSpriteVBO, m_uiSpriteIBO, m_pShaders));
+		m_gameObjects.push_back(new EnemyObject(glm::vec3(100 + (3-i)%3*250, 100 + i/2*400, 0), m_player, m_pBulletManager, m_uiSpriteVBO, m_uiSpriteIBO, m_pShaders));
 		m_gameObjects[i + 1]->AddComponent(m_pPhysicsComponents + i + 1);
 		m_gameObjects[i + 1]->AddComponent(m_pSpriteComponents + i + 1);
 		m_gameObjects[i + 1]->AddComponent(m_pHealthComponents + i + 1);
+		m_gameObjects[i + 1]->AddComponent(m_pColliderComponents + i + 1);
 		//m_enemies[i] = new Enemy(1, 50, glm::vec3(rand() % 800, rand() % 600, 0), glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), 51, 86, "cylon.png", &m_enemyBullets, *m_pSounds);
 	}
 
@@ -71,22 +94,10 @@ GameScreen::GameScreen(SoundSystemClass* a_pSounds, GLSLProgram *a_pShaders) : S
 
 GameScreen::~GameScreen()
 {
-	if (m_enemies != nullptr) {
-		for (int i = 0; i < 3; i++) {
-			delete m_enemies[i];
-		}
-		delete m_enemies;
-	}
-
-	for (int i = 0; i < m_playerBullets.size(); i++) {
-		delete m_playerBullets[i];
-	}
-	m_playerBullets.clear();
-
-	for (int i = 0; i < m_enemyBullets.size(); i++) {
-		delete m_enemyBullets[i];
-	}
-	m_enemyBullets.clear();
+	delete[] m_pColliderComponents;
+	delete[] m_pHealthComponents;
+	delete[] m_pPhysicsComponents;
+	delete[] m_pSpriteComponents;
 
 	for (int i = 0; i < m_gameObjects.size(); i++) {
 		delete m_gameObjects[i];
@@ -96,9 +107,12 @@ GameScreen::~GameScreen()
 
 Screen* GameScreen::Update(const double a_fDeltaTime)
 {
+	bool playerAlive = m_player->IsActive();
+
 	Screen::Draw();
 
 	m_pBulletManager->Update(a_fDeltaTime);
+	m_pPhysicsManager->Update();
 
 	if(glfwGetKey(glfwGetCurrentContext(), GLFW_KEY_ESCAPE))
 	{
@@ -108,13 +122,14 @@ Screen* GameScreen::Update(const double a_fDeltaTime)
 	for (unsigned int i = 0; i < 14; ++i) {
 		m_pPhysicsComponents[i].Update(a_fDeltaTime);
 		m_pSpriteComponents[i].Update(a_fDeltaTime);
+		m_pColliderComponents[i].Update(a_fDeltaTime);
 	}
 
 	for (int i = 0; i < m_gameObjects.size(); i++) {
 		m_gameObjects[i]->Update(a_fDeltaTime);
 	}
 
-	bool playerAlive =  m_player->IsActive();
+	
 
 	if (playerAlive) {
 

@@ -6,7 +6,7 @@
 class ShipObject : public GameObject
 {
 public:
-	ShipObject(float a_fFireCoolDownMax, BulletManager *a_pBulletManager, GLuint a_uiVBO, GLuint a_uiIBO, GLSLProgram *a_pShader);
+	ShipObject(glm::vec3 a_position, float a_fFireCoolDownMax, BulletManager *a_pBulletManager, GLuint a_uiVBO, GLuint a_uiIBO, GLSLProgram *a_pShader);
 	virtual void Update(const double a_dDeltaTime);
 
 protected:

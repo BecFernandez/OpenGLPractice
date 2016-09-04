@@ -1,15 +1,20 @@
 #include "GameObject.h"
 
-GameObject::GameObject() : m_bActive(true)
+GameObject::GameObject() : m_bActive(true), m_fRotationAngle(0), m_fScale(1), m_position(glm::vec3())
+{
+
+}
+
+GameObject::GameObject(glm::vec3 a_position, float a_fRotationAngle, float a_fScale) : m_bActive(true), m_fRotationAngle(a_fRotationAngle), m_fScale(a_fScale), m_position(a_position)
 {
 
 }
 
 GameObject::~GameObject()
 {
-	for (int i = 0; i < m_components.size(); i++) {
+	/*for (int i = 0; i < m_components.size(); i++) {
 		delete m_components[i];
-	}
+	}*/
 
 	m_components.clear();
 }
@@ -17,6 +22,7 @@ GameObject::~GameObject()
 void GameObject::AddComponent(Component* a_component)
 {
 	m_components.push_back(a_component);
+	a_component->SetGameObject(this);
 }
 
 //This could definitely be done better. I want to take performance into account a little bit - so I would like to find out:
