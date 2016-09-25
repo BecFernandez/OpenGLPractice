@@ -4,9 +4,9 @@
 #include "Component.h"
 
 enum CollisionTags{ 
-	PLAYER,
-	ENEMY,
-	BULLET
+	PLAYER_COLLIDER,
+	ENEMY_COLLIDER,
+	BULLET_COLLIDER
 };
 
 class ColliderComponent : public Component
@@ -17,6 +17,8 @@ public:
 	bool IsCollidingWith(ColliderComponent *a_pOtherCollider);
 	void Update(const double a_dDeltaTime);
 	ColliderComponent *m_pOtherCollider;
+	CollisionTags GetCollisionTag() { return m_collisionTag; }
+	void ResetOtherCollider();
 
 private:
 	CollisionTags m_collisionTag;

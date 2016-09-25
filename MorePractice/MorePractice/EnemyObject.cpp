@@ -3,8 +3,8 @@
 #include "PhysicsComponent.h"
 #include "HealthComponent.h"
 
-EnemyObject::EnemyObject(glm::vec3 a_position, PlayerObject* a_player, BulletManager *a_pBulletManager, GLuint a_uiVBO, GLuint a_uiIBO, GLSLProgram *a_pShader) : 
-	ShipObject(a_position, ENEMY_F_FIRE_COOL_DOWN_MAX, a_pBulletManager, a_uiVBO, a_uiIBO, a_pShader), m_player(a_player)
+EnemyObject::EnemyObject(glm::vec3 a_position, PlayerObject* a_player, BulletManager *a_pBulletManager) : 
+	ShipObject(ENEMY_FIRE_POWER, a_position, ENEMY_F_FIRE_COOL_DOWN_MAX, a_pBulletManager), m_player(a_player)
 {
 
 }

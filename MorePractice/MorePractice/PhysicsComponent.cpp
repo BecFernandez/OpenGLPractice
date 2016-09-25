@@ -8,8 +8,8 @@ m_fRotationSpeed(1.0f)
 
 }
 
-PhysicsComponent::PhysicsComponent(const float a_fRotationSpeed, const float a_fFrictionValue, bool a_bActive) :
-	Component(PHYSICS, a_bActive), m_fRotationSpeed(a_fRotationSpeed),
+PhysicsComponent::PhysicsComponent(const float a_fRotationSpeed, const float a_fFrictionValue) :
+	Component(PHYSICS), m_fRotationSpeed(a_fRotationSpeed),
 	m_velocity(0, 0), m_acceleration(0, 0), m_fFrictionValue(a_fFrictionValue)
 {
 
@@ -17,12 +17,14 @@ PhysicsComponent::PhysicsComponent(const float a_fRotationSpeed, const float a_f
 
 void PhysicsComponent::AddRotation(const float a_fRotation)
 {
-	m_pGameObject->m_fRotationAngle += a_fRotation;
+	if (m_bActive) {
+		m_pGameObject->m_fRotationAngle += a_fRotation;
+	}
 }
 
 void PhysicsComponent::Update(const double a_dDelaTime)
 {
-	if (m_pGameObject->IsActive()) {
+	if (m_bActive) {
 		m_velocity.x += m_acceleration.x * a_dDelaTime;
 		m_velocity.y += m_acceleration.y * a_dDelaTime;
 

@@ -6,14 +6,10 @@
 class BulletManager
 {
 public:
-	BulletManager(GLuint a_uiVBO, GLuint a_uiIBO, GLSLProgram *a_pShaderProgram, PhysicsComponent *a_pPhysicsComponents, SpriteComponent *a_pSpriteComponents, ColliderComponent *a_pColliderComponents);
-	void Shoot(int speed, float a_fRotationAngle, glm::vec3 a_position);
+	BulletManager(PhysicsComponent *a_pPhysicsComponents, SpriteComponent *a_pSpriteComponents, ColliderComponent *a_pColliderComponents);
+	void Shoot(ShipObject* a_pOwner, int a_iPower, int speed, float a_fRotationAngle, glm::vec3 a_position);
 	void Update(const double a_dDeltaTime);
 private:
-	GLuint m_uiVBO;
-	GLuint m_uiIBO;
-	GLSLProgram* m_pShaderProgram;
-
 	SpriteComponent *m_pSpriteComponents;
 	PhysicsComponent *m_pPhysicsComponents;
 	ColliderComponent *m_pColliderComponents;

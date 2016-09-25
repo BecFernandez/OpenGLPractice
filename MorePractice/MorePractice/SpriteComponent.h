@@ -18,7 +18,6 @@ public:
 
 private:
 	Vertex m_corners[4]; //all my sprites are rectangles
-	glm::mat4 m_globalTransform;
 	glm::vec2 m_dimensions;
 	glm::vec2 m_textureDimensions;
 	GLuint m_uiVBO;

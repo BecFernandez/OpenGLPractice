@@ -1,13 +1,14 @@
 #include "GameObject.h"
+#include <gtc\matrix_transform.hpp>
 
-GameObject::GameObject() : m_bActive(true), m_fRotationAngle(0), m_fScale(1), m_position(glm::vec3())
+GameObject::GameObject() : m_bActive(false), m_fRotationAngle(0), m_fScale(1), m_position(glm::vec3())
 {
 
 }
 
-GameObject::GameObject(glm::vec3 a_position, float a_fRotationAngle, float a_fScale) : m_bActive(true), m_fRotationAngle(a_fRotationAngle), m_fScale(a_fScale), m_position(a_position)
+GameObject::GameObject(glm::vec3 a_position, float a_fRotationAngle, float a_fScale) : m_fRotationAngle(a_fRotationAngle), m_fScale(a_fScale), m_position(a_position), m_bActive(false)
 {
-
+	
 }
 
 GameObject::~GameObject()
@@ -21,8 +22,10 @@ GameObject::~GameObject()
 
 void GameObject::AddComponent(Component* a_component)
 {
+	a_component->m_bActive = m_bActive;
 	m_components.push_back(a_component);
 	a_component->SetGameObject(this);
+	setComponentPointers();
 }
 
 //This could definitely be done better. I want to take performance into account a little bit - so I would like to find out:
@@ -54,7 +57,21 @@ Component* GameObject::GetComponent(ComponentTypes a_type) const {
 
 void GameObject::Update(const double a_dDeltaTime)
 {
-	/*for (int i = 0; i < m_components.size(); i++) {
-		m_components[i]->Update(a_dDeltaTime);
-	}*/
+	m_globalTransform = glm::translate(glm::mat4(1), glm::vec3(m_position.x, m_position.y, m_position.z)) *
+		glm::rotate(glm::mat4(1), m_fRotationAngle, glm::vec3(0, 0, 1)) * glm::scale(glm::mat4(1), glm::vec3(m_fScale, m_fScale, 1));
+}
+
+glm::mat4 GameObject::GetGlobalTransform()
+{
+	return m_globalTransform;
+}
+
+void GameObject::SetActive(bool a_bValue)
+{
+	if (m_bActive != a_bValue) {
+		m_bActive = a_bValue;
+		for (unsigned int i = 0; i < m_components.size(); i++) {
+			m_components[i]->m_bActive = m_bActive;
+		}
+	}
 }

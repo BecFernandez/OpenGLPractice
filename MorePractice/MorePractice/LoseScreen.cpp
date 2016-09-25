@@ -14,7 +14,6 @@ Screen* LoseScreen::Update(const double a_dDeltaTime)
 {
 	GLFWwindow *currentContext = glfwGetCurrentContext();
 	if (glfwGetKey(currentContext, GLFW_KEY_ESCAPE) ||
-		glfwGetKey(currentContext, GLFW_KEY_SPACE) ||
 		glfwGetKey(currentContext, GLFW_KEY_ENTER) ||
 		glfwGetMouseButton(currentContext, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS)
 	{

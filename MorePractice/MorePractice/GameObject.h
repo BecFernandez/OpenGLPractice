@@ -15,16 +15,19 @@ public:
 	Component* GetComponent(ComponentTypes a_type) const;
 	virtual void Update(const double a_dDeltaTime);
 	bool IsActive() const { return m_bActive; }
+	glm::mat4 GetGlobalTransform();
 
-	//might wrap these in a struct? Similar to Unity's Transform component
 	glm::vec3 m_position;
 	float m_fScale;
 	float m_fRotationAngle;
+	virtual void SetActive(bool a_bValue);
 
 private:
 	std::vector<Component*> m_components;
+	glm::mat4 m_globalTransform;
 
 protected:
 	bool m_bActive;
+	virtual void setComponentPointers() {}
 };
 

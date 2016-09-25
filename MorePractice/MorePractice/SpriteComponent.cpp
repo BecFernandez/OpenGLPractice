@@ -139,13 +139,12 @@ void SpriteComponent::UpdateCornersGrounded(unsigned int a_uiWidth, unsigned int
 
 void SpriteComponent::Update(double a_dDeltaTime)
 {
-	m_globalTransform = glm::translate(glm::mat4(1), glm::vec3(m_pGameObject->m_position.x, m_pGameObject->m_position.y, m_pGameObject->m_position.z)) *
-		glm::rotate(glm::mat4(1), m_pGameObject->m_fRotationAngle, glm::vec3(0, 0, 1)) * glm::scale(glm::mat4(1), glm::vec3(m_pGameObject->m_fScale, m_pGameObject->m_fScale, 1));
+	
 }
 
 void SpriteComponent::Draw() const
 {
-	if (m_pGameObject->IsActive()) {
+	if (m_bActive) {
 		//copy vertices to GPU in case they have changed
 		glBindBuffer(GL_ARRAY_BUFFER, m_uiVBO);
 		GLvoid *vBuffer = glMapBuffer(GL_ARRAY_BUFFER, GL_WRITE_ONLY);
@@ -156,7 +155,7 @@ void SpriteComponent::Draw() const
 
 		glBindTexture(GL_TEXTURE_2D, m_uiTexture);
 
-		m_pShader->setUniform("world", this->m_globalTransform);
+		m_pShader->setUniform("world", m_pGameObject->GetGlobalTransform());
 
 		glEnableVertexAttribArray(0);
 		glEnableVertexAttribArray(1);

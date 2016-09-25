@@ -9,6 +9,8 @@ public:
 	void TakeDamage(const int a_iDamage) { m_iHealth -= a_iDamage; }
 	bool IsAlive() const { return m_iHealth > 0; }
 	void Update(const double a_dDeltaTime) {}
+	float HealthRatio() { return (float)m_iHealth / (float)m_iMaxHealth; }
 private:
 	int m_iHealth;
+	int m_iMaxHealth;
 };
