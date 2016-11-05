@@ -15,6 +15,12 @@ PhysicsComponent::PhysicsComponent(const float a_fRotationSpeed, const float a_f
 
 }
 
+void PhysicsComponent::Init(const float a_fRotationSpeed, const float a_fFrictionValue)
+{
+	m_fRotationSpeed = a_fRotationSpeed;
+	m_fFrictionValue = a_fFrictionValue;
+}
+
 void PhysicsComponent::AddRotation(const float a_fRotation)
 {
 	if (m_bActive) {

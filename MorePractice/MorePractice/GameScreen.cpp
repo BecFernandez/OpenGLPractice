@@ -7,6 +7,14 @@
 
 GameScreen::GameScreen(SoundSystemClass* a_pSounds, GLSLProgram *a_pShaders) : Screen(a_pSounds, a_pShaders) 
 {
+	float i = 1;
+	m_pPhysicsComponentPool = new ComponentPool<PhysicsComponent>(14);
+	m_pSpriteComponentPool = new ComponentPool<SpriteComponent>(14);
+	m_pSpriteComponentPool->Create(glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), glm::vec2(51.0f, 86.0f), "ship.png", m_uiSpriteVBO, m_uiSpriteIBO, m_pShaders);
+	m_pPhysicsComponentPool->Create(1, 1);
+
+	//ComponentPool<PhysicsComponent> pool(100);
+
 	m_pPhysicsComponents = new PhysicsComponent[14]{ 
 		{ 1.0f },  
 		{ 1.0f },
@@ -84,7 +92,6 @@ GameScreen::GameScreen(SoundSystemClass* a_pSounds, GLSLProgram *a_pShaders) : S
 		m_gameObjects[i + 1]->AddComponent(m_pSpriteComponents + i + 1);
 		m_gameObjects[i + 1]->AddComponent(m_pHealthComponents + i + 1);
 		m_gameObjects[i + 1]->AddComponent(m_pColliderComponents + i + 1);
-		//m_enemies[i] = new Enemy(1, 50, glm::vec3(rand() % 800, rand() % 600, 0), glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), 51, 86, "cylon.png", &m_enemyBullets, *m_pSounds);
 	}
 
 	

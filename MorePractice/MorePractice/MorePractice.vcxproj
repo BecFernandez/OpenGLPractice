@@ -111,6 +111,7 @@
     <ClInclude Include="MainMenuScreen.h" />
     <ClInclude Include="Physics.h" />
     <ClInclude Include="PhysicsComponent.h" />
+    <ClInclude Include="ComponentPool.h" />
     <ClInclude Include="PhysicsManager.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="PlayerObject.h" />

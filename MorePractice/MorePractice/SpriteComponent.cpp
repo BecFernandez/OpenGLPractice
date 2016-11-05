@@ -114,6 +114,54 @@ SpriteComponent::SpriteComponent(const glm::vec4 a_colour,
 	}
 }
 
+void SpriteComponent::Init(const glm::vec4 a_colour,
+	const glm::vec2 a_dimensions, const char* a_szTexName,
+	GLuint a_uiVBO, GLuint a_uiIBO, GLSLProgram* a_pShader, bool a_bActive)
+{
+	m_dimensions = a_dimensions;
+	m_uiVBO = a_uiVBO;
+	m_uiIBO = a_uiIBO;
+	m_pShader = a_pShader;
+
+	unsigned int width = (unsigned int)a_dimensions.x;
+	unsigned int height = (unsigned int)a_dimensions.y;
+	if (a_szTexName != nullptr)
+		m_uiTexture = LoadTexture2(a_szTexName, GL_RGBA, &width, &height, NULL);
+	else
+		m_uiTexture = 0;
+
+	m_dimensions.x = (float)width;
+	m_dimensions.y = (float)height;
+
+	for (int i = 0; i < 4; i++)
+	{
+		m_corners[i].position.z = 0;
+		m_corners[i].position.w = 1;
+		m_corners[i].colour = a_colour;
+
+		if (i / 2)
+		{
+			m_corners[i].position.x = m_dimensions.x *0.5f * (float)-1;
+			m_corners[i].texCoords.s = 0;
+		}
+		else
+		{
+			m_corners[i].position.x = m_dimensions.x*0.5f;
+			m_corners[i].texCoords.s = 1;
+		}
+		if (i % 3)
+		{
+			m_corners[i].position.y = m_dimensions.y*0.5f;
+			m_corners[i].texCoords.t = 1;
+		}
+		else
+		{
+			m_corners[i].position.y = m_dimensions.y*0.5f * (float)-1;
+			m_corners[i].texCoords.t = 0;
+		}
+	}
+}
+
 void SpriteComponent::UpdateCornersGrounded(unsigned int a_uiWidth, unsigned int a_uiHeight)
 {
 	for (int i = 0; i < 4; i++)

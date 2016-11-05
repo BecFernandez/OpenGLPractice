@@ -11,6 +11,7 @@
 #include "SpriteComponent.h"
 #include "HealthComponent.h"
 #include "ColliderComponent.h"
+#include "ComponentPool.h"
 
 class GameScreen : public Screen
 {
@@ -32,6 +33,8 @@ private:
 	PhysicsManager *m_pPhysicsManager;
 	std::vector<GameObject*> m_gameObjects;
 
+	ComponentPool<PhysicsComponent> *m_pPhysicsComponentPool;
+	ComponentPool<SpriteComponent> *m_pSpriteComponentPool;
 	PhysicsComponent *m_pPhysicsComponents;
 	SpriteComponent *m_pSpriteComponents;
 	HealthComponent *m_pHealthComponents;
