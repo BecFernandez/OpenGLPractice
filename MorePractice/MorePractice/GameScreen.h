@@ -33,12 +33,13 @@ private:
 	PhysicsManager *m_pPhysicsManager;
 	std::vector<GameObject*> m_gameObjects;
 
-	ComponentPool<PhysicsComponent> *m_pPhysicsComponentPool;
-	ComponentPool<SpriteComponent> *m_pSpriteComponentPool;
-	PhysicsComponent *m_pPhysicsComponents;
-	SpriteComponent *m_pSpriteComponents;
+	ObjectPool<PhysicsComponent> *m_pPhysicsComponentPool;
+	ObjectPool<SpriteComponent> *m_pSpriteComponentPool;
+	ObjectPool<ColliderComponent> *m_pColliderComponentPool;
+	//PhysicsComponent *m_pPhysicsComponents;
+	//SpriteComponent *m_pSpriteComponents;
 	HealthComponent *m_pHealthComponents;
-	ColliderComponent *m_pColliderComponents;
+	//ColliderComponent *m_pColliderComponents;
 };
 
 #endif

@@ -9,10 +9,10 @@ public:
 	SpriteComponent() : Component(SPRITE) {}
 	SpriteComponent(const glm::vec4 a_colour,
 		const glm::vec2 a_dimensions, const char* a_szTexName,
-		GLuint a_uiVBO, GLuint a_uiIBO, GLSLProgram* a_pShader, bool a_bActive = true);
-	void Init(const glm::vec4 a_colour,
+		GLuint a_uiVBO, GLuint a_uiIBO, GLSLProgram* a_pShader);
+	void Init(unsigned int a_uiId, const glm::vec4 a_colour,
 		const glm::vec2 a_dimensions, const char* a_szTexName,
-		GLuint a_uiVBO, GLuint a_uiIBO, GLSLProgram* a_pShader, bool a_bActive = true);
+		GLuint a_uiVBO, GLuint a_uiIBO, GLSLProgram* a_pShader);
 	void UpdateCornersGrounded(unsigned int a_uiWidth, unsigned int a_uiHeight);
 	void Update(const double a_dDeltaTime);
 	void Draw() const;

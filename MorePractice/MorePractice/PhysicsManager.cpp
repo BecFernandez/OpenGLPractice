@@ -1,21 +1,32 @@
 #include "PhysicsManager.h"
 
-void PhysicsManager::AddCollider(ColliderComponent* a_pColliderComponent) {
-	m_colliders.push_back(a_pColliderComponent);
+PhysicsManager::PhysicsManager(ObjectPool<ColliderComponent>* a_colliderComponents) : m_colliderComponents(a_colliderComponents)
+{
+
 }
 
 void PhysicsManager::Update()
 {
-	for (int i = 0; i < m_colliders.size(); i++) {
-		m_colliders[i]->ResetOtherCollider();
+	unsigned int numColliderComponents = m_colliderComponents->GetCurrentSize();
+	for (unsigned int i = 0; i < numColliderComponents; i++) {
+		ColliderComponent *pColliderComponent = m_colliderComponents->GetObjectByIndex(i);
+		if (pColliderComponent != nullptr) {
+			pColliderComponent->ResetOtherCollider();
+		}
 	}
 
 	//check all colliders against all other colliders. Is there a faster way to do this?? Obviously octrees, space partitioning, etc
-	for (unsigned int i = 0; i < m_colliders.size(); i++) {
-		for (unsigned int j = 0; j < m_colliders.size(); j++) {
+	for (unsigned int i = 0; i < numColliderComponents; i++) {
+		for (unsigned int j = 0; j < numColliderComponents; j++) {
 			//process collisions
 			if (i != j) {
-				m_colliders[i]->IsCollidingWith(m_colliders[j]);
+				ColliderComponent *pColliderComponentI = m_colliderComponents->GetObjectByIndex(i);
+				if (pColliderComponentI != nullptr) {
+					ColliderComponent *pColliderComponentJ = m_colliderComponents->GetObjectByIndex(j);
+					if (pColliderComponentJ != nullptr) {
+						pColliderComponentI->IsCollidingWith(pColliderComponentJ);
+					}
+				}
 			}
 		}
 	}

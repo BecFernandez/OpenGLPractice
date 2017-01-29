@@ -4,8 +4,10 @@
 #include <glm.hpp>
 
 #include "Component.h"
+#include "Subject.h"
 
-class GameObject {
+class GameObject : public Subject
+{
 public:
 	GameObject();
 	GameObject(glm::vec3 a_position, float a_fRotationAngle = 0, float a_fScale = 1);

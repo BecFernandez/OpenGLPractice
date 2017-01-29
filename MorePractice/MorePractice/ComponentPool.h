@@ -1,72 +1,118 @@
 #pragma once
 #include <utility>
 
-template<typename T>
-class ComponentPool
+struct Index
 {
-public:
-	ComponentPool();
-	ComponentPool(const int a_iSize);
-	~ComponentPool();
-	template<typename... Args>
-	T* Create(Args&&... args);
-	void Destroy(T* a_pComponent);
-
-private:
-	T *m_pComponent;
-	int m_iSize;
-	bool *m_pActive;
+	unsigned int id;
+	unsigned short index;
+	unsigned short next;
 };
 
 template<typename T>
-ComponentPool<T>::ComponentPool() : m_iSize(0)
+class ObjectPool
+{
+public:
+	ObjectPool();
+	ObjectPool(const unsigned int a_uiSize);
+	~ObjectPool();
+	template<typename... Args>
+	T* Create(Args&&... args);
+	void Destroy(T* a_pComponent);
+	void Update(const double a_dDeltaTime);
+	unsigned int GetCurrentSize() { return m_uiCapacity; }
+	T* GetObjectByIndex(const unsigned int a_uiIndex);
+
+private:
+	T *m_pComponent;
+	unsigned int m_uiCapacity;
+	unsigned int m_uiCount;
+	Index *m_pIndices;
+	unsigned short m_usFreelistDequeue;
+	unsigned short m_usFreelistEnqueue;
+};
+
+template<typename T>
+ObjectPool<T>::ObjectPool() : m_uiCapacity(0)
 {
 
 }
 
 template<typename T>
-ComponentPool<T>::ComponentPool(const int a_iSize) : m_iSize(a_iSize)
+ObjectPool<T>::ObjectPool(const unsigned int a_uiSize) : m_uiCapacity(a_uiSize)
 {
-	m_pComponent = new T[m_iSize];
-	m_pActive = new bool[m_iSize];
+	m_pComponent = new T[m_uiCapacity];
+	m_pIndices = new Index[m_uiCapacity];
 
-	for (unsigned int i = 0; i < m_iSize; ++i)
+	for (unsigned int i = 0; i < m_uiCapacity; ++i)
 	{
-		m_pActive[i] = false;
+		m_pIndices[i].id = i;
+		//what happens when we get to the end??
+		m_pIndices[i].next = i + 1;
 	}
+
+	m_usFreelistDequeue = 0;
+	m_usFreelistEnqueue = m_uiCapacity - 1;
+	m_uiCount = 0;
 }
 
 template<typename T>
-ComponentPool<T>::~ComponentPool()
+ObjectPool<T>::~ObjectPool()
 {
 	delete[] m_pComponent;
-	delete[] m_pActive;
+	delete[] m_pIndices;
 }
 
 template<typename T>
 template<typename... Args>
-T* ComponentPool<T>::Create(Args&&... args)
+T* ObjectPool<T>::Create(Args&&... args)
 {
-	for (unsigned int i = 0; i < m_iSize; ++i)
+	if (m_uiCount != m_uiCapacity) 
 	{
-		if (m_pActive[i] != true)
-		{
-			m_pComponent[i].Init(std::forward<Args>(args)...);
-			m_pActive[i] = true;
-			return &m_pComponent[i];
-		}
+		Index &nextFree = m_pIndices[m_usFreelistDequeue];
+		m_usFreelistDequeue = nextFree.next;
+		nextFree.id += m_uiCapacity;
+		nextFree.index = m_uiCount++;
+		m_pComponent[nextFree.index].Init(nextFree.id, std::forward<Args>(args)...);
+		return &m_pComponent[nextFree.index];
 	}
-	return nullptr;
+	else
+	{
+		return nullptr;
+	}
 }
 
 template<typename T>
-void ComponentPool<T>::Destroy(T* a_pComponent)
+void ObjectPool<T>::Destroy(T* a_pComponent)
 {
-	for (unsigned int i = 0; i < m_iSize; ++i)
+	Index &indexToDelete = m_pIndices[a_pComponent->GetID() % m_uiCapacity];
+	T &object = m_pComponent[indexToDelete.index];
+	object = m_pComponent[--m_uiCount];
+	m_pIndices[object.GetID() % m_uiCapacity].index = indexToDelete.index;
+
+	indexToDelete.index = m_uiCapacity;
+	m_pIndices[m_usFreelistEnqueue].next = a_pComponent->GetID() % m_uiCapacity;
+	m_usFreelistEnqueue = a_pComponent->GetID() % m_uiCapacity;
+	//if we have just removed something from a completely full pool
+	if (m_uiCount == m_uiCapacity - 1) 
 	{
-		if (&m_pComponent[i] == a_pComponent)
-		{
-			m_pActive[i] = false;
-		}
+		m_usFreelistDequeue = m_usFreelistEnqueue;
 	}
+}
+
+template<typename T>
+void ObjectPool<T>::Update(const double a_dDeltaTime)
+{
+	for (unsigned int i = 0; i < m_uiCount; ++i)
+	{
+		m_pComponent[i].Update(a_dDeltaTime);
+	}
+}
+
+template<typename T>
+T* ObjectPool<T>::GetObjectByIndex(const unsigned int a_uiIndex)
+{
+	if (m_pIndices[a_uiIndex].index < m_uiCount) {
+		return &m_pComponent[m_pIndices[a_uiIndex].index];
+	}
+	return nullptr;
 }

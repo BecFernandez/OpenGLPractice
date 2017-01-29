@@ -1,41 +1,34 @@
 #include "BulletManager.h"
 
-BulletManager::BulletManager(PhysicsComponent *a_pPhysicsComponents, SpriteComponent *a_pSpriteComponents, ColliderComponent *a_pColliderComponents) :
-	m_pPhysicsComponents(a_pPhysicsComponents), m_pSpriteComponents(a_pSpriteComponents), m_pColliderComponents(a_pColliderComponents),
-	m_iLastAssignedBullet(-1), m_uiNumActiveBullets(0)
+BulletManager::BulletManager(ObjectPool<PhysicsComponent> *a_pPhysicsComponentPool, ObjectPool<SpriteComponent> *a_pSpriteComponentPool, ObjectPool<ColliderComponent> *a_pColliderComponentPool,
+	GLuint a_uiVBO, GLuint a_uiIBO, GLSLProgram *a_pShader) :
+	m_pPhysicsComponentPool(a_pPhysicsComponentPool), m_pSpriteComponentPool(a_pSpriteComponentPool), m_pColliderComponentPool(a_pColliderComponentPool),
+	m_iLastAssignedBullet(-1), m_uiNumActiveBullets(0), m_uiVBO(a_uiVBO), m_uiIBO(a_uiIBO), m_pShader(a_pShader)
 {
-	m_bullets = new BulletObject[10];
-	for (unsigned int i = 0; i < 10; ++i) {
-		m_bullets[i].AddComponent(m_pPhysicsComponents + i);
-		m_bullets[i].AddComponent(m_pSpriteComponents + i);
-		m_bullets[i].AddComponent(m_pColliderComponents + i);
-	}
+	m_bulletPool = new ObjectPool<BulletObject>(10);//new BulletObject[10];
 }
 
 void BulletManager::Shoot(ShipObject* a_pOwner, int a_iPower, int speed, float a_fRotationAngle, glm::vec3 a_position) 
 {
-	//clearly need to make this 10 a const (or a variable if I pass it in, I guess)
-	if (m_uiNumActiveBullets < 10) {
-		while (true) { //is this bad? My teachers (and I) always taught it was bad coding practice - but otherwise I'm wasting a boolean and an extra check
-			++m_iLastAssignedBullet;
-			if (m_iLastAssignedBullet >= 10) {
-				m_iLastAssignedBullet = 0;
-			}
-			if (!m_bullets[m_iLastAssignedBullet].IsActive()) {
-				m_bullets[m_iLastAssignedBullet].Shoot(a_pOwner, a_iPower, speed, a_fRotationAngle, a_position);
-				break;
-			}
-		}
+	BulletObject* bullet = m_bulletPool->Create(m_pPhysicsComponentPool, m_pSpriteComponentPool, m_pColliderComponentPool, a_pOwner, a_iPower, speed, a_fRotationAngle, a_position,
+		m_uiVBO, m_uiIBO, m_pShader);
+	if (bullet != nullptr) {
+		bullet->AddObserver(this);
+		bullet->Shoot(a_pOwner, a_iPower, speed, a_fRotationAngle, a_position);
 	}
+
 }
 
 void BulletManager::Update(const double a_dDeltaTime)
 {
-	m_uiNumActiveBullets = 0; //also don't particularly like this - not sure why
-	for (unsigned int i = 0; i < 10; ++i) {
-		m_bullets[i].Update(a_dDeltaTime);
-		if (m_bullets[i].IsActive()) {
-			++m_uiNumActiveBullets;
-		}
+	m_bulletPool->Update(a_dDeltaTime);
+}
+
+void BulletManager::OnNotify(Subject *subject)
+{
+	BulletObject* bulletToRemove = reinterpret_cast<BulletObject*>(subject);
+	if (bulletToRemove != nullptr) {
+		bulletToRemove->RemoveObserver(this);
+		m_bulletPool->Destroy(bulletToRemove);
 	}
 }

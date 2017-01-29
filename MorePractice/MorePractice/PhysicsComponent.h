@@ -6,7 +6,7 @@ class PhysicsComponent : public Component {
 public:
 	PhysicsComponent();
 	PhysicsComponent(const float a_fRotationSpeed, const float a_fFrictionValue = 0.97f);
-	void Init(const float a_fRotationSpeed, const float a_fFrictionValue = 0.97f);
+	void Init(unsigned int a_uiId, const float a_fRotationSpeed, const float a_fFrictionValue = 0.97f);
 	void AddForce(const glm::vec2 a_force) { m_acceleration += a_force; }
 	void AddRotation(const float a_fRotation); 
 	void Update(const double a_dDeltaTime);

@@ -22,7 +22,6 @@ GameObject::~GameObject()
 
 void GameObject::AddComponent(Component* a_component)
 {
-	a_component->m_bActive = m_bActive;
 	m_components.push_back(a_component);
 	a_component->SetGameObject(this);
 	setComponentPointers();
@@ -70,8 +69,5 @@ void GameObject::SetActive(bool a_bValue)
 {
 	if (m_bActive != a_bValue) {
 		m_bActive = a_bValue;
-		for (unsigned int i = 0; i < m_components.size(); i++) {
-			m_components[i]->m_bActive = m_bActive;
-		}
 	}
 }

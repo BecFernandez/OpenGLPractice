@@ -3,13 +3,14 @@
 #include <vector>
 #include "Physics.h"
 #include "ColliderComponent.h"
+#include "ComponentPool.h"
 
 class PhysicsManager
 {
 public:
-	void AddCollider(ColliderComponent* a_pColliderComponent);
+	PhysicsManager(ObjectPool<ColliderComponent>* a_colliderComponents);
 	void Update();
 
 private:
-	std::vector<ColliderComponent*> m_colliders;
+	ObjectPool<ColliderComponent>* m_colliderComponents;
 };
