@@ -20,8 +20,8 @@ void Subject::RemoveObserver(Observer* observerToRemove)
 
 void Subject::notify()
 {
-	for each (Observer* observer in observers)
+	for (unsigned int i = 0; i < observers.size(); i++)
 	{
-		observer->OnNotify(this);
+		observers[i]->OnNotify(this);
 	}
 }

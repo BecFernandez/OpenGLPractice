@@ -16,8 +16,8 @@ public:
 	ObjectPool(const unsigned int a_uiSize);
 	~ObjectPool();
 	template<typename... Args>
-	T* Create(Args&&... args);
-	void Destroy(T* a_pComponent);
+	unsigned int Create(Args&&... args);
+	void Destroy(const unsigned int a_id);
 	void Update(const double a_dDeltaTime);
 	unsigned int GetCurrentSize() { return m_uiCapacity; }
 	T* GetObjectByIndex(const unsigned int a_uiIndex);
@@ -64,7 +64,7 @@ ObjectPool<T>::~ObjectPool()
 
 template<typename T>
 template<typename... Args>
-T* ObjectPool<T>::Create(Args&&... args)
+unsigned int ObjectPool<T>::Create(Args&&... args)
 {
 	if (m_uiCount != m_uiCapacity) 
 	{
@@ -73,29 +73,31 @@ T* ObjectPool<T>::Create(Args&&... args)
 		nextFree.id += m_uiCapacity;
 		nextFree.index = m_uiCount++;
 		m_pComponent[nextFree.index].Init(nextFree.id, std::forward<Args>(args)...);
-		return &m_pComponent[nextFree.index];
+		return nextFree.id;
 	}
 	else
 	{
-		return nullptr;
+		return m_uiCapacity;
 	}
 }
 
 template<typename T>
-void ObjectPool<T>::Destroy(T* a_pComponent)
+void ObjectPool<T>::Destroy(const unsigned int a_id)
 {
-	Index &indexToDelete = m_pIndices[a_pComponent->GetID() % m_uiCapacity];
-	T &object = m_pComponent[indexToDelete.index];
-	object = m_pComponent[--m_uiCount];
-	m_pIndices[object.GetID() % m_uiCapacity].index = indexToDelete.index;
+	Index &indexToDelete = m_pIndices[a_id % m_uiCapacity];
+	if (indexToDelete.index < m_uiCount) {
+		T &object = m_pComponent[indexToDelete.index];
+		object = m_pComponent[--m_uiCount];
+		m_pIndices[object.GetID() % m_uiCapacity].index = indexToDelete.index;
 
-	indexToDelete.index = m_uiCapacity;
-	m_pIndices[m_usFreelistEnqueue].next = a_pComponent->GetID() % m_uiCapacity;
-	m_usFreelistEnqueue = a_pComponent->GetID() % m_uiCapacity;
-	//if we have just removed something from a completely full pool
-	if (m_uiCount == m_uiCapacity - 1) 
-	{
-		m_usFreelistDequeue = m_usFreelistEnqueue;
+		indexToDelete.index = m_uiCapacity;
+		m_pIndices[m_usFreelistEnqueue].next = a_pComponent->GetID() % m_uiCapacity;
+		m_usFreelistEnqueue = a_pComponent->GetID() % m_uiCapacity;
+		//if we have just removed something from a completely full pool
+		if (m_uiCount == m_uiCapacity - 1)
+		{
+			m_usFreelistDequeue = m_usFreelistEnqueue;
+		}
 	}
 }
 

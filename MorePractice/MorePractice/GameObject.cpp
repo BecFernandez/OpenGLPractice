@@ -20,9 +20,9 @@ GameObject::~GameObject()
 	m_components.clear();
 }
 
-void GameObject::AddComponent(Component* a_component)
+void GameObject::AddComponent(int a_type, unsigned int a_id)
 {
-	m_components.push_back(a_component);
+	m_components[a_type] = a_id;
 	a_component->SetGameObject(this);
 	setComponentPointers();
 }

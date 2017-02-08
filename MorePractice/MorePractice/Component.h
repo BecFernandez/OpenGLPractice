@@ -5,7 +5,8 @@ enum ComponentTypes {
 	SPRITE,
 	PHYSICS,
 	HEALTH,
-	COLLIDER
+	COLLIDER,
+	NUM_COMPONENTS
 };
 
 class Component {
