@@ -4,6 +4,7 @@
 #include "SpriteComponent.h"
 #include "ColliderComponent.h"
 #include "Observer.h"
+#include <vector>
 
 class BulletManager : public Observer
 {
@@ -16,7 +17,8 @@ private:
 	ObjectPool<SpriteComponent> *m_pSpriteComponentPool;
 	ObjectPool<PhysicsComponent> *m_pPhysicsComponentPool;
 	ObjectPool<ColliderComponent> *m_pColliderComponentPool;
-
+	
+	std::vector<BulletObject*> m_bulletsToRemove;
 	int m_iLastAssignedBullet;
 	unsigned int m_uiNumActiveBullets;
 	ObjectPool<BulletObject>* m_bulletPool;

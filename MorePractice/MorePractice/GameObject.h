@@ -1,7 +1,7 @@
 #pragma once
 #include <GL\glew.h>
 #include <GL\glfw3.h>
-#include <vector>
+#include <map>
 #include <glm.hpp>
 
 #include "Component.h"
@@ -26,7 +26,7 @@ public:
 	virtual void SetActive(bool a_bValue);
 
 private:
-	std::vector<Component*> m_components;
+	std::map<int, unsigned int> m_components;
 	glm::mat4 m_globalTransform;
 
 protected:
