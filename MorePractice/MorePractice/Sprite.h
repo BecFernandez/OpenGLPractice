@@ -6,6 +6,8 @@
 #include "ShaderLoader.h"
 #include "Physics.h"
 
+void checkGLError(const char* customMessage);
+
 struct Vertex
 {
 	glm::vec4 position; 

@@ -1,5 +1,7 @@
 #include "GameObject.h"
+#include <iostream>
 #include <gtc\matrix_transform.hpp>
+
 
 GameObject::GameObject() : m_bActive(false), m_fRotationAngle(0), m_fScale(1), m_position(glm::vec3())
 {

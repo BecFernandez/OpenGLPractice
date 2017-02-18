@@ -66,8 +66,8 @@ unsigned int LoadTexture2(const char * Texture, const unsigned int format, unsig
 
 SpriteComponent::SpriteComponent(const glm::vec4 a_colour,
 	const glm::vec2 a_dimensions, const char* a_szTexName,
-	GLuint a_uiVBO, GLuint a_uiIBO, GLSLProgram* a_pShader) : Component(SPRITE),
-	m_dimensions(a_dimensions), m_uiVBO(a_uiVBO), m_uiIBO(a_uiIBO), m_pShader(a_pShader)
+	GLuint a_uiVAO, GLuint a_uiVBO, GLuint a_uiIBO, GLSLProgram* a_pShader) : Component(SPRITE),
+	m_dimensions(a_dimensions), m_uiVAO(a_uiVAO), m_uiVBO(a_uiVBO), m_uiIBO(a_uiIBO), m_pShader(a_pShader)
 {
 	//load texture - at run time? Sounds like a bad idea - why don't I load all the textures when the game starts
 	//and here I just link to it?
@@ -116,9 +116,10 @@ SpriteComponent::SpriteComponent(const glm::vec4 a_colour,
 
 void SpriteComponent::Init(unsigned int a_uiId, const glm::vec4 a_colour,
 	const glm::vec2 a_dimensions, const char* a_szTexName,
-	GLuint a_uiVBO, GLuint a_uiIBO, GLSLProgram* a_pShader)
+	GLuint a_uiVAO, GLuint a_uiVBO, GLuint a_uiIBO, GLSLProgram* a_pShader)
 {
 	m_dimensions = a_dimensions;
+	m_uiVAO = a_uiVAO;
 	m_uiVBO = a_uiVBO;
 	m_uiIBO = a_uiIBO;
 	m_pShader = a_pShader;
@@ -193,6 +194,7 @@ void SpriteComponent::Update(double a_dDeltaTime)
 
 void SpriteComponent::Draw() const
 {
+	glBindVertexArray(m_uiVAO);
 	//copy vertices to GPU in case they have changed
 	glBindBuffer(GL_ARRAY_BUFFER, m_uiVBO);
 	GLvoid *vBuffer = glMapBuffer(GL_ARRAY_BUFFER, GL_WRITE_ONLY);
@@ -208,9 +210,9 @@ void SpriteComponent::Draw() const
 	glEnableVertexAttribArray(0);
 	glEnableVertexAttribArray(1);
 	glEnableVertexAttribArray(2);
-	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, sizeof(struct Vertex), (void*)0);
-	glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, sizeof(struct Vertex), (void*)(sizeof(glm::vec4)));
-	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(struct Vertex), (void*)(sizeof(glm::vec4) * 2));
+	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, sizeof(struct Vertex), (GLvoid*)0);
+	glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, sizeof(struct Vertex), (GLvoid*)(sizeof(glm::vec4)));
+	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(struct Vertex), (GLvoid*)(sizeof(glm::vec4) * 2));
 
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, (void*)0);
 
@@ -222,6 +224,7 @@ void SpriteComponent::Draw() const
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindVertexArray(0);
 }
 
 void SpriteComponent::ChangeColour(const glm::vec4 a_NewColour)

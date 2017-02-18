@@ -13,10 +13,10 @@ class BulletObject : public GameObject
 public:
 	BulletObject();
 	BulletObject(ObjectPool<PhysicsComponent> *a_pPhysicsPool, ObjectPool<SpriteComponent> *a_pSpritePool, ObjectPool<ColliderComponent> *a_pColliderPool, ShipObject *a_pOwner, 
-					int a_iPower, int a_iSpeed, float a_fRotationAngle, glm::vec3 a_startPos, GLuint a_uiVBO, GLuint a_uiIBO, GLSLProgram* a_pShader);
+					int a_iPower, int a_iSpeed, float a_fRotationAngle, glm::vec3 a_startPos, GLuint a_uiVAO, GLuint a_uiVBO, GLuint a_uiIBO, GLSLProgram* a_pShader);
 	~BulletObject();
 	void Init(unsigned int a_uiID, ObjectPool<PhysicsComponent> *a_pPhysicsPool, ObjectPool<SpriteComponent> *a_pSpritePool, ObjectPool<ColliderComponent> *a_pColliderPool, ShipObject *a_pOwner,
-		int a_iPower, int a_iSpeed, float a_fRotationAngle, glm::vec3 a_startPos, GLuint a_uiVBO, GLuint a_uiIBO, GLSLProgram* a_pShader);
+		int a_iPower, int a_iSpeed, float a_fRotationAngle, glm::vec3 a_startPos, GLuint a_uiVAO, GLuint a_uiVBO, GLuint a_uiIBO, GLSLProgram* a_pShader);
 	void Update(const double a_dDeltaTime);
 	void Shoot(ShipObject* a_pOwner, int a_iPower, int speed, float a_fRotationAngle, glm::vec3 a_startPos);
 	int GetPower() { return m_iPower; }

@@ -2,6 +2,14 @@
 #include "Sprite.h"
 #include <gtc\matrix_transform.hpp>
 
+void checkGLError(const char* customMessage)
+{
+	GLenum error;
+	while ((error = glGetError()) != GL_NO_ERROR) {
+		std::cout << customMessage << " " << error << std::endl;
+	}
+}
+
 Screen::Screen()
 {
 
@@ -9,6 +17,9 @@ Screen::Screen()
 
 Screen::Screen(SoundSystemClass* a_pSounds, GLSLProgram *a_pShaders) : m_pSounds(a_pSounds), m_pShaders(a_pShaders)
 {
+	glGenVertexArrays(1, &m_uiSpriteVAO);
+	glBindVertexArray(m_uiSpriteVAO);
+
 	glGenBuffers(1, &m_uiSpriteVBO);
 	glBindBuffer(GL_ARRAY_BUFFER, m_uiSpriteVBO);
 	//stream draw is to tell OpenGL that the data in this buffer will be modified every frame

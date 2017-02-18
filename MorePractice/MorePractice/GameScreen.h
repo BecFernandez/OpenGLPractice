@@ -24,10 +24,10 @@ public:
 private:
 	const unsigned int m_iCOLLISION_DAMAGE = 10;
 
-	std::vector<Bullet*> m_playerBullets;
-	std::vector<Bullet*> m_enemyBullets;
+	//std::vector<Bullet*> m_playerBullets;
+	//std::vector<Bullet*> m_enemyBullets;
 	PlayerObject* m_player;
-	Enemy** m_enemies;
+	//Enemy** m_enemies;
 
 	BulletManager *m_pBulletManager;
 	PhysicsManager *m_pPhysicsManager;

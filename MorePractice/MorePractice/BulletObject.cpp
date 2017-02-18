@@ -6,11 +6,13 @@ BulletObject::BulletObject() : GameObject()
 
 }
 
-BulletObject::BulletObject(ObjectPool<PhysicsComponent> *a_pPhysicsPool, ObjectPool<SpriteComponent> *a_pSpritePool, ObjectPool<ColliderComponent> *a_pColliderPool, ShipObject *a_pOwner, int a_iPower, int a_iSpeed, float a_fRotationAngle, glm::vec3 a_startPos, GLuint a_uiVBO, GLuint a_uiIBO, GLSLProgram* a_pShader)
+BulletObject::BulletObject(ObjectPool<PhysicsComponent> *a_pPhysicsPool, ObjectPool<SpriteComponent> *a_pSpritePool, ObjectPool<ColliderComponent> *a_pColliderPool, 
+	ShipObject *a_pOwner, int a_iPower, int a_iSpeed, float a_fRotationAngle, glm::vec3 a_startPos, 
+	GLuint a_uiVAO, GLuint a_uiVBO, GLuint a_uiIBO, GLSLProgram* a_pShader)
 	: m_pPhysicsPool(a_pPhysicsPool), m_pSpritePool(a_pSpritePool), m_pColliderPool(a_pColliderPool)
 {
 	m_physicsComponent = m_pPhysicsPool->Create(1, 1);
-	m_spriteComponent = m_pSpritePool->Create(glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), glm::vec2(5.0f, 15.0f), "laser.png", a_uiVBO, a_uiIBO, a_pShader);
+	m_spriteComponent = m_pSpritePool->Create(glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), glm::vec2(5.0f, 15.0f), "laser.png", a_uiVAO, a_uiVBO, a_uiIBO, a_pShader);
 	m_colliderComponent = m_pColliderPool->Create(BULLET_COLLIDER, glm::vec2(5.0f, 15.0f));
 }
 
@@ -23,14 +25,14 @@ BulletObject::~BulletObject()
 
 void BulletObject::Init(unsigned int a_uiID, ObjectPool<PhysicsComponent> *a_pPhysicsPool, ObjectPool<SpriteComponent> *a_pSpritePool, 
 	ObjectPool<ColliderComponent> *a_pColliderPool, ShipObject *a_pOwner, int a_iPower, int a_iSpeed, float a_fRotationAngle, 
-	glm::vec3 a_startPos, GLuint a_uiVBO, GLuint a_uiIBO, GLSLProgram* a_pShader)
+	glm::vec3 a_startPos, GLuint a_uiVAO, GLuint a_uiVBO, GLuint a_uiIBO, GLSLProgram* a_pShader)
 {
 	m_pPhysicsPool = a_pPhysicsPool;
 	m_pSpritePool = a_pSpritePool;
 	m_pColliderPool = a_pColliderPool;
 	m_uiID = a_uiID;
 	m_physicsComponent = m_pPhysicsPool->Create(1, 1);
-	m_spriteComponent = m_pSpritePool->Create(glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), glm::vec2(5.0f, 15.0f), "laser.png", a_uiVBO, a_uiIBO, a_pShader);
+	m_spriteComponent = m_pSpritePool->Create(glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), glm::vec2(5.0f, 15.0f), "laser.png", a_uiVAO, a_uiVBO, a_uiIBO, a_pShader);
 	m_colliderComponent = m_pColliderPool->Create(BULLET_COLLIDER, glm::vec2(5.0f, 15.0f));
 	AddComponent(m_physicsComponent);
 	AddComponent(m_spriteComponent);

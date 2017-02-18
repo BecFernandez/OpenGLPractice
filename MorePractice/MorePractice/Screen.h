@@ -20,6 +20,7 @@ public:
 protected:
 	SoundSystemClass* m_pSounds;
 	GLSLProgram *m_pShaders;
+	GLuint m_uiSpriteVAO;
 	GLuint m_uiSpriteVBO;
 	GLuint m_uiSpriteIBO;
 	std::vector<AnimatedSprite> m_animations;

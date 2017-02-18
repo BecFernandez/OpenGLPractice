@@ -74,12 +74,12 @@ GameScreen::GameScreen(SoundSystemClass* a_pSounds, GLSLProgram *a_pShaders) : S
 	//	{ BULLET_COLLIDER, glm::vec2(5.0f, 15.0f) }
 	//};
 
-	m_pBulletManager = new BulletManager(m_pPhysicsComponentPool, m_pSpriteComponentPool, m_pColliderComponentPool, m_uiSpriteVBO, m_uiSpriteIBO, m_pShaders);
+	m_pBulletManager = new BulletManager(m_pPhysicsComponentPool, m_pSpriteComponentPool, m_pColliderComponentPool, m_uiSpriteVAO, m_uiSpriteVBO, m_uiSpriteIBO, m_pShaders);
 	m_pPhysicsManager = new PhysicsManager(m_pColliderComponentPool);
 
 	m_player = new PlayerObject(glm::vec3(400, 300, 0), m_pBulletManager);
 	m_player->AddComponent(m_pPhysicsComponentPool->Create(1.0f));
-	m_player->AddComponent(m_pSpriteComponentPool->Create(glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), glm::vec2(51.0f, 86.0f), "ship.png", m_uiSpriteVBO, m_uiSpriteIBO, m_pShaders));
+	m_player->AddComponent(m_pSpriteComponentPool->Create(glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), glm::vec2(51.0f, 86.0f), "ship.png", m_uiSpriteVAO, m_uiSpriteVBO, m_uiSpriteIBO, m_pShaders));
 	m_player->AddComponent(m_pHealthComponents);
 	m_player->AddComponent(m_pColliderComponentPool->Create(PLAYER_COLLIDER, glm::vec2(51.0f, 86.0f)));
 	m_gameObjects.push_back(m_player);
@@ -88,7 +88,7 @@ GameScreen::GameScreen(SoundSystemClass* a_pSounds, GLSLProgram *a_pShaders) : S
 	{
 		m_gameObjects.push_back(new EnemyObject(glm::vec3(100 + (3-i)%3*250, 100 + i/2*400, 0), m_player, m_pBulletManager));
 		m_gameObjects[i + 1]->AddComponent(m_pPhysicsComponentPool->Create(1.0f));
-		m_gameObjects[i + 1]->AddComponent(m_pSpriteComponentPool->Create(glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), glm::vec2(51.0f, 86.0f), "cylon.png", m_uiSpriteVBO, m_uiSpriteIBO, m_pShaders));
+		m_gameObjects[i + 1]->AddComponent(m_pSpriteComponentPool->Create(glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), glm::vec2(51.0f, 86.0f), "cylon.png", m_uiSpriteVAO, m_uiSpriteVBO, m_uiSpriteIBO, m_pShaders));
 		m_gameObjects[i + 1]->AddComponent(m_pHealthComponents + i + 1);
 		m_gameObjects[i + 1]->AddComponent(m_pColliderComponentPool->Create(ENEMY_COLLIDER, glm::vec2(51.0f, 86.0f)));
 	}
