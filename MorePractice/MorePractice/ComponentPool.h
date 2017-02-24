@@ -91,8 +91,8 @@ void ObjectPool<T>::Destroy(const unsigned int a_id)
 		m_pIndices[object.GetID() % m_uiCapacity].index = indexToDelete.index;
 
 		indexToDelete.index = m_uiCapacity;
-		m_pIndices[m_usFreelistEnqueue].next = a_pComponent->GetID() % m_uiCapacity;
-		m_usFreelistEnqueue = a_pComponent->GetID() % m_uiCapacity;
+		//m_pIndices[m_usFreelistEnqueue].next = a_pComponent->GetID() % m_uiCapacity;
+		//m_usFreelistEnqueue = a_pComponent->GetID() % m_uiCapacity;
 		//if we have just removed something from a completely full pool
 		if (m_uiCount == m_uiCapacity - 1)
 		{

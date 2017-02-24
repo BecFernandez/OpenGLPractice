@@ -36,9 +36,10 @@ private:
 	ObjectPool<PhysicsComponent> *m_pPhysicsComponentPool;
 	ObjectPool<SpriteComponent> *m_pSpriteComponentPool;
 	ObjectPool<ColliderComponent> *m_pColliderComponentPool;
+	ObjectPool<HealthComponent> *m_pHealthComponentPool;
 	//PhysicsComponent *m_pPhysicsComponents;
 	//SpriteComponent *m_pSpriteComponents;
-	HealthComponent *m_pHealthComponents;
+	//HealthComponent *m_pHealthComponents;
 	//ColliderComponent *m_pColliderComponents;
 };
 

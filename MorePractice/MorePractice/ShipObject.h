@@ -14,7 +14,6 @@ public:
 
 protected:
 	void shoot();
-	virtual void setComponentPointers();
 
 private:
 	BulletManager *m_pBulletManager;

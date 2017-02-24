@@ -31,6 +31,5 @@ private:
 	ObjectPool<SpriteComponent> *m_pSpritePool;
 	ObjectPool<ColliderComponent> *m_pColliderPool;
 	int m_iPower;
-	void setComponentPointers();
 	unsigned int m_uiID;
 };

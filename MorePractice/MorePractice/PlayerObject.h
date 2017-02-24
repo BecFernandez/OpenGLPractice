@@ -13,6 +13,5 @@ public:
 	void Update(const double a_dDeltaTime);
 
 private:
-	void setComponentPointers();
 	PhysicsComponent* m_physicsComponent;
 };

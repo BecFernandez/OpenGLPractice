@@ -5,14 +5,17 @@
 
 #include "Component.h"
 #include "Subject.h"
+#include "ComponentPool.h"
 
+//template <typename T>
 class GameObject : public Subject
 {
 public:
 	GameObject();
 	GameObject(glm::vec3 a_position, float a_fRotationAngle = 0, float a_fScale = 1);
 	~GameObject();
-	void AddComponent(Component* a_component);
+	template <typename T>
+	void AddComponent(ComponentTypes a_type, ObjectPool<T> *a_pComponentPool, unsigned int a_id);
 	void RemoveComponent(ComponentTypes a_type);
 	Component* GetComponent(ComponentTypes a_type) const;
 	virtual void Update(const double a_dDeltaTime);
@@ -25,11 +28,12 @@ public:
 	virtual void SetActive(bool a_bValue);
 
 private:
-	std::map<int, unsigned int> m_components;
+	template <typename T>
+	std::map<ComponentTypes, ObjectPool<T>*> m_componentPoolLinks;
+	std::map<ComponentTypes, unsigned int> m_components;
 	glm::mat4 m_globalTransform;
 
 protected:
 	bool m_bActive;
-	virtual void setComponentPointers() {}
 };
 

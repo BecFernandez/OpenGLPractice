@@ -12,6 +12,7 @@ GameScreen::GameScreen(SoundSystemClass* a_pSounds, GLSLProgram *a_pShaders) : S
 	m_pPhysicsComponentPool = new ObjectPool<PhysicsComponent>(14);
 	m_pSpriteComponentPool = new ObjectPool<SpriteComponent>(14);
 	m_pColliderComponentPool = new ObjectPool<ColliderComponent>(14);
+	m_pHealthComponentPool = new ObjectPool<HealthComponent>(4);
 	//m_pSpriteComponentPool->Create(glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), glm::vec2(51.0f, 86.0f), "ship.png", m_uiSpriteVBO, m_uiSpriteIBO, m_pShaders);
 	//m_pPhysicsComponentPool->Create(1, 1);
 
@@ -50,12 +51,12 @@ GameScreen::GameScreen(SoundSystemClass* a_pSounds, GLSLProgram *a_pShaders) : S
 		{ glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), glm::vec2(5.0f, 15.0f), "laser.png", m_uiSpriteVBO, m_uiSpriteIBO, m_pShaders },
 		{ glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), glm::vec2(5.0f, 15.0f), "laser.png", m_uiSpriteVBO, m_uiSpriteIBO, m_pShaders }
 	};*/
-	m_pHealthComponents = new HealthComponent[4]{
+	/*m_pHealthComponents = new HealthComponent[4]{
 		{100},
 		{30},
 		{30},
 		{30}
-	};
+	};*/
 
 	//m_pColliderComponents = new ColliderComponent[14]{
 	//	{ PLAYER_COLLIDER, glm::vec2(51.0f, 86.0f) },
@@ -78,19 +79,19 @@ GameScreen::GameScreen(SoundSystemClass* a_pSounds, GLSLProgram *a_pShaders) : S
 	m_pPhysicsManager = new PhysicsManager(m_pColliderComponentPool);
 
 	m_player = new PlayerObject(glm::vec3(400, 300, 0), m_pBulletManager);
-	m_player->AddComponent(m_pPhysicsComponentPool->Create(1.0f));
-	m_player->AddComponent(m_pSpriteComponentPool->Create(glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), glm::vec2(51.0f, 86.0f), "ship.png", m_uiSpriteVBO, m_uiSpriteIBO, m_pShaders));
-	m_player->AddComponent(m_pHealthComponents);
-	m_player->AddComponent(m_pColliderComponentPool->Create(PLAYER_COLLIDER, glm::vec2(51.0f, 86.0f)));
+	m_player->AddComponent(PHYSICS, m_pPhysicsComponentPool, m_pPhysicsComponentPool->Create(1.0f));
+	m_player->AddComponent(SPRITE, m_pSpriteComponentPool, m_pSpriteComponentPool->Create(glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), glm::vec2(51.0f, 86.0f), "ship.png", m_uiSpriteVBO, m_uiSpriteIBO, m_pShaders));
+	m_player->AddComponent(HEALTH, m_pHealthComponentPool, m_pHealthComponentPool->Create(100));
+	m_player->AddComponent(COLLIDER, m_pColliderComponentPool, m_pColliderComponentPool->Create(PLAYER_COLLIDER, glm::vec2(51.0f, 86.0f)));
 	m_gameObjects.push_back(m_player);
 
 	for (int i = 0; i < 3; i++)
 	{
 		m_gameObjects.push_back(new EnemyObject(glm::vec3(100 + (3-i)%3*250, 100 + i/2*400, 0), m_player, m_pBulletManager));
-		m_gameObjects[i + 1]->AddComponent(m_pPhysicsComponentPool->Create(1.0f));
-		m_gameObjects[i + 1]->AddComponent(m_pSpriteComponentPool->Create(glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), glm::vec2(51.0f, 86.0f), "cylon.png", m_uiSpriteVBO, m_uiSpriteIBO, m_pShaders));
-		m_gameObjects[i + 1]->AddComponent(m_pHealthComponents + i + 1);
-		m_gameObjects[i + 1]->AddComponent(m_pColliderComponentPool->Create(ENEMY_COLLIDER, glm::vec2(51.0f, 86.0f)));
+		m_gameObjects[i + 1]->AddComponent(PHYSICS, m_pColliderComponentPool, m_pPhysicsComponentPool->Create(1.0f));
+		m_gameObjects[i + 1]->AddComponent(SPRITE, m_pSpriteComponentPool, m_pSpriteComponentPool->Create(glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), glm::vec2(51.0f, 86.0f), "cylon.png", m_uiSpriteVBO, m_uiSpriteIBO, m_pShaders));
+		m_gameObjects[i + 1]->AddComponent(HEALTH, m_pHealthComponentPool, m_pHealthComponentPool->Create(30));
+		m_gameObjects[i + 1]->AddComponent(COLLIDER, m_pColliderComponentPool, m_pColliderComponentPool->Create(ENEMY_COLLIDER, glm::vec2(51.0f, 86.0f)));
 	}
 
 	
@@ -99,7 +100,7 @@ GameScreen::GameScreen(SoundSystemClass* a_pSounds, GLSLProgram *a_pShaders) : S
 GameScreen::~GameScreen()
 {
 	//delete[] m_pColliderComponents;
-	delete[] m_pHealthComponents;
+	//delete[] m_pHealthComponents;
 	//delete[] m_pPhysicsComponents;
 	//delete[] m_pSpriteComponents;
 

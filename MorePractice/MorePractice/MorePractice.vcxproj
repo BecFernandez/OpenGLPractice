@@ -131,9 +131,6 @@
       <Project>{8fc79638-b005-4ae7-84a7-44e401e3be9e}</Project>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include="..\..\..\Visual Studio 2013\Projects\ScreenSaverOpenGL\lib\libcurl.rc" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

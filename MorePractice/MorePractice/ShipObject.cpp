@@ -55,10 +55,3 @@ void ShipObject::shoot()
 		m_pBulletManager->Shoot(this, m_iPower, M_BULLET_SPEED, m_fRotationAngle, m_position + glm::vec3(2 * offset.x, 2 * offset.y, 2 * offset.z));
 	}
 }
-
-void ShipObject::setComponentPointers()
-{
-	m_spriteComponent = dynamic_cast<SpriteComponent*>(GameObject::GetComponent(SPRITE));
-	m_colliderComponent = dynamic_cast<ColliderComponent*>(GameObject::GetComponent(COLLIDER));
-	m_healthComponent = dynamic_cast<HealthComponent*>(GameObject::GetComponent(HEALTH));
-}

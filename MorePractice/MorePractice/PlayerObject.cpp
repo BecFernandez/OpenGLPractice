@@ -34,9 +34,3 @@ void PlayerObject::Update(const double a_dDeltaTime)
 
 	ShipObject::Update(a_dDeltaTime);
 }
-
-void PlayerObject::setComponentPointers()
-{
-	ShipObject::setComponentPointers();
-	m_physicsComponent = dynamic_cast<PhysicsComponent*>(GameObject::GetComponent(PHYSICS));
-}
