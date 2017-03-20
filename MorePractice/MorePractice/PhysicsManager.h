@@ -2,15 +2,15 @@
 
 #include <vector>
 #include "Physics.h"
-#include "ColliderComponent.h"
 #include "ComponentPool.h"
+#include "ComponentPoolHelper.h"
 
 class PhysicsManager
 {
 public:
-	PhysicsManager(ObjectPool<ColliderComponent>* a_colliderComponents);
+	PhysicsManager(ComponentPoolHelper *a_pComponentPoolHelper);
 	void Update();
 
 private:
-	ObjectPool<ColliderComponent>* m_colliderComponents;
+	ComponentPoolHelper *m_pComponentPoolHelper;
 };

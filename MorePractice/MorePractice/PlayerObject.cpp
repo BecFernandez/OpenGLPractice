@@ -4,14 +4,17 @@
 #include "HealthComponent.h"
 #include <gtc\matrix_transform.hpp>
 
-PlayerObject::PlayerObject(glm::vec3 a_position, BulletManager *a_pBulletManager) : 
-	ShipObject(PLAYER_FIRE_POWER, a_position, PLAYER_F_FIRE_COOL_DOWN_MAX, a_pBulletManager)
+PlayerObject::PlayerObject(ComponentPoolHelper *a_pComponentPoolHelper, glm::vec3 a_position, BulletManager *a_pBulletManager) : 
+	ShipObject(a_pComponentPoolHelper, PLAYER_FIRE_POWER, a_position, PLAYER_F_FIRE_COOL_DOWN_MAX, a_pBulletManager)
 {
 
 }
 
 void PlayerObject::Update(const double a_dDeltaTime)
 {
+	ShipObject::Update(a_dDeltaTime);
+	m_physicsComponent = (PhysicsComponent*)GetComponent(ComponentTypes::PHYSICS);
+	
 	if (m_bActive) {
 		GLFWwindow* currentContext = glfwGetCurrentContext();
 		if (m_physicsComponent != nullptr) {
@@ -31,12 +34,4 @@ void PlayerObject::Update(const double a_dDeltaTime)
 			}
 		}
 	}
-
-	ShipObject::Update(a_dDeltaTime);
-}
-
-void PlayerObject::setComponentPointers()
-{
-	ShipObject::setComponentPointers();
-	m_physicsComponent = dynamic_cast<PhysicsComponent*>(GameObject::GetComponent(PHYSICS));
 }

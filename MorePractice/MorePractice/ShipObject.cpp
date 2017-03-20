@@ -5,8 +5,8 @@
 #include "ColliderComponent.h"
 #include <gtc\matrix_transform.hpp>
 
-ShipObject::ShipObject(int a_iPower, glm::vec3 a_position, float a_fFireCoolDownMax, BulletManager *a_pBulletManager) : GameObject(a_position),
-	m_pBulletManager(a_pBulletManager), m_fFireCoolDownMax(a_fFireCoolDownMax), m_fFireCoolDown(0), m_iPower(a_iPower)
+ShipObject::ShipObject(ComponentPoolHelper *a_pComponentPoolHelper, int a_iPower, glm::vec3 a_position, float a_fFireCoolDownMax, BulletManager *a_pBulletManager) : 
+	GameObject(a_pComponentPoolHelper, a_position), m_pBulletManager(a_pBulletManager), m_fFireCoolDownMax(a_fFireCoolDownMax), m_fFireCoolDown(0), m_iPower(a_iPower)
 {
 	SetActive(true);
 }
@@ -15,18 +15,23 @@ void ShipObject::Update(const double a_dDeltaTime)
 {
 	GameObject::Update(a_dDeltaTime);
 
+	m_healthComponent = (HealthComponent*)GetComponent(ComponentTypes::HEALTH);
+	m_colliderComponent = (ColliderComponent*)GetComponent(ComponentTypes::COLLIDER);
+	m_spriteComponent = (SpriteComponent*)GetComponent(ComponentTypes::SPRITE);
+
 	if (!m_healthComponent->IsAlive()) {
 		SetActive(false);
 	}
 
 	if (m_bActive) {
-		if (m_colliderComponent->m_pOtherCollider != nullptr) {
-			CollisionTags collisionTag = m_colliderComponent->m_pOtherCollider->GetCollisionTag();
+		if (m_colliderComponent->m_pOtherColliderID != -1) {
+			ColliderComponent* otherCollider = m_pComponentPoolHelper->m_colliderComponentPool->GetObjectById(m_colliderComponent->m_pOtherColliderID);
+			CollisionTags collisionTag = otherCollider->GetCollisionTag();
 			if (collisionTag == PLAYER_COLLIDER || collisionTag == ENEMY_COLLIDER) {
 				m_healthComponent->TakeDamage(10);
 			}
 			else if (collisionTag == BULLET_COLLIDER) {
-				BulletObject* bullet = dynamic_cast<BulletObject*>(m_colliderComponent->m_pOtherCollider->m_pGameObject);
+				BulletObject* bullet = dynamic_cast<BulletObject*>(otherCollider->m_pGameObject);
 				if (bullet->m_pOwner != nullptr && bullet->m_pOwner != this) {
 					m_healthComponent->TakeDamage(bullet->GetPower());
 				}
@@ -54,11 +59,4 @@ void ShipObject::shoot()
 		m_pBulletManager->Shoot(this, m_iPower, M_BULLET_SPEED, m_fRotationAngle, m_position - glm::vec3(offset.x, offset.y, offset.z));
 		m_pBulletManager->Shoot(this, m_iPower, M_BULLET_SPEED, m_fRotationAngle, m_position + glm::vec3(2 * offset.x, 2 * offset.y, 2 * offset.z));
 	}
-}
-
-void ShipObject::setComponentPointers()
-{
-	m_spriteComponent = dynamic_cast<SpriteComponent*>(GameObject::GetComponent(SPRITE));
-	m_colliderComponent = dynamic_cast<ColliderComponent*>(GameObject::GetComponent(COLLIDER));
-	m_healthComponent = dynamic_cast<HealthComponent*>(GameObject::GetComponent(HEALTH));
 }

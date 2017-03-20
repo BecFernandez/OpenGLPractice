@@ -5,8 +5,7 @@
 //#include "Text.h"
 #include "GameObject.h"
 #include<vector>
-#include "SpriteComponent.h"
-#include "ComponentPool.h"
+#include "ComponentPoolHelper.h"
 
 class MainMenuScreen : public Screen
 {
@@ -19,7 +18,7 @@ private:
 	//Text m_t;
 	std::vector<GameObject*> m_gameObjects;
 
-	ObjectPool<SpriteComponent> *m_pSpriteComponentPool;
+	ComponentPoolHelper m_componentPoolHelper;
 };
 
 #endif

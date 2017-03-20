@@ -2,14 +2,14 @@
 #include "GameObject.h"
 #include <gtc\matrix_transform.hpp>
 
-PhysicsComponent::PhysicsComponent() : Component(PHYSICS), m_velocity(0, 0), m_acceleration(0, 0), m_fFrictionValue(0.97),
+PhysicsComponent::PhysicsComponent() : Component(ComponentTypes::PHYSICS), m_velocity(0, 0), m_acceleration(0, 0), m_fFrictionValue(0.97),
 m_fRotationSpeed(1.0f)
 {
 
 }
 
 PhysicsComponent::PhysicsComponent(const float a_fRotationSpeed, const float a_fFrictionValue) :
-	Component(PHYSICS), m_fRotationSpeed(a_fRotationSpeed),
+	Component(ComponentTypes::PHYSICS), m_fRotationSpeed(a_fRotationSpeed),
 	m_velocity(0, 0), m_acceleration(0, 0), m_fFrictionValue(a_fFrictionValue)
 {
 

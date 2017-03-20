@@ -1,7 +1,7 @@
 #pragma once
 class GameObject;
 
-enum ComponentTypes {
+enum class ComponentTypes {
 	SPRITE,
 	PHYSICS,
 	HEALTH,

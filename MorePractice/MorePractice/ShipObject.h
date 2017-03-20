@@ -9,12 +9,11 @@
 class ShipObject : public GameObject
 {
 public:
-	ShipObject(int a_iPower, glm::vec3 a_position, float a_fFireCoolDownMax, BulletManager *a_pBulletManager);
+	ShipObject(ComponentPoolHelper *a_pComponentPoolHelper, int a_iPower, glm::vec3 a_position, float a_fFireCoolDownMax, BulletManager *a_pBulletManager);
 	virtual void Update(const double a_dDeltaTime);
 
 protected:
 	void shoot();
-	virtual void setComponentPointers();
 
 private:
 	BulletManager *m_pBulletManager;

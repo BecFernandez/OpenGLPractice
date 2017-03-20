@@ -1,7 +1,9 @@
 #include "Subject.h"
+#include <iostream>
 
 void Subject::AddObserver(Observer* observerToAdd)
 {
+	std::cout << "Observer list size: " << observers.size() << std::endl;
 	observers.push_back(observerToAdd);
 }
 

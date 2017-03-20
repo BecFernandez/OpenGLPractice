@@ -1,8 +1,8 @@
 #include "BulletManager.h"
 
-BulletManager::BulletManager(ObjectPool<PhysicsComponent> *a_pPhysicsComponentPool, ObjectPool<SpriteComponent> *a_pSpriteComponentPool, ObjectPool<ColliderComponent> *a_pColliderComponentPool,
+BulletManager::BulletManager(ComponentPoolHelper *a_pComponentPoolHelper,
 	GLuint a_uiVAO, GLuint a_uiVBO, GLuint a_uiIBO, GLSLProgram *a_pShader) :
-	m_pPhysicsComponentPool(a_pPhysicsComponentPool), m_pSpriteComponentPool(a_pSpriteComponentPool), m_pColliderComponentPool(a_pColliderComponentPool),
+	m_pComponentPoolHelper(a_pComponentPoolHelper),
 	m_iLastAssignedBullet(-1), m_uiNumActiveBullets(0), m_uiVAO(a_uiVAO), m_uiVBO(a_uiVBO), m_uiIBO(a_uiIBO), m_pShader(a_pShader)
 {
 	m_bulletPool = new ObjectPool<BulletObject>(10);//new BulletObject[10];
@@ -10,12 +10,13 @@ BulletManager::BulletManager(ObjectPool<PhysicsComponent> *a_pPhysicsComponentPo
 
 void BulletManager::Shoot(ShipObject* a_pOwner, int a_iPower, int speed, float a_fRotationAngle, glm::vec3 a_position) 
 {
-	unsigned int bulletID = m_bulletPool->Create(m_pPhysicsComponentPool, m_pSpriteComponentPool, m_pColliderComponentPool, a_pOwner, a_iPower, speed, a_fRotationAngle, a_position,
+	unsigned int bulletID = m_bulletPool->Create(m_pComponentPoolHelper, a_pOwner, a_iPower, speed, a_fRotationAngle, a_position,
 		m_uiVAO, m_uiVBO, m_uiIBO, m_pShader);
-	BulletObject* bullet = m_bulletPool->GetObjectByIndex(bulletID);
+	BulletObject* bullet = m_bulletPool->GetObjectById(bulletID);
 	if (bullet != nullptr) {
 		bullet->AddObserver(this);
 		bullet->Shoot(a_pOwner, a_iPower, speed, a_fRotationAngle, a_position);
+		std::cout << "Bullet created: " << bulletID << std::endl;
 	}
 
 }
@@ -24,7 +25,9 @@ void BulletManager::Update(const double a_dDeltaTime)
 {
 	for (unsigned int i = 0; i < m_bulletsToRemove.size(); i++) {
 		m_bulletsToRemove[i]->Disable();
-		m_bulletPool->Destroy(m_bulletsToRemove[i]->GetID());
+		int bulletID = m_bulletsToRemove[i]->GetID();
+		m_bulletPool->Destroy(bulletID);
+		std::cout << "Bullet destroyed: " << bulletID << std::endl;
 	}
 	m_bulletsToRemove.clear();
 	m_bulletPool->Update(a_dDeltaTime);

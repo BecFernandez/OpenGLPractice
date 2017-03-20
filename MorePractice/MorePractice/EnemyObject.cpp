@@ -3,8 +3,8 @@
 #include "PhysicsComponent.h"
 #include "HealthComponent.h"
 
-EnemyObject::EnemyObject(glm::vec3 a_position, PlayerObject* a_player, BulletManager *a_pBulletManager) : 
-	ShipObject(ENEMY_FIRE_POWER, a_position, ENEMY_F_FIRE_COOL_DOWN_MAX, a_pBulletManager), m_player(a_player)
+EnemyObject::EnemyObject(ComponentPoolHelper *a_pComponentPoolHelper, glm::vec3 a_position, PlayerObject* a_player, BulletManager *a_pBulletManager) : 
+	ShipObject(a_pComponentPoolHelper, ENEMY_FIRE_POWER, a_position, ENEMY_F_FIRE_COOL_DOWN_MAX, a_pBulletManager), m_player(a_player)
 {
 
 }
@@ -12,7 +12,7 @@ EnemyObject::EnemyObject(glm::vec3 a_position, PlayerObject* a_player, BulletMan
 void EnemyObject::Update(double a_dDeltaTime)
 {
 	if (m_bActive) {
-		PhysicsComponent* physicsComponent = dynamic_cast<PhysicsComponent*>(GameObject::GetComponent(PHYSICS));
+		PhysicsComponent* physicsComponent = dynamic_cast<PhysicsComponent*>(GameObject::GetComponent(ComponentTypes::PHYSICS));
 		glm::vec3 playerPos = m_player->m_position;
 
 		glm::vec3 toPlayer = playerPos - m_position;

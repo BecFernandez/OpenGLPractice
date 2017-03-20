@@ -7,10 +7,7 @@
 
 #include "BulletManager.h"
 #include "PhysicsManager.h"
-#include "PhysicsComponent.h"
-#include "SpriteComponent.h"
-#include "HealthComponent.h"
-#include "ColliderComponent.h"
+#include "ComponentPoolHelper.h"
 #include "ComponentPool.h"
 
 class GameScreen : public Screen
@@ -33,13 +30,7 @@ private:
 	PhysicsManager *m_pPhysicsManager;
 	std::vector<GameObject*> m_gameObjects;
 
-	ObjectPool<PhysicsComponent> *m_pPhysicsComponentPool;
-	ObjectPool<SpriteComponent> *m_pSpriteComponentPool;
-	ObjectPool<ColliderComponent> *m_pColliderComponentPool;
-	//PhysicsComponent *m_pPhysicsComponents;
-	//SpriteComponent *m_pSpriteComponents;
-	HealthComponent *m_pHealthComponents;
-	//ColliderComponent *m_pColliderComponents;
+	ComponentPoolHelper m_componentPoolHelper;
 };
 
 #endif
