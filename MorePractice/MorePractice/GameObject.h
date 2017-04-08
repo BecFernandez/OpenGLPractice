@@ -21,6 +21,8 @@ public:
 	virtual void Update(const double a_dDeltaTime);
 	bool IsActive() const { return m_bActive; }
 	glm::mat4 GetGlobalTransform();
+	void ResetComponentPointers();
+	void ClearComponentsList() { m_components.clear(); }
 
 	glm::vec3 m_position;
 	float m_fScale;

@@ -3,7 +3,6 @@
 
 void Subject::AddObserver(Observer* observerToAdd)
 {
-	std::cout << "Observer list size: " << observers.size() << std::endl;
 	observers.push_back(observerToAdd);
 }
 
@@ -14,10 +13,10 @@ void Subject::RemoveObserver(Observer* observerToRemove)
 	{
 		if (*it == observerToRemove)
 		{
+			observers.erase(it);
 			break;
 		}
 	}
-	observers.erase(it);
 }
 
 void Subject::notify()

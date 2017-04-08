@@ -18,6 +18,7 @@ public:
 	void Disable();
 	void Update(const double a_dDeltaTime);
 	void Shoot(ShipObject* a_pOwner, int a_iPower, int speed, float a_fRotationAngle, glm::vec3 a_startPos);
+	void PostMoveUpdate();
 	int GetPower() { return m_iPower; }
 	unsigned int GetID() { return m_uiID; }
 	ShipObject* m_pOwner;

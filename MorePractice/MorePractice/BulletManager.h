@@ -13,7 +13,7 @@ public:
 private:
 	ComponentPoolHelper *m_pComponentPoolHelper;
 	
-	std::vector<BulletObject*> m_bulletsToRemove;
+	std::vector<unsigned int> m_bulletsToRemove;
 	int m_iLastAssignedBullet;
 	unsigned int m_uiNumActiveBullets;
 	ObjectPool<BulletObject>* m_bulletPool;

@@ -15,6 +15,5 @@ private:
 	glm::vec2 m_velocity;
 	glm::vec2 m_acceleration;
 	float m_fRotationSpeed;
-
 	float m_fFrictionValue;
 };

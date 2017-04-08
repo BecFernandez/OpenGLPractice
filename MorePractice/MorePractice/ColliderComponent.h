@@ -18,7 +18,7 @@ public:
 	void Init(unsigned int a_uiId, CollisionTags a_collisionTag, glm::vec2 a_Dimensions);
 	bool IsCollidingWith(ColliderComponent *a_pOtherCollider);
 	void Update(const double a_dDeltaTime);
-	long m_pOtherColliderID;
+	long m_lOtherColliderID;
 	CollisionTags GetCollisionTag() { return m_collisionTag; }
 	void ResetOtherCollider();
 

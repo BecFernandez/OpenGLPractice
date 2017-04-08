@@ -11,6 +11,7 @@ public:
 	virtual ~Subject() {}
 	void AddObserver(Observer* observerToAdd);
 	void RemoveObserver(Observer* observerToRemove);
+	void ClearObserverList() { observers.clear(); }
 
 protected:
 	void notify();

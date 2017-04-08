@@ -16,6 +16,7 @@ public:
 	ComponentTypes GetComponentType() const { return m_componentType; }
 	void SetGameObject(GameObject* a_pGameObject) { m_pGameObject = a_pGameObject; }
 	unsigned int GetID() { return m_uiID; }
+	void PostMoveUpdate() {}
 
 private:
 	ComponentTypes m_componentType;

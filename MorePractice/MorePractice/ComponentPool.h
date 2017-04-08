@@ -67,11 +67,11 @@ template<typename T>
 template<typename... Args>
 unsigned int ObjectPool<T>::Create(Args&&... args)
 {
-	if (m_uiCount != m_uiCapacity) 
+	if (m_uiCount < m_uiCapacity) 
 	{
 		Index &nextFree = m_pIndices[m_usFreelistDequeue];
-		m_usFreelistDequeue = nextFree.next;
 		nextFree.id += m_uiCapacity;
+		m_usFreelistDequeue = nextFree.next;
 		nextFree.index = m_uiCount++;
 		m_pComponent[nextFree.index].Init(nextFree.id, std::forward<Args>(args)...);
 		return nextFree.id;
@@ -87,18 +87,22 @@ void ObjectPool<T>::Destroy(const unsigned int a_id)
 {
 	Index &indexToDelete = m_pIndices[a_id % m_uiCapacity];
 	if (indexToDelete.index < m_uiCount) {
+		std::cout << "removing component in index " << indexToDelete.index << std::endl;
 		T &object = m_pComponent[indexToDelete.index];
 		if (object.GetID() == a_id) {
 			object = m_pComponent[--m_uiCount];
 			m_pIndices[object.GetID() % m_uiCapacity].index = indexToDelete.index;
-
 			indexToDelete.index = m_uiCapacity;
-			//m_pIndices[m_usFreelistEnqueue].next = a_pComponent->GetID() % m_uiCapacity;
-			//m_usFreelistEnqueue = a_pComponent->GetID() % m_uiCapacity;
+			m_pIndices[m_usFreelistEnqueue].next = a_id % m_uiCapacity;
+			m_usFreelistEnqueue = a_id % m_uiCapacity;
 			//if we have just removed something from a completely full pool
 			if (m_uiCount == m_uiCapacity - 1)
 			{
 				m_usFreelistDequeue = m_usFreelistEnqueue;
+			}
+			//if the thing we just deleted wasn't the last object in the array (meaning we did actually assign something different in object)
+			if (m_pIndices[object.GetID() % m_uiCapacity].index != m_uiCapacity) {
+				object.PostMoveUpdate();
 			}
 		}
 		else {
@@ -134,4 +138,5 @@ T* ObjectPool<T>::GetObjectById(const unsigned int a_uiID)
 			return &m_pComponent[indexToGet.index];
 		}
 	}
+	return nullptr;
 }

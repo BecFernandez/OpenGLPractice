@@ -16,7 +16,6 @@ void BulletManager::Shoot(ShipObject* a_pOwner, int a_iPower, int speed, float a
 	if (bullet != nullptr) {
 		bullet->AddObserver(this);
 		bullet->Shoot(a_pOwner, a_iPower, speed, a_fRotationAngle, a_position);
-		std::cout << "Bullet created: " << bulletID << std::endl;
 	}
 
 }
@@ -24,10 +23,10 @@ void BulletManager::Shoot(ShipObject* a_pOwner, int a_iPower, int speed, float a
 void BulletManager::Update(const double a_dDeltaTime)
 {
 	for (unsigned int i = 0; i < m_bulletsToRemove.size(); i++) {
-		m_bulletsToRemove[i]->Disable();
-		int bulletID = m_bulletsToRemove[i]->GetID();
-		m_bulletPool->Destroy(bulletID);
-		std::cout << "Bullet destroyed: " << bulletID << std::endl;
+		std::cout << "Bullet " << m_bulletsToRemove[i] << " being disabled and destroyed" << std::endl;
+		BulletObject * bulletToRemove = m_bulletPool->GetObjectById(m_bulletsToRemove[i]);
+		bulletToRemove->Disable();
+		m_bulletPool->Destroy(m_bulletsToRemove[i]);
 	}
 	m_bulletsToRemove.clear();
 	m_bulletPool->Update(a_dDeltaTime);
@@ -35,9 +34,8 @@ void BulletManager::Update(const double a_dDeltaTime)
 
 void BulletManager::OnNotify(Subject *subject)
 {
-	BulletObject* bulletToRemove = dynamic_cast<BulletObject*>(subject);
-	if (bulletToRemove != nullptr) {
-		bulletToRemove->RemoveObserver(this);
-		m_bulletsToRemove.push_back(bulletToRemove);
-	}
+	unsigned int bulletToRemove = dynamic_cast<BulletObject*>(subject)->GetID();
+	std::cout << "Bullet " << bulletToRemove << " added to remove list" << std::endl;
+	dynamic_cast<BulletObject*>(subject)->RemoveObserver(this);
+	m_bulletsToRemove.push_back(bulletToRemove);
 }

@@ -24,7 +24,7 @@ GameScreen::GameScreen(SoundSystemClass* a_pSounds, GLSLProgram *a_pShaders) : S
 	m_player->AddComponent(ComponentTypes::COLLIDER, m_componentPoolHelper.m_colliderComponentPool->Create(PLAYER_COLLIDER, glm::vec2(51.0f, 86.0f)));
 	m_gameObjects.push_back(m_player);
 
-	for (int i = 0; i < 3; i++)
+	for (int i = 0; i < 1; i++)
 	{
 		m_gameObjects.push_back(new EnemyObject(&m_componentPoolHelper, glm::vec3(100 + (3-i)%3*250, 100 + i/2*400, 0), m_player, m_pBulletManager));
 		m_gameObjects[i + 1]->AddComponent(ComponentTypes::PHYSICS, m_componentPoolHelper.m_physicsComponentPool->Create(1.0f));
@@ -60,10 +60,10 @@ Screen* GameScreen::Update(const double a_fDeltaTime)
 	}
 
 	m_pBulletManager->Update(a_fDeltaTime);
-	m_pPhysicsManager->Update();
 	
 	m_componentPoolHelper.Update(a_fDeltaTime);
 
+	m_pPhysicsManager->Update();
 	//player died in the last frame
 	if (playerAlive != m_player->IsActive()) {
 		return new LoseScreen(m_pSounds, m_pShaders);

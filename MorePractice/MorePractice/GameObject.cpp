@@ -47,6 +47,19 @@ void GameObject::AddComponent(ComponentTypes a_type, unsigned int a_id)
 	//Urgent TODO.
 }
 
+void GameObject::ResetComponentPointers()
+{
+	for (std::map<ComponentTypes, unsigned int>::iterator it = m_components.begin(); it != m_components.end(); it++) {
+		Component* component = GetComponent(it->first);
+		if (component != nullptr) {
+			component->SetGameObject(this);
+		}
+		else {
+			std::cout << "GameObject being reset has no " << (int)it->first << "component" << std::endl;
+		}
+	}
+}
+
 void GameObject::RemoveComponent(ComponentTypes a_type)
 {
 	if (m_components.find(a_type) != m_components.end()) {

@@ -8,6 +8,7 @@
 ShipObject::ShipObject(ComponentPoolHelper *a_pComponentPoolHelper, int a_iPower, glm::vec3 a_position, float a_fFireCoolDownMax, BulletManager *a_pBulletManager) : 
 	GameObject(a_pComponentPoolHelper, a_position), m_pBulletManager(a_pBulletManager), m_fFireCoolDownMax(a_fFireCoolDownMax), m_fFireCoolDown(0), m_iPower(a_iPower)
 {
+	GameObject::Update(0);
 	SetActive(true);
 }
 
@@ -19,20 +20,27 @@ void ShipObject::Update(const double a_dDeltaTime)
 	m_colliderComponent = (ColliderComponent*)GetComponent(ComponentTypes::COLLIDER);
 	m_spriteComponent = (SpriteComponent*)GetComponent(ComponentTypes::SPRITE);
 
-	if (!m_healthComponent->IsAlive()) {
+	if (m_bActive && !m_healthComponent->IsAlive()) {
+		std::cout << "Ship has died :(" << std::endl;
 		SetActive(false);
+		RemoveComponent(ComponentTypes::HEALTH);
+		RemoveComponent(ComponentTypes::COLLIDER);
+		RemoveComponent(ComponentTypes::SPRITE);
+		RemoveComponent(ComponentTypes::PHYSICS);
 	}
 
 	if (m_bActive) {
-		if (m_colliderComponent->m_pOtherColliderID != -1) {
-			ColliderComponent* otherCollider = m_pComponentPoolHelper->m_colliderComponentPool->GetObjectById(m_colliderComponent->m_pOtherColliderID);
+		if (m_colliderComponent->m_lOtherColliderID != -1) {
+			ColliderComponent* otherCollider = m_pComponentPoolHelper->m_colliderComponentPool->GetObjectById(m_colliderComponent->m_lOtherColliderID);
 			CollisionTags collisionTag = otherCollider->GetCollisionTag();
 			if (collisionTag == PLAYER_COLLIDER || collisionTag == ENEMY_COLLIDER) {
+				std::cout << "collision with another ship" << std::endl;
 				m_healthComponent->TakeDamage(10);
 			}
 			else if (collisionTag == BULLET_COLLIDER) {
 				BulletObject* bullet = dynamic_cast<BulletObject*>(otherCollider->m_pGameObject);
 				if (bullet->m_pOwner != nullptr && bullet->m_pOwner != this) {
+					std::cout << "Collision with bullet. Damage: " << bullet->GetPower() << std::endl;
 					m_healthComponent->TakeDamage(bullet->GetPower());
 				}
 			}
