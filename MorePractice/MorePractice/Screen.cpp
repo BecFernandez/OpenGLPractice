@@ -1,6 +1,6 @@
 #include "Screen.h"
-#include "Sprite.h"
 #include <gtc\matrix_transform.hpp>
+#include "Vertex.h"
 
 void checkGLError(const char* customMessage)
 {
@@ -10,12 +10,12 @@ void checkGLError(const char* customMessage)
 	}
 }
 
-Screen::Screen()
+Screen::Screen() : m_pSounds(nullptr), m_pShaders(nullptr)
 {
 
 }
 
-Screen::Screen(SoundSystemClass* a_pSounds, GLSLProgram *a_pShaders) : m_pSounds(a_pSounds), m_pShaders(a_pShaders)
+Screen::Screen(const SoundSystemClass* const a_pSounds, const GLSLProgram * const a_pShaders) : m_pSounds(a_pSounds), m_pShaders(a_pShaders)
 {
 	glGenVertexArrays(1, &m_uiSpriteVAO);
 	glBindVertexArray(m_uiSpriteVAO);
@@ -43,7 +43,7 @@ Screen::~Screen()
 Screen* Screen::Update(const double m_fDeltaTime)
 {
 	//update animations
-	for(unsigned int i =0; i < m_animations.size(); i++)
+	/*for(unsigned int i =0; i < m_animations.size(); i++)
 	{
 		m_animations[i].Update(m_fDeltaTime);
 		if(!m_animations[i].IsStillRunning())
@@ -51,7 +51,7 @@ Screen* Screen::Update(const double m_fDeltaTime)
 			m_animations.erase(m_animations.begin() + i);
 			i--;
 		}
-	}
+	}*/
 	return this;
 }
 
@@ -60,4 +60,16 @@ void Screen::Draw()
 	m_pShaders->use();
 	//set projection view matrix - once per frame
 	m_pShaders->setUniform("projectionView", m_projectionMatrix);
+	for (unsigned short i = 0; i < m_componentPoolHelper.m_spriteComponentPool->GetCurrentSize(); ++i) {
+		SpriteComponent* pSpriteComponent = m_componentPoolHelper.m_spriteComponentPool->GetObjectByIndex(i);
+		if (pSpriteComponent != nullptr) {
+			pSpriteComponent->Draw();
+		}
+	}
+}
+
+void Screen::OnNotify(Subject * subject)
+{
+	//nothing here for the moment. This should be overriden in child classes if needed
+	//might be best to throw an exception here?
 }

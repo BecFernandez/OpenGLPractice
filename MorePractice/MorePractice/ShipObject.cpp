@@ -21,27 +21,27 @@ void ShipObject::Update(const double a_dDeltaTime)
 	m_spriteComponent = (SpriteComponent*)GetComponent(ComponentTypes::SPRITE);
 
 	if (m_bActive && !m_healthComponent->IsAlive()) {
-		std::cout << "Ship has died :(" << std::endl;
 		SetActive(false);
 		RemoveComponent(ComponentTypes::HEALTH);
 		RemoveComponent(ComponentTypes::COLLIDER);
 		RemoveComponent(ComponentTypes::SPRITE);
 		RemoveComponent(ComponentTypes::PHYSICS);
+		notify();
 	}
 
 	if (m_bActive) {
-		if (m_colliderComponent->m_lOtherColliderID != -1) {
-			ColliderComponent* otherCollider = m_pComponentPoolHelper->m_colliderComponentPool->GetObjectById(m_colliderComponent->m_lOtherColliderID);
-			CollisionTags collisionTag = otherCollider->GetCollisionTag();
-			if (collisionTag == PLAYER_COLLIDER || collisionTag == ENEMY_COLLIDER) {
-				std::cout << "collision with another ship" << std::endl;
-				m_healthComponent->TakeDamage(10);
-			}
-			else if (collisionTag == BULLET_COLLIDER) {
-				BulletObject* bullet = dynamic_cast<BulletObject*>(otherCollider->m_pGameObject);
-				if (bullet->m_pOwner != nullptr && bullet->m_pOwner != this) {
-					std::cout << "Collision with bullet. Damage: " << bullet->GetPower() << std::endl;
-					m_healthComponent->TakeDamage(bullet->GetPower());
+		for (unsigned int i = 0; i < m_colliderComponent->m_OtherColliderIDs.size(); i++) {
+			ColliderComponent* otherCollider = m_pComponentPoolHelper->m_colliderComponentPool->GetObjectById(m_colliderComponent->m_OtherColliderIDs[i]);
+			if (otherCollider != nullptr) { //this could happen if the thing we're collided with was already removed
+				CollisionTags collisionTag = otherCollider->GetCollisionTag();
+				if (collisionTag == PLAYER_COLLIDER || collisionTag == ENEMY_COLLIDER) {
+					m_healthComponent->TakeDamage(10);
+				}
+				else if (collisionTag == BULLET_COLLIDER) {
+					BulletObject* bullet = dynamic_cast<BulletObject*>(otherCollider->m_pGameObject);
+					if (bullet->m_pOwner != nullptr && bullet->m_pOwner != this) {
+						m_healthComponent->TakeDamage(bullet->GetPower());
+					}
 				}
 			}
 		}

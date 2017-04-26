@@ -5,11 +5,10 @@
 class WinScreen : public Screen
 {
 public:
-	WinScreen(SoundSystemClass *a_pSounds, GLSLProgram *a_pShaders);
+	WinScreen(const SoundSystemClass * const a_pSounds, const GLSLProgram * const a_pShaders);
 	Screen* Update(double a_dDeltaTime);
 	void Draw();
 
 private:
-	Sprite m_winImage;
-	Text m_winText;
+	//Text m_winText;
 };

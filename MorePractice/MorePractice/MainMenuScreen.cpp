@@ -1,8 +1,7 @@
 #include "MainMenuScreen.h"
 #include "GameScreen.h"
 
-MainMenuScreen::MainMenuScreen(SoundSystemClass* a_pSounds, GLSLProgram *a_pShaders) : Screen(a_pSounds, a_pShaders)
-	//m_gameTitle(glm::vec3(400, 300, 0), glm::vec4(1.0, 1.0, 1.0, 1.0), 720, 393, "SpaceWars.jpg"),
+MainMenuScreen::MainMenuScreen(const SoundSystemClass* const a_pSounds, const GLSLProgram * const a_pShaders) : Screen(a_pSounds, a_pShaders)
 	//m_t(glm::vec3(350, 100, 0), glm::vec4(1.0, 0.0, 0.0, 1.0), 256, 256, "arial_0.png", "arial.fnt")
 {
 	m_componentPoolHelper.m_spriteComponentPool = new ObjectPool<SpriteComponent>(1);
@@ -39,15 +38,7 @@ Screen* MainMenuScreen::Update(const double a_dDeltaTime)
 void MainMenuScreen::Draw()
 {
 	Screen::Draw();
-	for (unsigned short i = 0; i < m_componentPoolHelper.m_spriteComponentPool->GetCurrentSize(); ++i) {
-		SpriteComponent* pSpriteComponent = m_componentPoolHelper.m_spriteComponentPool->GetObjectByIndex(i);
-		if (pSpriteComponent != nullptr) {
-			pSpriteComponent->Draw();
-		}
-	}
 
-	//m_gameTitle.Draw(m_uiSpriteVBO, m_uiSpriteIBO, m_pShaders);
-	//checkGLError("draw menu title sprite");
 	//m_t.DrawString(m_uiSpriteVBO, m_uiSpriteIBO, m_pShaders, "Hello  World");
 	//checkGLError("draw menu string");
 }

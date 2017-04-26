@@ -6,11 +6,10 @@
 class LoseScreen : public Screen
 {
 public:
-	LoseScreen(SoundSystemClass* a_pSounds, GLSLProgram *a_pShaders);
+	LoseScreen(const SoundSystemClass* const a_pSounds, const GLSLProgram * const a_pShaders);
 	Screen* Update(const double a_dDeltaTime);
 	void Draw();
 
 private:
-	Sprite m_loseImage;
-	Text m_loseText;
+	//Text m_loseText;
 };

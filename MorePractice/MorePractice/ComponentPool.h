@@ -78,7 +78,8 @@ unsigned int ObjectPool<T>::Create(Args&&... args)
 	}
 	else
 	{
-		return m_uiCapacity;
+		//0 should be an invalid number to get (unless the id overflows), since we always add capacity to the ID before returning
+		return 0;
 	}
 }
 
@@ -87,7 +88,6 @@ void ObjectPool<T>::Destroy(const unsigned int a_id)
 {
 	Index &indexToDelete = m_pIndices[a_id % m_uiCapacity];
 	if (indexToDelete.index < m_uiCount) {
-		std::cout << "removing component in index " << indexToDelete.index << std::endl;
 		T &object = m_pComponent[indexToDelete.index];
 		if (object.GetID() == a_id) {
 			object = m_pComponent[--m_uiCount];

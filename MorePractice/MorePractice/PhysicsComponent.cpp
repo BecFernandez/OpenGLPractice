@@ -20,6 +20,7 @@ void PhysicsComponent::Init(unsigned int a_uiId, const float a_fRotationSpeed, c
 	m_uiID = a_uiId;
 	m_fRotationSpeed = a_fRotationSpeed;
 	m_fFrictionValue = a_fFrictionValue;
+	m_velocity.x = m_velocity.y = 0;
 }
 
 void PhysicsComponent::AddRotation(const float a_fRotation)

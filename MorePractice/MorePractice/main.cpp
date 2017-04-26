@@ -103,7 +103,7 @@ bool init(GLFWwindow*& window)
 	if (glDebugMessageCallback) {
 		std::cout << "Register OpenGL debug callback " << std::endl;
 		glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
-		glDebugMessageCallback(openglCallbackFunction, nullptr);
+		//glDebugMessageCallback(openglCallbackFunction, nullptr);
 		GLuint unusedIds = 0;
 		glDebugMessageControl(GL_DONT_CARE,
 			GL_DONT_CARE,

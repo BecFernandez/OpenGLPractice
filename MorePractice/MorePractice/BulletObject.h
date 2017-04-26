@@ -11,10 +11,10 @@ class BulletObject : public GameObject
 public:
 	BulletObject();
 	BulletObject(ComponentPoolHelper *a_pComponentPoolHelper, ShipObject *a_pOwner, int a_iPower, int a_iSpeed, 
-		float a_fRotationAngle, glm::vec3 a_startPos, GLuint a_uiVAO, GLuint a_uiVBO, GLuint a_uiIBO, GLSLProgram* a_pShader);
+		float a_fRotationAngle, glm::vec3 a_startPos, GLuint a_uiVAO, GLuint a_uiVBO, GLuint a_uiIBO, const GLSLProgram* a_pShader);
 	~BulletObject();
 	void Init(unsigned int a_uiID, ComponentPoolHelper *a_pComponentPoolHelper, ShipObject *a_pOwner, int a_iPower, 
-		int a_iSpeed, float a_fRotationAngle, glm::vec3 a_startPos, GLuint a_uiVAO, GLuint a_uiVBO, GLuint a_uiIBO, GLSLProgram* a_pShader);
+		int a_iSpeed, float a_fRotationAngle, glm::vec3 a_startPos, GLuint a_uiVAO, GLuint a_uiVBO, GLuint a_uiIBO, const GLSLProgram* a_pShader);
 	void Disable();
 	void Update(const double a_dDeltaTime);
 	void Shoot(ShipObject* a_pOwner, int a_iPower, int speed, float a_fRotationAngle, glm::vec3 a_startPos);

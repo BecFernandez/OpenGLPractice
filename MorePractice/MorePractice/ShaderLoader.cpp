@@ -2,10 +2,8 @@
 
 GLSLProgram::GLSLProgram()
 {
-	linked = false;
-	handle = 0;
-	logString = "";
-
+	m_bLinked = false;
+	m_iHandle = 0;
 };
 
 bool GLSLProgram::compileShaderFromFile(const char* filename, GLSLShaderType type)
@@ -88,24 +86,23 @@ bool GLSLProgram::compileShaderFromFile(const char* filename, GLSLShaderType typ
 			char* log = (char*)malloc(logLen);
 			GLsizei written;
 			glGetShaderInfoLog(shader, logLen, &written, log);
-			logString = log;
-			std::cerr << logString << std::endl;
+			std::cerr << log << std::endl;
 			free(log);
 		}
 		return false;
 	}
 
 	//attach shader to program
-	if(handle == 0)
+	if(m_iHandle == 0)
 	{
-		handle = glCreateProgram();
-		if(handle == 0)
+		m_iHandle = glCreateProgram();
+		if(m_iHandle == 0)
 		{
 			std::cerr << "Error creating shader program" << std::endl;
 			return false;
 		}	
 	}
-	glAttachShader(handle, shader);
+	glAttachShader(m_iHandle, shader);
 
 	return true;
 }
@@ -117,94 +114,88 @@ bool GLSLProgram::compileShaderFromString(const std::string & source, GLSLShader
 
 bool GLSLProgram::link()
 {
-	glLinkProgram(handle);
+	glLinkProgram(m_iHandle);
 
 	GLint status;
-	glGetProgramiv(handle, GL_LINK_STATUS, &status);
+	glGetProgramiv(m_iHandle, GL_LINK_STATUS, &status);
 	if(status == GL_FALSE)
 	{
 		std::cerr << "Failed to link shader program" << std::endl;
 		GLint logLen;
-		glGetProgramiv(handle, GL_INFO_LOG_LENGTH, &logLen);
+		glGetProgramiv(m_iHandle, GL_INFO_LOG_LENGTH, &logLen);
 		if(logLen > 0)
 		{
 			char*log = new char[logLen];
 			GLsizei written;
-			glGetProgramInfoLog(handle, logLen, &written, log);
+			glGetProgramInfoLog(m_iHandle, logLen, &written, log);
 			std::cerr << log << std::endl;
 			delete [] log;
 		}
-		linked = false;
+		m_bLinked = false;
 		return false;
 	}
-	linked = true;
+	m_bLinked = true;
 	return true;
 }
 
-bool GLSLProgram::use()
+bool GLSLProgram::use() const
 {
-	if(handle)
+	if(m_iHandle)
 	{
-		glUseProgram(handle);
+		glUseProgram(m_iHandle);
 		return true;
 	}
 	return false;
 }
 
-std::string GLSLProgram::log()
+int GLSLProgram::getHandle() const
 {
-	return "ouhgwh";
+	return m_iHandle;
 }
 
-int GLSLProgram::getHandle()
+bool GLSLProgram::isLinked() const
 {
-	return handle;
+	return m_bLinked;
 }
 
-bool GLSLProgram::isLinked()
+void GLSLProgram::bindAttribLocation(GLuint location, const char* name) const
 {
-	return linked;
+	glBindAttribLocation(m_iHandle, location, name);
 }
 
-void GLSLProgram::bindAttribLocation(GLuint location, const char* name)
-{
-	glBindAttribLocation(handle, location, name);
-}
+//void GLSLProgram::bindFragDataLocation(GLuint location, const char* name)
+//{
+//	
+//}
 
-void GLSLProgram::bindFragDataLocation(GLuint location, const char* name)
+void GLSLProgram::setUniform(const char* name, float x, float y, float z) const
 {
-	
-}
-
-void GLSLProgram::setUniform(const char* name, float x, float y, float z)
-{
-
 	glUniform3f(getUniformLocation(name), x, y, z);
 }
 
-void GLSLProgram::setUniform(const char* name, const glm::mat4 & m)
+void GLSLProgram::setUniform(const char* name, const glm::mat4 & m) const
 {
 	glUniformMatrix4fv(getUniformLocation(name), 1, GL_FALSE, &m[0][0]);
 }
 
-GLint GLSLProgram::getUniformBlockInfo(const char * blockName, const int numOfItems, const char ** blockItems, GLint *offsets, GLubyte *blockBuffer)
+GLint GLSLProgram::getUniformBlockInfo(const char * blockName, const int numOfItems, const char ** blockItems, GLint *offsets, GLubyte *blockBuffer) const
 {
 	GLint blockSize;
 
-	GLuint blockIndex = glGetUniformBlockIndex(handle, blockName);
-	glGetActiveUniformBlockiv(handle, blockIndex, GL_UNIFORM_BLOCK_DATA_SIZE, &blockSize);
+	GLuint blockIndex = glGetUniformBlockIndex(m_iHandle, blockName);
+	glGetActiveUniformBlockiv(m_iHandle, blockIndex, GL_UNIFORM_BLOCK_DATA_SIZE, &blockSize);
 	blockBuffer = (GLubyte *)malloc(blockSize);
 	//query for the offsets of each variable
 	GLuint *indices = new GLuint[numOfItems];
 
-	glGetUniformIndices(handle, numOfItems, blockItems, indices);
+	glGetUniformIndices(m_iHandle, numOfItems, blockItems, indices);
 	
 	if(offsets != NULL)
 	{
 		delete [] offsets;
 	}
 	offsets = new GLint[numOfItems];
-	glGetActiveUniformsiv(handle, numOfItems, indices, GL_UNIFORM_OFFSET, offsets);
+	glGetActiveUniformsiv(m_iHandle, numOfItems, indices, GL_UNIFORM_OFFSET, offsets);
 	delete [] indices;
 	return blockSize;
 }
@@ -212,9 +203,9 @@ GLint GLSLProgram::getUniformBlockInfo(const char * blockName, const int numOfIt
 /**************
   Private
 *************/
-int GLSLProgram::getUniformLocation(const char* name)
+int GLSLProgram::getUniformLocation(const char* name) const
 {
-	return glGetUniformLocation(handle, name);
+	return glGetUniformLocation(m_iHandle, name);
 }
 
 bool GLSLProgram::fileExists(const std::string & filename)

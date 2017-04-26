@@ -8,12 +8,16 @@ BulletObject::BulletObject() : GameObject()
 
 BulletObject::BulletObject(ComponentPoolHelper *a_pComponentPoolHelper, 
 	ShipObject *a_pOwner, int a_iPower, int a_iSpeed, float a_fRotationAngle, glm::vec3 a_startPos, 
-	GLuint a_uiVAO, GLuint a_uiVBO, GLuint a_uiIBO, GLSLProgram* a_pShader)
+	GLuint a_uiVAO, GLuint a_uiVBO, GLuint a_uiIBO, const GLSLProgram* a_pShader)
 	: GameObject(a_pComponentPoolHelper, a_startPos)
 {
 	m_spriteComponentID = a_pComponentPoolHelper->m_spriteComponentPool->Create(glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), glm::vec2(5.0f, 15.0f), "laser.png", a_uiVAO, a_uiVBO, a_uiIBO, a_pShader);
 	m_physicsComponentID = a_pComponentPoolHelper->m_physicsComponentPool->Create(1, 1);
 	m_colliderComponentID = a_pComponentPoolHelper->m_colliderComponentPool->Create(BULLET_COLLIDER, glm::vec2(5.0f, 15.0f));
+	if (m_spriteComponentID == 0 || m_physicsComponentID == 0 || m_colliderComponentID == 0) {
+		std::cout << "A component pool is full" << std::endl;
+		//I really need to add some exception handling or something
+	}
 }
 
 BulletObject::~BulletObject()
@@ -23,13 +27,17 @@ BulletObject::~BulletObject()
 
 void BulletObject::Init(unsigned int a_uiID, ComponentPoolHelper *a_pComponentPoolHelper,
 	ShipObject *a_pOwner, int a_iPower, int a_iSpeed, float a_fRotationAngle, 
-	glm::vec3 a_startPos, GLuint a_uiVAO, GLuint a_uiVBO, GLuint a_uiIBO, GLSLProgram* a_pShader)
+	glm::vec3 a_startPos, GLuint a_uiVAO, GLuint a_uiVBO, GLuint a_uiIBO, const GLSLProgram* a_pShader)
 {
 	m_pComponentPoolHelper = a_pComponentPoolHelper;
 	m_uiID = a_uiID;
 	m_spriteComponentID = a_pComponentPoolHelper->m_spriteComponentPool->Create(glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), glm::vec2(5.0f, 15.0f), "laser.png", a_uiVAO, a_uiVBO, a_uiIBO, a_pShader);
 	m_physicsComponentID = a_pComponentPoolHelper->m_physicsComponentPool->Create(1, 1);
 	m_colliderComponentID = a_pComponentPoolHelper->m_colliderComponentPool->Create(BULLET_COLLIDER, glm::vec2(5.0f, 15.0f));
+	if (m_spriteComponentID == 0 || m_physicsComponentID == 0 || m_colliderComponentID == 0) {
+		std::cout << "A component pool is full" << std::endl;
+		//I really need to add some exception handling or something
+	}
 	ClearObserverList();
 	ClearComponentsList();
 	AddComponent(ComponentTypes::PHYSICS, m_physicsComponentID);
@@ -50,8 +58,6 @@ void BulletObject::Update(const double a_dDeltaTime)
 	if (m_bActive) {
 		glm::vec3 position = m_position;
 
-		//std::cout << "Bullet position " << position.x << " " << position.y << std::endl;
-
 		GameObject::Update(a_dDeltaTime);
 
 		//TODO - move these hard coded numbers to somewhere central that can be accessed in all files
@@ -62,12 +68,14 @@ void BulletObject::Update(const double a_dDeltaTime)
 		}
 
 		ColliderComponent* colliderComponent = (ColliderComponent*)GetComponent(ComponentTypes::COLLIDER);
-		if (colliderComponent != nullptr && colliderComponent->m_lOtherColliderID != -1) {
-			ColliderComponent* otherCollider = (ColliderComponent*)m_pComponentPoolHelper->m_colliderComponentPool->GetObjectById(colliderComponent->m_lOtherColliderID);
-			if (otherCollider != nullptr && dynamic_cast<ShipObject*>(otherCollider->m_pGameObject) != m_pOwner) {
-				std::cout << "Bullet " << this->GetID() << " collided with something" << std::endl;
-				SetActive(false);
-				notify();
+		if (colliderComponent != nullptr) {
+			for (unsigned int i = 0; i < colliderComponent->m_OtherColliderIDs.size(); i++) {
+				ColliderComponent* otherCollider = (ColliderComponent*)m_pComponentPoolHelper->m_colliderComponentPool->GetObjectById(colliderComponent->m_OtherColliderIDs[i]);
+				if (otherCollider != nullptr && dynamic_cast<ShipObject*>(otherCollider->m_pGameObject) != m_pOwner) {
+					SetActive(false);
+					notify();
+					return;
+				}
 			}
 		}
 	}

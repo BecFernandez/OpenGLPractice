@@ -19,10 +19,9 @@ enum GLSLShaderType
 class GLSLProgram
 {
 private:
-	int handle;
-	bool linked;
-	std::string logString;
-	int getUniformLocation(const char* name);
+	int m_iHandle;
+	bool m_bLinked;
+	int getUniformLocation(const char* name) const;
 	bool fileExists(const std::string & filename);
 
 public:
@@ -30,14 +29,13 @@ public:
 	bool compileShaderFromFile(const char* filename, GLSLShaderType type);
 	bool compileShaderFromString(const std::string & source, GLSLShaderType type);
 	bool link();
-	bool use();
-	std::string log();
-	int getHandle();
-	bool isLinked();
-	void bindAttribLocation(GLuint location, const char* name);
-	void bindFragDataLocation(GLuint location, const char* name);
-	void setUniform(const char* name, float x, float y, float z);
-	void setUniform(const char* name, const glm::mat4 &m);
+	bool use() const;
+	int getHandle() const;
+	bool isLinked() const;
+	void bindAttribLocation(GLuint location, const char* name) const;
+	//void bindFragDataLocation(GLuint location, const char* name);
+	void setUniform(const char* name, float x, float y, float z) const;
+	void setUniform(const char* name, const glm::mat4 &m) const;
 	/*void setUniform(const char* name, float x, float y, float z);
 	void setUniform(const char* name, float x, float y, float z);
 	void setUniform(const char* name, float x, float y, float z);
@@ -45,7 +43,7 @@ public:
 	void setUniform(const char* name, float x, float y, float z);
 	void setUniform(const char* name, float x, float y, float z);
 	*/
-	GLint getUniformBlockInfo(const char * blockName, const int numOfItems, const char ** blockItems, GLint *offsets, GLubyte *blockBuffer);
+	GLint getUniformBlockInfo(const char * blockName, const int numOfItems, const char ** blockItems, GLint *offsets, GLubyte *blockBuffer) const;
 
 };
 

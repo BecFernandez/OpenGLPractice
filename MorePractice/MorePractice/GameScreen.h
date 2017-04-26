@@ -3,34 +3,27 @@
 
 #include "Screen.h"
 #include "PlayerObject.h"
-#include "Enemy.h"
 
 #include "BulletManager.h"
 #include "PhysicsManager.h"
-#include "ComponentPoolHelper.h"
-#include "ComponentPool.h"
 
 class GameScreen : public Screen
 {
 public:
-	GameScreen(SoundSystemClass* a_pSounds, GLSLProgram *a_pShaders);
+	GameScreen(const SoundSystemClass* const a_pSounds, const GLSLProgram * const a_pShaders);
 	~GameScreen();
 	Screen* Update(const double a_dDeltaTime);
 	void Draw();
+	void OnNotify(Subject* subject);
 
 private:
 	const unsigned int m_iCOLLISION_DAMAGE = 10;
-
-	//std::vector<Bullet*> m_playerBullets;
-	//std::vector<Bullet*> m_enemyBullets;
+	const unsigned int m_iNUMBER_OF_ENEMIES = 3;
 	PlayerObject* m_player;
-	//Enemy** m_enemies;
 
 	BulletManager *m_pBulletManager;
 	PhysicsManager *m_pPhysicsManager;
-	std::vector<GameObject*> m_gameObjects;
-
-	ComponentPoolHelper m_componentPoolHelper;
+	unsigned int m_uiEnemyCount = m_iNUMBER_OF_ENEMIES;
 };
 
 #endif

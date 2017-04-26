@@ -4,13 +4,12 @@
 
 ColliderComponent::ColliderComponent() : Component(ComponentTypes::COLLIDER)
 {
-	m_lOtherColliderID = -1;
+	
 }
 
 ColliderComponent::ColliderComponent(CollisionTags a_collisionTag, glm::vec2 a_Dimensions) : Component(ComponentTypes::COLLIDER), m_collisionTag(a_collisionTag)
 {
 	m_collisionTag = a_collisionTag;
-	m_lOtherColliderID = -1;
 	for (int i = 0; i < 4; i++)
 	{
 		m_corners[i].z = 0;
@@ -38,7 +37,7 @@ ColliderComponent::ColliderComponent(CollisionTags a_collisionTag, glm::vec2 a_D
 void ColliderComponent::Init(unsigned int a_uiId, CollisionTags a_collisionTag, glm::vec2 a_Dimensions)
 {
 	m_collisionTag = a_collisionTag;
-	m_lOtherColliderID = -1;
+	m_OtherColliderIDs.clear();
 	m_uiID = a_uiId;
 
 	for (int i = 0; i < 4; i++)
@@ -86,7 +85,7 @@ void ColliderComponent::Update(const double a_dDeltaTime)
 
 void ColliderComponent::ResetOtherCollider()
 {
-	m_lOtherColliderID = -1;
+	m_OtherColliderIDs.clear();
 }
 
 bool ColliderComponent::IsCollidingWith(ColliderComponent *a_pOtherCollider)
@@ -99,8 +98,8 @@ bool ColliderComponent::IsCollidingWith(ColliderComponent *a_pOtherCollider)
 	if (max.y < a_pOtherCollider->min.y || min.y > a_pOtherCollider->max.y)
 		return false;
 	//store the other collider
-	m_lOtherColliderID = a_pOtherCollider->GetID();
-	a_pOtherCollider->m_lOtherColliderID = m_uiID;
+	m_OtherColliderIDs.push_back(a_pOtherCollider->GetID());
+	//a_pOtherCollider->m_OtherColliderIDs.push_back(m_uiID);
 	//a_pOtherCollider->m_pOtherCollider = this;
 	return true;
 }

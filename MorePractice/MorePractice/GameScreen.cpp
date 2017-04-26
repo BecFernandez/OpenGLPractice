@@ -6,7 +6,7 @@
 #include "EnemyObject.h"
 
 
-GameScreen::GameScreen(SoundSystemClass* a_pSounds, GLSLProgram *a_pShaders) : Screen(a_pSounds, a_pShaders) 
+GameScreen::GameScreen(const SoundSystemClass* const a_pSounds, const GLSLProgram * const a_pShaders) : Screen(a_pSounds, a_pShaders) 
 {
 	float i = 1;
 	m_componentPoolHelper.m_physicsComponentPool = new ObjectPool<PhysicsComponent>(14);
@@ -24,15 +24,15 @@ GameScreen::GameScreen(SoundSystemClass* a_pSounds, GLSLProgram *a_pShaders) : S
 	m_player->AddComponent(ComponentTypes::COLLIDER, m_componentPoolHelper.m_colliderComponentPool->Create(PLAYER_COLLIDER, glm::vec2(51.0f, 86.0f)));
 	m_gameObjects.push_back(m_player);
 
-	for (int i = 0; i < 1; i++)
+	for (int i = 0; i < m_iNUMBER_OF_ENEMIES; i++)
 	{
 		m_gameObjects.push_back(new EnemyObject(&m_componentPoolHelper, glm::vec3(100 + (3-i)%3*250, 100 + i/2*400, 0), m_player, m_pBulletManager));
 		m_gameObjects[i + 1]->AddComponent(ComponentTypes::PHYSICS, m_componentPoolHelper.m_physicsComponentPool->Create(1.0f));
 		m_gameObjects[i + 1]->AddComponent(ComponentTypes::SPRITE, m_componentPoolHelper.m_spriteComponentPool->Create(glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), glm::vec2(51.0f, 86.0f), "cylon.png", m_uiSpriteVAO, m_uiSpriteVBO, m_uiSpriteIBO, m_pShaders));
 		m_gameObjects[i + 1]->AddComponent(ComponentTypes::HEALTH, m_componentPoolHelper.m_healthComponentPool->Create(30));
 		m_gameObjects[i + 1]->AddComponent(ComponentTypes::COLLIDER, m_componentPoolHelper.m_colliderComponentPool->Create(ENEMY_COLLIDER, glm::vec2(51.0f, 86.0f)));
+		m_gameObjects[i + 1]->AddObserver(this);
 	}
-
 	
 }
 
@@ -69,10 +69,14 @@ Screen* GameScreen::Update(const double a_fDeltaTime)
 		return new LoseScreen(m_pSounds, m_pShaders);
 	}
 
-	for (unsigned int i = 0; i < m_animations.size(); i++)
-	{
-		m_animations[i].Draw(m_uiSpriteVBO, m_uiSpriteIBO, m_pShaders);
+	if (m_uiEnemyCount == 0) {
+		return new WinScreen(m_pSounds, m_pShaders);
 	}
+
+	//for (unsigned int i = 0; i < m_animations.size(); i++)
+	//{
+	//	m_animations[i].Draw(m_uiSpriteVBO, m_uiSpriteIBO, m_pShaders);
+	//}
 
 	Screen::Update(a_fDeltaTime);
 
@@ -81,13 +85,13 @@ Screen* GameScreen::Update(const double a_fDeltaTime)
 
 void GameScreen::Draw()
 {
-	//this code is the same in both screens, perhaps it should be moved elsewhere?
 	Screen::Draw();
-	for (unsigned short i = 0; i < m_componentPoolHelper.m_spriteComponentPool->GetCurrentSize(); ++i) {
-		SpriteComponent* pSpriteComponent = m_componentPoolHelper.m_spriteComponentPool->GetObjectByIndex(i);
-		if (pSpriteComponent != nullptr) {
-			pSpriteComponent->Draw();
-		}
+}
+
+void GameScreen::OnNotify(Subject *subject)
+{
+	if (dynamic_cast<EnemyObject*>(subject)) {
+		this->m_uiEnemyCount--;
 	}
 }
 

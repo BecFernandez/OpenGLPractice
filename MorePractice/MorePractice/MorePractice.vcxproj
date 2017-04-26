@@ -66,12 +66,10 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="AnimatedSprite.cpp" />
-    <ClCompile Include="Bullet.cpp" />
     <ClCompile Include="BulletManager.cpp" />
     <ClCompile Include="BulletObject.cpp" />
     <ClCompile Include="ColliderComponent.cpp" />
     <ClCompile Include="ComponentPoolHelper.cpp" />
-    <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="EnemyObject.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="GameScreen.cpp" />
@@ -82,12 +80,10 @@
     <ClCompile Include="Physics.cpp" />
     <ClCompile Include="PhysicsComponent.cpp" />
     <ClCompile Include="PhysicsManager.cpp" />
-    <ClCompile Include="Player.cpp" />
     <ClCompile Include="PlayerObject.cpp" />
     <ClCompile Include="Screen.cpp" />
     <ClCompile Include="ShipObject.cpp" />
     <ClCompile Include="SoundSystemClass.cpp" />
-    <ClCompile Include="Sprite.cpp" />
     <ClCompile Include="SpriteComponent.cpp" />
     <ClCompile Include="Subject.cpp" />
     <ClCompile Include="Text.cpp" />
@@ -99,13 +95,11 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AnimatedSprite.h" />
-    <ClInclude Include="Bullet.h" />
     <ClInclude Include="BulletManager.h" />
     <ClInclude Include="BulletObject.h" />
     <ClInclude Include="ColliderComponent.h" />
     <ClInclude Include="Component.h" />
     <ClInclude Include="ComponentPoolHelper.h" />
-    <ClInclude Include="Enemy.h" />
     <ClInclude Include="EnemyObject.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="GameScreen.h" />
@@ -117,15 +111,14 @@
     <ClInclude Include="PhysicsComponent.h" />
     <ClInclude Include="ComponentPool.h" />
     <ClInclude Include="PhysicsManager.h" />
-    <ClInclude Include="Player.h" />
     <ClInclude Include="PlayerObject.h" />
     <ClInclude Include="Screen.h" />
     <ClInclude Include="ShipObject.h" />
     <ClInclude Include="SoundSystemClass.h" />
-    <ClInclude Include="Sprite.h" />
     <ClInclude Include="SpriteComponent.h" />
     <ClInclude Include="Subject.h" />
     <ClInclude Include="Text.h" />
+    <ClInclude Include="Vertex.h" />
     <ClInclude Include="WinScreen.h" />
   </ItemGroup>
   <ItemGroup>

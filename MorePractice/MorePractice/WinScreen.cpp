@@ -1,11 +1,13 @@
 #include "WinScreen.h"
 #include "MainMenuScreen.h"
 
-WinScreen::WinScreen(SoundSystemClass *a_pSounds, GLSLProgram *a_pShaders) : Screen(a_pSounds, a_pShaders),
-m_winImage(glm::vec3(0, 0, 0), glm::vec4(1.0, 1.0, 1.0, 1.0), 600, 400, "fireworks.jpg"),
-m_winText(glm::vec3(350, 100, 0), glm::vec4(1.0, 0.0, 0.0, 1.0), 256, 256, "arial_0.png", "arial.fnt")
+WinScreen::WinScreen(const SoundSystemClass * const a_pSounds, const GLSLProgram * const a_pShaders) : Screen(a_pSounds, a_pShaders)
+//m_winText(glm::vec3(350, 100, 0), glm::vec4(1.0, 0.0, 0.0, 1.0), 256, 256, "arial_0.png", "arial.fnt")
 {
-
+	m_componentPoolHelper.m_spriteComponentPool = new ObjectPool<SpriteComponent>(1);
+	m_gameObjects.push_back(new GameObject(&m_componentPoolHelper, glm::vec3(0, 0, 0)));
+	m_gameObjects[0]->AddComponent(ComponentTypes::SPRITE, m_componentPoolHelper.m_spriteComponentPool->Create(glm::vec4(1.0, 1.0, 1.0, 1.0), glm::vec2(600, 400), "fireworks.jpg",
+		m_uiSpriteVAO, m_uiSpriteVBO, m_uiSpriteIBO, m_pShaders));
 }
 
 Screen *WinScreen::Update(double a_dDeltaTime)
@@ -29,7 +31,5 @@ void WinScreen::Draw()
 {
 	Screen::Draw();
 
-	//would be a better idea for there to be a list of images and texts, right?
-	m_winImage.Draw(m_uiSpriteVBO, m_uiSpriteIBO, m_pShaders);
-	m_winText.DrawString(m_uiSpriteVBO, m_uiSpriteIBO, m_pShaders, "You Won!");
+	//m_winText.DrawString(m_uiSpriteVBO, m_uiSpriteIBO, m_pShaders, "You Won!");
 }
