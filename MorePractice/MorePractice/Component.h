@@ -6,6 +6,7 @@ enum class ComponentTypes {
 	PHYSICS,
 	HEALTH,
 	COLLIDER,
+	TEXT,
 	NUM_COMPONENTS
 };
 

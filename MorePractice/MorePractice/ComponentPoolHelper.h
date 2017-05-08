@@ -4,6 +4,7 @@
 #include "SpriteComponent.h"
 #include "ColliderComponent.h"
 #include "HealthComponent.h"
+#include "FontComponent.h"
 
 
 class ComponentPoolHelper
@@ -20,4 +21,5 @@ public:
 	ObjectPool<SpriteComponent> *m_spriteComponentPool;
 	ObjectPool<ColliderComponent> *m_colliderComponentPool;
 	ObjectPool<HealthComponent> *m_healthComponentPool;
+	ObjectPool<FontComponent> *m_fontComponentPool;
 };

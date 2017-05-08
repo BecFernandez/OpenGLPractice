@@ -8,6 +8,7 @@ ComponentPoolHelper::ComponentPoolHelper()
 	m_spriteComponentPool = nullptr;
 	m_colliderComponentPool = nullptr;
 	m_healthComponentPool = nullptr;
+	m_fontComponentPool = nullptr;
 }
 
 ComponentPoolHelper::~ComponentPoolHelper()
@@ -23,6 +24,9 @@ ComponentPoolHelper::~ComponentPoolHelper()
 	}
 	if (m_healthComponentPool != nullptr) {
 		delete m_healthComponentPool;
+	}
+	if (m_fontComponentPool != nullptr) {
+		delete m_fontComponentPool;
 	}
 }
 
@@ -43,6 +47,9 @@ void ComponentPoolHelper::Update(const double a_dDeltaTime)
 	if (m_healthComponentPool != nullptr)
 	{
 		m_healthComponentPool->Update(a_dDeltaTime);
+	}
+	if (m_fontComponentPool != nullptr) {
+		m_fontComponentPool->Update(a_dDeltaTime);
 	}
 }
 
@@ -68,6 +75,11 @@ Component* ComponentPoolHelper::GetComponent(ComponentTypes a_type, unsigned int
 	case ComponentTypes::SPRITE:
 		if (m_spriteComponentPool != nullptr) {
 			return m_spriteComponentPool->GetObjectById(a_uiComponentID);
+		}
+		break;
+	case ComponentTypes::TEXT:
+		if (m_fontComponentPool != nullptr) {
+			return m_fontComponentPool->GetObjectById(a_uiComponentID);
 		}
 		break;
 	}
@@ -98,5 +110,9 @@ void ComponentPoolHelper::DestroyComponent(ComponentTypes a_type, unsigned int a
 			m_spriteComponentPool->Destroy(a_uiComponentID);
 		}
 		break;
+	case ComponentTypes::TEXT:
+		if (m_fontComponentPool != nullptr) {
+			m_fontComponentPool->Destroy(a_uiComponentID);
+		}
 	}
 }

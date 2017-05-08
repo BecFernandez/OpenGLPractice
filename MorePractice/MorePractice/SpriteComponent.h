@@ -20,10 +20,12 @@ public:
 	void ChangeColour(const glm::vec4 a_NewColour);
 	void SetSpriteUVCoords(const float a_fULeft, const float a_fVbottom, const float a_fUright, const float a_fVtop);
 
+protected:
+	glm::vec2 m_textureDimensions;
+
 private:
 	Vertex m_corners[4]; //all my sprites are rectangles
 	glm::vec2 m_dimensions;
-	glm::vec2 m_textureDimensions;
 	GLuint m_uiVAO;
 	GLuint m_uiVBO;
 	GLuint m_uiIBO;

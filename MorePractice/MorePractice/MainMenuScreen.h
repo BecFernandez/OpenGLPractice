@@ -13,7 +13,7 @@ public:
 	Screen* Update(const double a_dDeltaTime);
 	void Draw();
 private:
-	//Text m_t;
+	GameObject *m_pMainFont;
 };
 
 #endif
