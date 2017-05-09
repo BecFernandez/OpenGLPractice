@@ -2,7 +2,6 @@
 #define __MAINMENUSCREEN_H__
 
 #include "Screen.h"
-//#include "Text.h"
 #include "GameObject.h"
 #include<vector>
 

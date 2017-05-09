@@ -11,7 +11,7 @@ MainMenuScreen::MainMenuScreen(const SoundSystemClass* const a_pSounds, const GL
 	m_gameObjects.push_back(mainImageObject);
 
 	m_componentPoolHelper.m_fontComponentPool = new ObjectPool<FontComponent>(1);
-	m_pMainFont = new GameObject(&m_componentPoolHelper, glm::vec3(350, 100, 0));
+	m_pMainFont = new GameObject(&m_componentPoolHelper);
 	m_pMainFont->AddComponent(ComponentTypes::TEXT, m_componentPoolHelper.m_fontComponentPool->Create(glm::vec4(1.0, 0.0, 0.0, 1.0),
 		glm::vec2(256, 256), "arial_0.png", "arial.fnt", m_uiSpriteVAO, m_uiSpriteVBO, m_uiSpriteIBO, m_pShaders));
 	m_gameObjects.push_back(m_pMainFont);
@@ -46,5 +46,5 @@ void MainMenuScreen::Draw()
 	Screen::Draw();
 
 	FontComponent *font = (FontComponent*)m_pMainFont->GetComponent(ComponentTypes::TEXT);
-	font->Draw("Hello World");
+	font->Draw("Hello World!", glm::vec3(350, 100, 0));
 }

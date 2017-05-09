@@ -1,6 +1,5 @@
 #pragma once
 #include "Screen.h"
-#include "Text.h"
 
 class WinScreen : public Screen
 {
@@ -10,5 +9,5 @@ public:
 	void Draw();
 
 private:
-	//Text m_winText;
+	GameObject *m_pMainFont;
 };

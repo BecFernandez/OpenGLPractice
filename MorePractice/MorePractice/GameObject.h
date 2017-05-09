@@ -13,7 +13,7 @@ class GameObject : public Subject
 {
 public:
 	GameObject();
-	GameObject(ComponentPoolHelper* a_pComponentPoolHelper, glm::vec3 a_position, float a_fRotationAngle = 0, float a_fScale = 1);
+	GameObject(ComponentPoolHelper* a_pComponentPoolHelper, glm::vec3 a_position = glm::vec3(0.0, 0.0, 0.0), float a_fRotationAngle = 0, float a_fScale = 1);
 	~GameObject();
 	void AddComponent(ComponentTypes a_type, unsigned int a_id);
 	void RemoveComponent(ComponentTypes a_type);

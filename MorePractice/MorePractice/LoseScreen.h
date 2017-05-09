@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Screen.h"
-#include "Text.h"
 
 class LoseScreen : public Screen
 {
@@ -11,5 +10,5 @@ public:
 	void Draw();
 
 private:
-	//Text m_loseText;
+	GameObject *m_pMainFont;
 };

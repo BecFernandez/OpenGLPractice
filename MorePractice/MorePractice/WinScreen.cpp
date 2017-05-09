@@ -8,6 +8,12 @@ WinScreen::WinScreen(const SoundSystemClass * const a_pSounds, const GLSLProgram
 	m_gameObjects.push_back(new GameObject(&m_componentPoolHelper, glm::vec3(0, 0, 0)));
 	m_gameObjects[0]->AddComponent(ComponentTypes::SPRITE, m_componentPoolHelper.m_spriteComponentPool->Create(glm::vec4(1.0, 1.0, 1.0, 1.0), glm::vec2(600, 400), "fireworks.jpg",
 		m_uiSpriteVAO, m_uiSpriteVBO, m_uiSpriteIBO, m_pShaders));
+
+	m_componentPoolHelper.m_fontComponentPool = new ObjectPool<FontComponent>(1);
+	m_pMainFont = new GameObject(&m_componentPoolHelper);
+	m_pMainFont->AddComponent(ComponentTypes::TEXT, m_componentPoolHelper.m_fontComponentPool->Create(glm::vec4(1.0, 0.0, 0.0, 1.0),
+		glm::vec2(256, 256), "arial_0.png", "arial.fnt", m_uiSpriteVAO, m_uiSpriteVBO, m_uiSpriteIBO, m_pShaders));
+	m_gameObjects.push_back(m_pMainFont);
 }
 
 Screen *WinScreen::Update(double a_dDeltaTime)
@@ -31,5 +37,6 @@ void WinScreen::Draw()
 {
 	Screen::Draw();
 
-	//m_winText.DrawString(m_uiSpriteVBO, m_uiSpriteIBO, m_pShaders, "You Won!");
+	FontComponent* font = (FontComponent*)m_pMainFont->GetComponent(ComponentTypes::TEXT);
+	font->Draw("You  Won!", glm::vec3(350, 100, 0));
 }
