@@ -3,8 +3,6 @@
 
 
 LoseScreen::LoseScreen(const SoundSystemClass* const a_pSounds, const GLSLProgram * const a_pShaders) : Screen(a_pSounds, a_pShaders)
-////what on earth is going on with this text? I set this every time?? It's the same for each class! Clearly this needs to change
-//m_loseText(glm::vec3(350, 100, 0), glm::vec4(1.0, 0.0, 0.0, 1.0), 256, 256, "arial_0.png", "arial.fnt")
 {
 	m_componentPoolHelper.m_spriteComponentPool = new ObjectPool<SpriteComponent>(1);
 	m_gameObjects.push_back(new GameObject(&m_componentPoolHelper, glm::vec3(400, 300, 0)));
@@ -20,6 +18,8 @@ LoseScreen::LoseScreen(const SoundSystemClass* const a_pSounds, const GLSLProgra
 
 Screen* LoseScreen::Update(const double a_dDeltaTime)
 {
+	Screen::Update(a_dDeltaTime);
+
 	GLFWwindow *currentContext = glfwGetCurrentContext();
 	if (glfwGetKey(currentContext, GLFW_KEY_ESCAPE) ||
 		glfwGetKey(currentContext, GLFW_KEY_ENTER) ||

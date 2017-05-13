@@ -1,6 +1,7 @@
 #include "Screen.h"
 #include <gtc\matrix_transform.hpp>
 #include "Vertex.h"
+#include "GameObject.h"
 
 void checkGLError(const char* customMessage)
 {
@@ -40,8 +41,14 @@ Screen::~Screen()
 
 }
 
-Screen* Screen::Update(const double m_fDeltaTime)
+Screen* Screen::Update(const double a_dDeltaTime)
 {
+	m_componentPoolHelper.Update(a_dDeltaTime);
+
+	for (int i = 0; i < m_gameObjects.size(); i++) {
+		m_gameObjects[i]->Update(a_dDeltaTime);
+	}
+
 	//update animations
 	/*for(unsigned int i =0; i < m_animations.size(); i++)
 	{

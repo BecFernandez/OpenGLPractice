@@ -87,10 +87,10 @@
     <ClCompile Include="SoundSystemClass.cpp" />
     <ClCompile Include="SpriteComponent.cpp" />
     <ClCompile Include="Subject.cpp" />
-    <ClCompile Include="Text.cpp" />
     <ClCompile Include="WinScreen.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="arial.f.glsl" />
     <None Include="triangle.f.glsl" />
     <None Include="triangle.v.glsl" />
   </ItemGroup>
@@ -119,7 +119,6 @@
     <ClInclude Include="SoundSystemClass.h" />
     <ClInclude Include="SpriteComponent.h" />
     <ClInclude Include="Subject.h" />
-    <ClInclude Include="Text.h" />
     <ClInclude Include="Vertex.h" />
     <ClInclude Include="WinScreen.h" />
   </ItemGroup>

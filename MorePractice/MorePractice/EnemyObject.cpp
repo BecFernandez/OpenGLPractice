@@ -11,6 +11,8 @@ EnemyObject::EnemyObject(ComponentPoolHelper *a_pComponentPoolHelper, glm::vec3 
 
 void EnemyObject::Update(double a_dDeltaTime)
 {
+	ShipObject::Update(a_dDeltaTime);
+
 	if (m_bActive) {
 		PhysicsComponent* physicsComponent = dynamic_cast<PhysicsComponent*>(GameObject::GetComponent(ComponentTypes::PHYSICS));
 		if (physicsComponent != nullptr) {
@@ -38,6 +40,4 @@ void EnemyObject::Update(double a_dDeltaTime)
 			}
 		}
 	}
-
-	ShipObject::Update(a_dDeltaTime);
 }

@@ -2,13 +2,13 @@
 #include "GameScreen.h"
 
 MainMenuScreen::MainMenuScreen(const SoundSystemClass* const a_pSounds, const GLSLProgram * const a_pShaders) : Screen(a_pSounds, a_pShaders)
-	//m_t(glm::vec3(350, 100, 0), glm::vec4(1.0, 0.0, 0.0, 1.0), 256, 256, "arial_0.png", "arial.fnt")
 {
 	m_componentPoolHelper.m_spriteComponentPool = new ObjectPool<SpriteComponent>(1);
-	GameObject *mainImageObject = new GameObject(&m_componentPoolHelper, glm::vec3(400, 300, 0));
-	mainImageObject->AddComponent(ComponentTypes::SPRITE, m_componentPoolHelper.m_spriteComponentPool->Create(glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), 
+	//GameObject *mainImageObject = 
+	m_gameObjects.push_back(new GameObject(&m_componentPoolHelper, glm::vec3(400, 300, 0)));
+	m_gameObjects[0]->AddComponent(ComponentTypes::SPRITE, m_componentPoolHelper.m_spriteComponentPool->Create(glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), 
 		glm::vec2(720, 393), "SpaceWars.jpg", m_uiSpriteVAO, m_uiSpriteVBO, m_uiSpriteIBO, m_pShaders));
-	m_gameObjects.push_back(mainImageObject);
+	//m_gameObjects.push_back(mainImageObject);
 
 	m_componentPoolHelper.m_fontComponentPool = new ObjectPool<FontComponent>(1);
 	m_pMainFont = new GameObject(&m_componentPoolHelper);
@@ -19,11 +19,7 @@ MainMenuScreen::MainMenuScreen(const SoundSystemClass* const a_pSounds, const GL
 
 Screen* MainMenuScreen::Update(const double a_dDeltaTime)
 {
-	m_componentPoolHelper.Update(a_dDeltaTime);
-
-	for (int i = 0; i < m_gameObjects.size(); i++) {
-		m_gameObjects[i]->Update(a_dDeltaTime);
-	}
+	Screen::Update(a_dDeltaTime);
 
 	//if mouse clicked, change to game screen
 	if(glfwGetMouseButton(glfwGetCurrentContext(), GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS)

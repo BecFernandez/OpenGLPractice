@@ -194,6 +194,7 @@ void SpriteComponent::Update(double a_dDeltaTime)
 
 void SpriteComponent::Draw() const
 {
+	m_pShader->use();
 	glBindVertexArray(m_uiVAO);
 	//copy vertices to GPU in case they have changed
 	glBindBuffer(GL_ARRAY_BUFFER, m_uiVBO);

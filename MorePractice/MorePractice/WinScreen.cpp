@@ -2,10 +2,9 @@
 #include "MainMenuScreen.h"
 
 WinScreen::WinScreen(const SoundSystemClass * const a_pSounds, const GLSLProgram * const a_pShaders) : Screen(a_pSounds, a_pShaders)
-//m_winText(glm::vec3(350, 100, 0), glm::vec4(1.0, 0.0, 0.0, 1.0), 256, 256, "arial_0.png", "arial.fnt")
 {
 	m_componentPoolHelper.m_spriteComponentPool = new ObjectPool<SpriteComponent>(1);
-	m_gameObjects.push_back(new GameObject(&m_componentPoolHelper, glm::vec3(0, 0, 0)));
+	m_gameObjects.push_back(new GameObject(&m_componentPoolHelper, glm::vec3(400, 300, 0)));
 	m_gameObjects[0]->AddComponent(ComponentTypes::SPRITE, m_componentPoolHelper.m_spriteComponentPool->Create(glm::vec4(1.0, 1.0, 1.0, 1.0), glm::vec2(600, 400), "fireworks.jpg",
 		m_uiSpriteVAO, m_uiSpriteVBO, m_uiSpriteIBO, m_pShaders));
 
@@ -18,6 +17,8 @@ WinScreen::WinScreen(const SoundSystemClass * const a_pSounds, const GLSLProgram
 
 Screen *WinScreen::Update(double a_dDeltaTime)
 {
+	Screen::Update(a_dDeltaTime);
+
 	GLFWwindow *currentContext = glfwGetCurrentContext();
 	if (glfwGetKey(currentContext, GLFW_KEY_ESCAPE) ||
 		glfwGetKey(currentContext, GLFW_KEY_SPACE) ||

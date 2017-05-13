@@ -44,28 +44,20 @@ GameScreen::~GameScreen()
 	m_gameObjects.clear();
 }
 
-Screen* GameScreen::Update(const double a_fDeltaTime)
+Screen* GameScreen::Update(const double a_dDeltaTime)
 {
-	bool playerAlive = m_player->IsActive();
-
-	Screen::Draw();
+	Screen::Update(a_dDeltaTime);
 
 	if(glfwGetKey(glfwGetCurrentContext(), GLFW_KEY_ESCAPE))
 	{
 		return nullptr;
 	}
 
-	for (int i = 0; i < m_gameObjects.size(); i++) {
-		m_gameObjects[i]->Update(a_fDeltaTime);
-	}
-
-	m_pBulletManager->Update(a_fDeltaTime);
-	
-	m_componentPoolHelper.Update(a_fDeltaTime);
+	m_pBulletManager->Update(a_dDeltaTime);
 
 	m_pPhysicsManager->Update();
-	//player died in the last frame
-	if (playerAlive != m_player->IsActive()) {
+
+	if (!m_player->IsActive()) {
 		return new LoseScreen(m_pSounds, m_pShaders);
 	}
 
@@ -77,8 +69,6 @@ Screen* GameScreen::Update(const double a_fDeltaTime)
 	//{
 	//	m_animations[i].Draw(m_uiSpriteVBO, m_uiSpriteIBO, m_pShaders);
 	//}
-
-	Screen::Update(a_fDeltaTime);
 
 	return this;
 }
