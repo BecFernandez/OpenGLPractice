@@ -4,7 +4,7 @@
 class WinScreen : public Screen
 {
 public:
-	WinScreen(const SoundSystemClass * const a_pSounds, const GLSLProgram * const a_pShaders);
+	WinScreen(const SoundSystemClass * const a_pSounds);
 	Screen* Update(double a_dDeltaTime);
 	void Draw();
 

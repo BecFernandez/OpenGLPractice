@@ -10,7 +10,7 @@
 class GameScreen : public Screen
 {
 public:
-	GameScreen(const SoundSystemClass* const a_pSounds, const GLSLProgram * const a_pShaders);
+	GameScreen(const SoundSystemClass* const a_pSounds);
 	~GameScreen();
 	Screen* Update(const double a_dDeltaTime);
 	void Draw();

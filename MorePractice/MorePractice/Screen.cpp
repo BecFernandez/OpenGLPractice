@@ -11,12 +11,12 @@ void checkGLError(const char* customMessage)
 	}
 }
 
-Screen::Screen() : m_pSounds(nullptr), m_pShaders(nullptr)
+Screen::Screen() : m_pSounds(nullptr), m_pSpriteShader(nullptr)
 {
 
 }
 
-Screen::Screen(const SoundSystemClass* const a_pSounds, const GLSLProgram * const a_pShaders) : m_pSounds(a_pSounds), m_pShaders(a_pShaders)
+Screen::Screen(const SoundSystemClass* const a_pSounds) : m_pSounds(a_pSounds), m_pSpriteShader(nullptr)
 {
 	glGenVertexArrays(1, &m_uiSpriteVAO);
 	glBindVertexArray(m_uiSpriteVAO);
@@ -64,9 +64,9 @@ Screen* Screen::Update(const double a_dDeltaTime)
 
 void Screen::Draw()
 {
-	m_pShaders->use();
+	m_pSpriteShader->use();
 	//set projection view matrix - once per frame
-	m_pShaders->setUniform("projectionView", m_projectionMatrix);
+	m_pSpriteShader->setUniform("projectionView", m_projectionMatrix);
 	for (unsigned short i = 0; i < m_componentPoolHelper.m_spriteComponentPool->GetCurrentSize(); ++i) {
 		SpriteComponent* pSpriteComponent = m_componentPoolHelper.m_spriteComponentPool->GetObjectByIndex(i);
 		if (pSpriteComponent != nullptr) {

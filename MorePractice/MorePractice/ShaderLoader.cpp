@@ -142,7 +142,11 @@ bool GLSLProgram::use() const
 {
 	if(m_iHandle)
 	{
-		glUseProgram(m_iHandle);
+		glUseProgram(m_iHandle); 
+		GLenum error;
+		while ((error = glGetError()) != GL_NO_ERROR) {
+			std::cout << "Use program: " << " " << error << std::endl;
+		}
 		return true;
 	}
 	return false;

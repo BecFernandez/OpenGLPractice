@@ -82,6 +82,7 @@
     <ClCompile Include="PhysicsComponent.cpp" />
     <ClCompile Include="PhysicsManager.cpp" />
     <ClCompile Include="PlayerObject.cpp" />
+    <ClCompile Include="ResourceManager.cpp" />
     <ClCompile Include="Screen.cpp" />
     <ClCompile Include="ShipObject.cpp" />
     <ClCompile Include="SoundSystemClass.cpp" />
@@ -91,7 +92,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="arial.f.glsl" />
+    <None Include="arial.shader" />
     <None Include="triangle.f.glsl" />
+    <None Include="triangle.shader" />
     <None Include="triangle.v.glsl" />
   </ItemGroup>
   <ItemGroup>
@@ -106,6 +109,7 @@
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="GameScreen.h" />
     <ClInclude Include="HealthComponent.h" />
+    <ClInclude Include="InitResources.h" />
     <ClInclude Include="LoseScreen.h" />
     <ClInclude Include="MainMenuScreen.h" />
     <ClInclude Include="Observer.h" />
@@ -114,7 +118,11 @@
     <ClInclude Include="ComponentPool.h" />
     <ClInclude Include="PhysicsManager.h" />
     <ClInclude Include="PlayerObject.h" />
+    <ClInclude Include="ResourceLocationMap.h" />
+    <ClInclude Include="ResourceManager.h" />
+    <ClInclude Include="ResourceStorage.h" />
     <ClInclude Include="Screen.h" />
+    <ClInclude Include="ResourceEnums.h" />
     <ClInclude Include="ShipObject.h" />
     <ClInclude Include="SoundSystemClass.h" />
     <ClInclude Include="SpriteComponent.h" />

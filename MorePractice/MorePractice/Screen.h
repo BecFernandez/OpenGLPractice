@@ -14,7 +14,7 @@ class Screen : public Observer
 {
 public:
 	Screen();
-	Screen(const SoundSystemClass* const a_pSounds, const GLSLProgram * const a_pShaders); 
+	Screen(const SoundSystemClass* const a_pSounds); 
 	virtual ~Screen();
 	virtual Screen* Update(const double a_dDeltaTime);
 	virtual void Draw();
@@ -22,7 +22,7 @@ public:
 
 protected:
 	const SoundSystemClass* const m_pSounds;
-	const GLSLProgram * const m_pShaders;
+	GLSLProgram * m_pSpriteShader;
 	GLuint m_uiSpriteVAO;
 	GLuint m_uiSpriteVBO;
 	GLuint m_uiSpriteIBO;

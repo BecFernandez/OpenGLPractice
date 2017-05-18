@@ -4,8 +4,8 @@
 #include <gtc\matrix_transform.hpp>
 #include "GameScreen.h"
 #include <stack>
+#include "InitResources.h"
 #include "MainMenuScreen.h"
-#include "Text.h"
 
 bool windowClosed = false;
 bool fullscreen = false;
@@ -91,6 +91,8 @@ bool init(GLFWwindow*& window)
 	glfwMakeContextCurrent(window);
 	glfwSwapInterval(1);
 
+	checkGLError("glfw init");
+
 	glewExperimental = GL_TRUE;
 	GLenum gerr = glewInit();
 	if(GLEW_OK != gerr)
@@ -100,21 +102,20 @@ bool init(GLFWwindow*& window)
 		return false;
 	}
 
-	if (glDebugMessageCallback) {
-		std::cout << "Register OpenGL debug callback " << std::endl;
-		glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
-		//glDebugMessageCallback(openglCallbackFunction, nullptr);
-		GLuint unusedIds = 0;
-		glDebugMessageControl(GL_DONT_CARE,
-			GL_DONT_CARE,
-			GL_DONT_CARE,
-			0,
-			&unusedIds,
-			true);
-	}
-	else
-		std::cout << "glDebugMessageCallback not available" << std::endl;
-	return true;
+	//if (glDebugMessageCallback) {
+	//	std::cout << "Register OpenGL debug callback " << std::endl;
+	//	glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
+	//	//glDebugMessageCallback(openglCallbackFunction, nullptr);
+	//	GLuint unusedIds = 0;
+	//	glDebugMessageControl(GL_DONT_CARE,
+	//		GL_DONT_CARE,
+	//		GL_DONT_CARE,
+	//		0,
+	//		&unusedIds,
+	//		true);
+	//}
+	//else
+	//	std::cout << "glDebugMessageCallback not available" << std::endl;
 
 	checkGLError("glew init");
 
@@ -127,7 +128,8 @@ bool init(GLFWwindow*& window)
     glCullFace(GL_BACK);
 	checkGLError("cull back");
 
-	
+	InitResources();
+	return true;
 }
 
 int main()
@@ -139,24 +141,15 @@ int main()
 		exit(0);
 	}
 
-	glClearColor(0.0, 0.0, 0.0, 0.0);
+	glClearColor(1.0, 0.0, 0.0, 1.0);
 
 	//set up audio engine
 	SoundSystemClass sounds;
 
-	GLSLProgram shaders;
-	//load shaders, compile and link	
-	shaders.compileShaderFromFile("triangle.v.glsl", VERTEX);
-	shaders.compileShaderFromFile("triangle.f.glsl", FRAGMENT);
-	shaders.link();
-	shaders.use();
-
 	Screen* currentScreen;
 
-	MainMenuScreen *mms = new MainMenuScreen(&sounds, &shaders);
+	MainMenuScreen *mms = new MainMenuScreen(&sounds);
 	currentScreen = mms;
-	
-	//Text t(glm::vec3(0, 0, 0), glm::vec4(1.0, 0.0, 0.0, 1.0), 40, 40, "arial_0.png", "arial.fnt");
 
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
