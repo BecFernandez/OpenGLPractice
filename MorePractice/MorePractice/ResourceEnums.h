@@ -1,5 +1,15 @@
 #pragma once
 
+enum class Levels
+{
+	GLOBAL,
+	MAIN_SCREEN,
+	GAME_SCREEN,
+	WIN_SCREEN,
+	LOSE_SCREEN,
+	NUM_LEVELS
+};
+
 enum class ShaderResources
 {
 	DEFAULT_SPRITE,

@@ -8,7 +8,7 @@
 
 GameScreen::GameScreen(const SoundSystemClass* const a_pSounds) : Screen(a_pSounds) 
 {
-	m_pSpriteShader = &ResourceManager::getInstance().m_shaders.GetResource(ShaderResources::DEFAULT_SPRITE);
+	m_pSpriteShader = &ResourceManager::getInstance().m_shaders.GetResource(Levels::GLOBAL, ShaderResources::DEFAULT_SPRITE);
 	float i = 1;
 	m_componentPoolHelper.m_physicsComponentPool = new ObjectPool<PhysicsComponent>(14);
 	m_componentPoolHelper.m_spriteComponentPool = new ObjectPool<SpriteComponent>(14);

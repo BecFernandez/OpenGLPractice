@@ -13,7 +13,8 @@ public:
 	ResourceStorage<ShaderResources, GLSLProgram> m_shaders;
 	ResourceLocationMap<ShaderResources> m_shaderLocations;
 
-	void LoadResources(); //TODO - separate resources into levels so we can load and unload them when it makes sense?
+	void LoadResources(Levels a_level); //TODO - separate resources into levels so we can load and unload them when it makes sense?
+	void UnloadResources(Levels a_level);
 
 private:
 	ResourceManager() {}

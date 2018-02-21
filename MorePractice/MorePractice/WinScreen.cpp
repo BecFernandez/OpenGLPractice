@@ -4,7 +4,7 @@
 
 WinScreen::WinScreen(const SoundSystemClass * const a_pSounds) : Screen(a_pSounds)
 {
-	m_pSpriteShader = &ResourceManager::getInstance().m_shaders.GetResource(ShaderResources::DEFAULT_SPRITE);
+	m_pSpriteShader = &ResourceManager::getInstance().m_shaders.GetResource(Levels::GLOBAL, ShaderResources::DEFAULT_SPRITE);
 	m_componentPoolHelper.m_spriteComponentPool = new ObjectPool<SpriteComponent>(1);
 	m_gameObjects.push_back(new GameObject(&m_componentPoolHelper, glm::vec3(400, 300, 0)));
 	m_gameObjects[0]->AddComponent(ComponentTypes::SPRITE, m_componentPoolHelper.m_spriteComponentPool->Create(glm::vec4(1.0, 1.0, 1.0, 1.0), glm::vec2(600, 400), "fireworks.jpg",

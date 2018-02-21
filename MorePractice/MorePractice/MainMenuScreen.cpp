@@ -4,14 +4,12 @@
 
 MainMenuScreen::MainMenuScreen(const SoundSystemClass* const a_pSounds) : Screen(a_pSounds)
 {
-	m_pSpriteShader = &ResourceManager::getInstance().m_shaders.GetResource(ShaderResources::DEFAULT_SPRITE);
-	m_pFontShader = &ResourceManager::getInstance().m_shaders.GetResource(ShaderResources::ARIAL_FONT);
+	m_pSpriteShader = &ResourceManager::getInstance().m_shaders.GetResource(Levels::GLOBAL, ShaderResources::DEFAULT_SPRITE);
+	m_pFontShader = &ResourceManager::getInstance().m_shaders.GetResource(Levels::GLOBAL, ShaderResources::ARIAL_FONT);
 	m_componentPoolHelper.m_spriteComponentPool = new ObjectPool<SpriteComponent>(1);
-	//GameObject *mainImageObject = 
 	m_gameObjects.push_back(new GameObject(&m_componentPoolHelper, glm::vec3(400, 300, 0)));
 	m_gameObjects[0]->AddComponent(ComponentTypes::SPRITE, m_componentPoolHelper.m_spriteComponentPool->Create(glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), 
 		glm::vec2(720, 393), "SpaceWars.jpg", m_uiSpriteVAO, m_uiSpriteVBO, m_uiSpriteIBO, m_pSpriteShader));
-	//m_gameObjects.push_back(mainImageObject);
 
 	m_componentPoolHelper.m_fontComponentPool = new ObjectPool<FontComponent>(1);
 	m_pMainFont = new GameObject(&m_componentPoolHelper);

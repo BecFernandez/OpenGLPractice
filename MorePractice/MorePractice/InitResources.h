@@ -3,9 +3,12 @@
 
 void InitResources()
 {
-	ResourceManager::getInstance().m_shaderLocations.AddResource(ShaderResources::DEFAULT_SPRITE, "triangle.shader");
-	ResourceManager::getInstance().m_shaderLocations.AddResource(ShaderResources::ARIAL_FONT, "arial.shader");
+	//FONTS
+	ResourceManager::getInstance().m_shaderLocations.AddResource(Levels::GLOBAL, ShaderResources::DEFAULT_SPRITE, "triangle.shader");
+	ResourceManager::getInstance().m_shaderLocations.AddResource(Levels::GLOBAL, ShaderResources::ARIAL_FONT, "arial.shader");
+
+	//TEXTURES
 
 
-	ResourceManager::getInstance().LoadResources();
+	ResourceManager::getInstance().LoadResources(Levels::GLOBAL);
 }

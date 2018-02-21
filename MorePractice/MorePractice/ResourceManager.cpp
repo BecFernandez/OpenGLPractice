@@ -7,12 +7,17 @@ ResourceManager& ResourceManager::getInstance()
 	return instance;
 }
 
-void ResourceManager::LoadResources()
+void ResourceManager::LoadResources(Levels a_level)
 {
 	for (unsigned int i = 0; ShaderResources(i) < ShaderResources::NUM_SHADER_RESOURCES; i++)
 	{
-		m_shaders.AddResource(ShaderResources(i), LoadShader(m_shaderLocations.GetFilePath(ShaderResources(i))));
+		m_shaders.AddResource(a_level, ShaderResources(i), LoadShader(m_shaderLocations.GetFilePath(a_level, ShaderResources(i))));
 	}
+}
+
+void ResourceManager::UnloadResources(Levels a_level)
+{
+	m_shaders.RemoveAllResourcesFromLevel(a_level);
 }
 
 GLSLProgram&& ResourceManager::LoadShader(std::string a_path)
