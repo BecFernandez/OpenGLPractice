@@ -4,16 +4,22 @@
 
 WinScreen::WinScreen(const SoundSystemClass * const a_pSounds) : Screen(a_pSounds)
 {
+	//Would make more sense for the screen to store it's own level and load the resources in the base constructor
+	ResourceManager::getInstance().LoadResources(Levels::WIN_SCREEN);
+
 	m_pSpriteShader = &ResourceManager::getInstance().m_shaders.GetResource(Levels::GLOBAL, ShaderResources::DEFAULT_SPRITE);
 	m_componentPoolHelper.m_spriteComponentPool = new ObjectPool<SpriteComponent>(1);
 	m_gameObjects.push_back(new GameObject(&m_componentPoolHelper, glm::vec3(400, 300, 0)));
-	m_gameObjects[0]->AddComponent(ComponentTypes::SPRITE, m_componentPoolHelper.m_spriteComponentPool->Create(glm::vec4(1.0, 1.0, 1.0, 1.0), glm::vec2(600, 400), "fireworks.jpg",
+	m_gameObjects[0]->AddComponent(ComponentTypes::SPRITE, m_componentPoolHelper.m_spriteComponentPool->Create(glm::vec4(1.0, 1.0, 1.0, 1.0), 
+		&ResourceManager::getInstance().m_textures.GetResource(Levels::WIN_SCREEN, TextureResources::FIREWORKS),
 		m_uiSpriteVAO, m_uiSpriteVBO, m_uiSpriteIBO, m_pSpriteShader));
 
 	m_componentPoolHelper.m_fontComponentPool = new ObjectPool<FontComponent>(1);
 	m_pMainFont = new GameObject(&m_componentPoolHelper);
 	m_pMainFont->AddComponent(ComponentTypes::TEXT, m_componentPoolHelper.m_fontComponentPool->Create(glm::vec4(1.0, 0.0, 0.0, 1.0),
-		glm::vec2(256, 256), "arial_0.png", "arial.fnt", m_uiSpriteVAO, m_uiSpriteVBO, m_uiSpriteIBO, m_pSpriteShader));
+		&ResourceManager::getInstance().m_textures.GetResource(Levels::GLOBAL, TextureResources::ARIAL_0), 
+		ResourceManager::getInstance().m_fonts.GetResource(Levels::GLOBAL, FontResources::ARIAL_0),
+		m_uiSpriteVAO, m_uiSpriteVBO, m_uiSpriteIBO, m_pSpriteShader));
 	m_gameObjects.push_back(m_pMainFont);
 }
 

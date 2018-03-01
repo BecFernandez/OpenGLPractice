@@ -7,46 +7,35 @@
 
 using namespace rapidxml;
 
-FontComponent::FontComponent()
+std::map<char, Character> LoadCharacters(const char* a_szXMLName)
 {
-}
+	std::map<char, Character> characters;
 
-
-FontComponent::~FontComponent()
-{
-}
-
-void FontComponent::Init(unsigned int a_uiId, const glm::vec4 a_colour,
-	const glm::vec2 a_dimensions, const char* a_szTexName, const char* a_szXMLName,
-	GLuint a_uiVAO, GLuint a_uiVBO, GLuint a_uiIBO, const GLSLProgram* a_pShader)
-{
-	SpriteComponent::Init(a_uiId, a_colour, a_dimensions, a_szTexName, a_uiVAO, a_uiVBO, a_uiIBO, a_pShader);
-	
 	std::ifstream ins(a_szXMLName);
-	
+
 	std::stringstream buffer;
 	buffer << ins.rdbuf();
 	std::string szTextFromFile(buffer.str());
-	
+
 	//then we can pass the text to the xml parser
 	xml_document<> doc;
 	try
 	{
 		doc.parse<parse_no_data_nodes>(&szTextFromFile[0]);
 	}
-	catch(parse_error p)
+	catch (parse_error p)
 	{
 		std::cout << p.what() << std::endl;
 		const char *w = p.where<char>();
 	}
-	
+
 	xml_node<> *font = doc.first_node("font");
 	font = font->first_node("chars");
 	xml_node<> *character = font->first_node("char");
 	do
 	{
 		Character c;
-	
+
 		xml_attribute<> *id = character->first_attribute("id");
 		c.m_cValue = atoi(id->value());
 		xml_attribute<char> *x = character->first_attribute("x");
@@ -57,11 +46,32 @@ void FontComponent::Init(unsigned int a_uiId, const glm::vec4 a_colour,
 		c.m_iWidth = atoi(width->value());
 		xml_attribute<char> *height = character->first_attribute("height");
 		c.m_iHeight = atoi(height->value());
-	
-		m_characters.insert(std::pair<char, Character>(c.m_cValue, c));
-	
+
+		characters.insert(std::pair<char, Character>(c.m_cValue, c));
+
 		character = character->next_sibling();
-	}while(character != nullptr);
+	} while (character != nullptr);
+
+	return characters;
+}
+
+
+FontComponent::FontComponent()
+{
+}
+
+
+FontComponent::~FontComponent()
+{
+}
+
+void FontComponent::Init(unsigned int a_uiId, const glm::vec4 a_colour,
+	Texture *a_pTexture, std::map<char, Character> a_characters,
+	GLuint a_uiVAO, GLuint a_uiVBO, GLuint a_uiIBO, const GLSLProgram* a_pShader)
+{
+	SpriteComponent::Init(a_uiId, a_colour, a_pTexture, a_uiVAO, a_uiVBO, a_uiIBO, a_pShader);
+	
+	m_characters = a_characters;
 }
 
 void FontComponent::Draw(const char * a_szToDraw, glm::vec3 a_position, glm::vec4 a_colour)
@@ -81,10 +91,10 @@ void FontComponent::Draw(const char * a_szToDraw, glm::vec3 a_position, glm::vec
 		//update the width and height and align bottom of the letters
 		UpdateCornersGrounded(thisChar.m_iWidth, thisChar.m_iHeight);
 		//change the UVs
-		SetSpriteUVCoords(thisChar.m_iX/m_dimensions.x, 
-			1.0 - (thisChar.m_iY+ thisChar.m_iHeight)/m_dimensions.y,
-			(thisChar.m_iX + thisChar.m_iWidth)/m_dimensions.x, 
-			1.0 - (thisChar.m_iY )/m_dimensions.y);
+		SetSpriteUVCoords(thisChar.m_iX/(float)m_pTexture->GetWidth(), 
+			1.0 - (thisChar.m_iY+ thisChar.m_iHeight)/ (float)m_pTexture->GetHeight(),
+			(thisChar.m_iX + thisChar.m_iWidth)/ (float)m_pTexture->GetWidth(),
+			1.0 - (thisChar.m_iY )/ (float)m_pTexture->GetHeight());
 		m_pGameObject->Update(0);
 		SpriteComponent::Draw();
 		curX += thisChar.m_iWidth;

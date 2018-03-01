@@ -19,8 +19,10 @@ public:
 	FontComponent();
 	~FontComponent();
 	void Init(unsigned int a_uiId, const glm::vec4 a_colour,
-		const glm::vec2 a_dimensions, const char* a_szTexName, const char* a_szXMLName,
+		Texture *a_pTexture, std::map<char, Character> a_characters,
 		GLuint a_uiVAO, GLuint a_uiVBO, GLuint a_uiIBO, const GLSLProgram* a_pShader);
 	void Draw(const char* a_szToDraw, glm::vec3 a_position, glm::vec4 a_colour = glm::vec4(1.0, 1.0, 1.0, 1.0));
 };
+
+std::map<char, Character> LoadCharacters(const char* a_szXMLName);
 

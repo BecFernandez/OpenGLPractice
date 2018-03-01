@@ -1,5 +1,6 @@
 #include "BulletObject.h"
 #include "ShipObject.h"
+#include "ResourceManager.h"
 
 BulletObject::BulletObject() : GameObject()
 {
@@ -11,7 +12,9 @@ BulletObject::BulletObject(ComponentPoolHelper *a_pComponentPoolHelper,
 	GLuint a_uiVAO, GLuint a_uiVBO, GLuint a_uiIBO, const GLSLProgram* a_pShader)
 	: GameObject(a_pComponentPoolHelper, a_startPos)
 {
-	m_spriteComponentID = a_pComponentPoolHelper->m_spriteComponentPool->Create(glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), glm::vec2(5.0f, 15.0f), "laser.png", a_uiVAO, a_uiVBO, a_uiIBO, a_pShader);
+	m_spriteComponentID = a_pComponentPoolHelper->m_spriteComponentPool->Create(glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), 
+		&ResourceManager::getInstance().m_textures.GetResource(Levels::GAME_SCREEN, TextureResources::LASER),
+		a_uiVAO, a_uiVBO, a_uiIBO, a_pShader);
 	m_physicsComponentID = a_pComponentPoolHelper->m_physicsComponentPool->Create(1, 1);
 	m_colliderComponentID = a_pComponentPoolHelper->m_colliderComponentPool->Create(BULLET_COLLIDER, glm::vec2(5.0f, 15.0f));
 	if (m_spriteComponentID == 0 || m_physicsComponentID == 0 || m_colliderComponentID == 0) {
@@ -31,7 +34,9 @@ void BulletObject::Init(unsigned int a_uiID, ComponentPoolHelper *a_pComponentPo
 {
 	m_pComponentPoolHelper = a_pComponentPoolHelper;
 	m_uiID = a_uiID;
-	m_spriteComponentID = a_pComponentPoolHelper->m_spriteComponentPool->Create(glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), glm::vec2(5.0f, 15.0f), "laser.png", a_uiVAO, a_uiVBO, a_uiIBO, a_pShader);
+	m_spriteComponentID = a_pComponentPoolHelper->m_spriteComponentPool->Create(glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), 
+		&ResourceManager::getInstance().m_textures.GetResource(Levels::GAME_SCREEN, TextureResources::LASER),
+		a_uiVAO, a_uiVBO, a_uiIBO, a_pShader);
 	m_physicsComponentID = a_pComponentPoolHelper->m_physicsComponentPool->Create(1, 1);
 	m_colliderComponentID = a_pComponentPoolHelper->m_colliderComponentPool->Create(BULLET_COLLIDER, glm::vec2(5.0f, 15.0f));
 	if (m_spriteComponentID == 0 || m_physicsComponentID == 0 || m_colliderComponentID == 0) {

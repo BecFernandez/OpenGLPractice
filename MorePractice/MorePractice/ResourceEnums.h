@@ -17,12 +17,20 @@ enum class ShaderResources
 	NUM_SHADER_RESOURCES
 };
 
-enum FontResources
+enum class FontResources
 {
+	ARIAL_0,
 	NUM_FONT_RESOURCES
 };
 
-enum TextureResources
+enum class TextureResources
 {
+	SPACE_WARS,
+	ARIAL_0,
+	SHIP,
+	CYLON,
+	LASER,
+	EXPLOSION,
+	FIREWORKS,
 	NUM_TEXTURE_RESOURCES
 };
