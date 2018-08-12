@@ -14,7 +14,7 @@ void ResourceManager::LoadResources(Levels a_level)
 		std::string shaderPath = m_shaderLocations.GetFilePath(a_level, ShaderResources(i));
 		if (!shaderPath.empty())
 		{
-			m_shaders.AddResource(a_level, ShaderResources(i), LoadShader(shaderPath.c_str()));
+			m_shaders.AddResource(a_level, ShaderResources(i), new GLSLProgram(shaderPath.c_str()));
 		}
 	}
 
@@ -23,7 +23,7 @@ void ResourceManager::LoadResources(Levels a_level)
 		std::string texturePath = m_textureLocations.GetFilePath(a_level, TextureResources(i));
 		if (!texturePath.empty())
 		{
-			m_textures.AddResource(a_level, TextureResources(i), Texture(texturePath.c_str()));
+			m_textures.AddResource(a_level, TextureResources(i), new Texture(texturePath.c_str()));
 		}
 	}
 
@@ -40,29 +40,6 @@ void ResourceManager::LoadResources(Levels a_level)
 void ResourceManager::UnloadResources(Levels a_level)
 {
 	m_shaders.RemoveAllResourcesFromLevel(a_level);
-}
-
-GLSLProgram&& ResourceManager::LoadShader(std::string a_path)
-{
-	std::ifstream readMarker(a_path);
-
-	GLSLProgram shader;
-	char path[255];
-
-	while (readMarker.getline(path, 255)) {
-		switch (path[0])
-		{
-		case 'v':
-			shader.compileShaderFromFile(path + 2, GLSLShaderType::VERTEX);
-			break;
-		case 'f':
-			shader.compileShaderFromFile(path + 2, GLSLShaderType::FRAGMENT);
-			break;
-		default:
-			break;
-		}
-	}
-	shader.link();
-
-	return std::move(shader);
+	m_textures.RemoveAllResourcesFromLevel(a_level);
+	m_fonts.RemoveAllResourcesFromLevel(a_level);
 }

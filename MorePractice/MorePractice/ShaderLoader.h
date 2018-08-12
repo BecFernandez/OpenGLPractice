@@ -23,12 +23,13 @@ private:
 	bool m_bLinked;
 	int getUniformLocation(const char* name) const;
 	bool fileExists(const std::string & filename);
-
-public:
-	GLSLProgram();
 	bool compileShaderFromFile(const char* filename, GLSLShaderType type);
 	bool compileShaderFromString(const std::string & source, GLSLShaderType type);
 	bool link();
+
+public:
+	GLSLProgram();
+	GLSLProgram(const char* a_szProgramPath);
 	bool use() const;
 	int getHandle() const;
 	bool isLinked() const;

@@ -1,10 +1,34 @@
 #include "ShaderLoader.h"
+#include <fstream>
 
-GLSLProgram::GLSLProgram()
+GLSLProgram::GLSLProgram() : m_bLinked(false), m_iHandle(0)
 {
-	m_bLinked = false;
-	m_iHandle = 0;
+
 };
+
+
+GLSLProgram::GLSLProgram(const char * a_szProgramPath) : m_bLinked(false), m_iHandle(0)
+{
+	std::ifstream readMarker(a_szProgramPath);
+
+	char path[255];
+
+	while (readMarker.getline(path, 255)) {
+		switch (path[0])
+		{
+		case 'v':
+			compileShaderFromFile(path + 2, GLSLShaderType::VERTEX);
+			break;
+		case 'f':
+			compileShaderFromFile(path + 2, GLSLShaderType::FRAGMENT);
+			break;
+		default:
+			break;
+		}
+	}
+
+	link();
+}
 
 bool GLSLProgram::compileShaderFromFile(const char* filename, GLSLShaderType type)
 {
@@ -144,9 +168,9 @@ bool GLSLProgram::use() const
 	{
 		glUseProgram(m_iHandle); 
 		GLenum error;
-		while ((error = glGetError()) != GL_NO_ERROR) {
+		/*while ((error = glGetError()) != GL_NO_ERROR) {
 			std::cout << "Use program: " << " " << error << std::endl;
-		}
+		}*/
 		return true;
 	}
 	return false;

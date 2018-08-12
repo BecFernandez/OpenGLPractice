@@ -6,11 +6,9 @@
 #include "EnemyObject.h"
 
 
-GameScreen::GameScreen(const SoundSystemClass* const a_pSounds) : Screen(a_pSounds) 
+GameScreen::GameScreen(const SoundSystemClass* const a_pSounds) : Screen(a_pSounds, Levels::GAME_SCREEN)
 {
-	ResourceManager::getInstance().LoadResources(Levels::GAME_SCREEN);
-
-	m_pSpriteShader = &ResourceManager::getInstance().m_shaders.GetResource(Levels::GLOBAL, ShaderResources::DEFAULT_SPRITE);
+	m_pSpriteShader = ResourceManager::getInstance().m_shaders.GetResource(Levels::GLOBAL, ShaderResources::DEFAULT_SPRITE);
 	float i = 1;
 	m_componentPoolHelper.m_physicsComponentPool = new ObjectPool<PhysicsComponent>(14);
 	m_componentPoolHelper.m_spriteComponentPool = new ObjectPool<SpriteComponent>(14);
@@ -23,7 +21,7 @@ GameScreen::GameScreen(const SoundSystemClass* const a_pSounds) : Screen(a_pSoun
 	m_player = new PlayerObject(&m_componentPoolHelper, glm::vec3(400, 300, 0), m_pBulletManager);
 	m_player->AddComponent(ComponentTypes::PHYSICS, m_componentPoolHelper.m_physicsComponentPool->Create(1.0f));
 	m_player->AddComponent(ComponentTypes::SPRITE, m_componentPoolHelper.m_spriteComponentPool->Create(glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), 
-		&ResourceManager::getInstance().m_textures.GetResource(Levels::GAME_SCREEN, TextureResources::SHIP), 
+		ResourceManager::getInstance().m_textures.GetResource(Levels::GAME_SCREEN, TextureResources::SHIP), 
 		m_uiSpriteVAO, m_uiSpriteVBO, m_uiSpriteIBO, m_pSpriteShader));
 	m_player->AddComponent(ComponentTypes::HEALTH, m_componentPoolHelper.m_healthComponentPool->Create(100));
 	m_player->AddComponent(ComponentTypes::COLLIDER, m_componentPoolHelper.m_colliderComponentPool->Create(PLAYER_COLLIDER, glm::vec2(51.0f, 86.0f)));
@@ -34,7 +32,7 @@ GameScreen::GameScreen(const SoundSystemClass* const a_pSounds) : Screen(a_pSoun
 		m_gameObjects.push_back(new EnemyObject(&m_componentPoolHelper, glm::vec3(100 + (3-i)%3*250, 100 + i/2*400, 0), m_player, m_pBulletManager));
 		m_gameObjects[i + 1]->AddComponent(ComponentTypes::PHYSICS, m_componentPoolHelper.m_physicsComponentPool->Create(1.0f));
 		m_gameObjects[i + 1]->AddComponent(ComponentTypes::SPRITE, m_componentPoolHelper.m_spriteComponentPool->Create(glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), 
-			&ResourceManager::getInstance().m_textures.GetResource(Levels::GAME_SCREEN, TextureResources::CYLON), 
+			ResourceManager::getInstance().m_textures.GetResource(Levels::GAME_SCREEN, TextureResources::CYLON), 
 			m_uiSpriteVAO, m_uiSpriteVBO, m_uiSpriteIBO, m_pSpriteShader));
 		m_gameObjects[i + 1]->AddComponent(ComponentTypes::HEALTH, m_componentPoolHelper.m_healthComponentPool->Create(30));
 		m_gameObjects[i + 1]->AddComponent(ComponentTypes::COLLIDER, m_componentPoolHelper.m_colliderComponentPool->Create(ENEMY_COLLIDER, glm::vec2(51.0f, 86.0f)));

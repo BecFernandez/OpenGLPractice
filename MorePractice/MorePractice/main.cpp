@@ -167,8 +167,6 @@ int main()
 		//draw
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		currentScreen->Draw();
-
-		
 		
 		//update
 		Screen* next = currentScreen->Update(deltaTime);
@@ -185,6 +183,8 @@ int main()
 		lastTime = currentTime;
 
 	}
+
+	RemoveGlobalResources();
 
 	glfwDestroyWindow(window);
 	glfwTerminate();

@@ -7,7 +7,7 @@
 
 SpriteComponent::SpriteComponent(const glm::vec4 a_colour, Texture *a_pTexture,
 	GLuint a_uiVAO, GLuint a_uiVBO, GLuint a_uiIBO, const GLSLProgram* a_pShader) : Component(ComponentTypes::SPRITE),
-	m_uiVAO(a_uiVAO), m_uiVBO(a_uiVBO), m_uiIBO(a_uiIBO), m_pShader(a_pShader)
+	m_uiVAO(a_uiVAO), m_uiVBO(a_uiVBO), m_uiIBO(a_uiIBO), m_pShader(a_pShader), m_pTexture(a_pTexture)
 {
 	for (int i = 0; i < 4; i++)
 	{

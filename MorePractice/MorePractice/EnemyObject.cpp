@@ -33,8 +33,6 @@ void EnemyObject::Update(double a_dDeltaTime)
 				aimAngle += 2 * PI;
 			}
 
-			std::cout << aimAngle*180.0 / PI + 90 << std::endl;
-
 			if (aimAngle*180.0 / PI > m_fRotationAngle + 90)
 				physicsComponent->AddRotation(3);
 			else if (aimAngle*180.0 / PI < m_fRotationAngle + 90)

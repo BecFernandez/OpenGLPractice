@@ -7,9 +7,9 @@
 
 using namespace rapidxml;
 
-std::map<char, Character> LoadCharacters(const char* a_szXMLName)
+std::map<char, Character> *LoadCharacters(const char* a_szXMLName)
 {
-	std::map<char, Character> characters;
+	std::map<char, Character> *characters = new std::map<char, Character>();
 
 	std::ifstream ins(a_szXMLName);
 
@@ -47,7 +47,7 @@ std::map<char, Character> LoadCharacters(const char* a_szXMLName)
 		xml_attribute<char> *height = character->first_attribute("height");
 		c.m_iHeight = atoi(height->value());
 
-		characters.insert(std::pair<char, Character>(c.m_cValue, c));
+		characters->insert(std::pair<char, Character>(c.m_cValue, c));
 
 		character = character->next_sibling();
 	} while (character != nullptr);
@@ -66,7 +66,7 @@ FontComponent::~FontComponent()
 }
 
 void FontComponent::Init(unsigned int a_uiId, const glm::vec4 a_colour,
-	Texture *a_pTexture, std::map<char, Character> a_characters,
+	Texture *a_pTexture, std::map<char, Character> *a_characters,
 	GLuint a_uiVAO, GLuint a_uiVBO, GLuint a_uiIBO, const GLSLProgram* a_pShader)
 {
 	SpriteComponent::Init(a_uiId, a_colour, a_pTexture, a_uiVAO, a_uiVBO, a_uiIBO, a_pShader);
@@ -85,7 +85,7 @@ void FontComponent::Draw(const char * a_szToDraw, glm::vec3 a_position, glm::vec
 	while(*currentLetter != '\0')
 	{
 		
-		Character thisChar = m_characters[*currentLetter];
+		Character thisChar = (*m_characters)[*currentLetter];
 		//move the position of the sprite
 		m_pGameObject->m_position.x = centrePos.x + curX + thisChar.m_iWidth*0.5;
 		//update the width and height and align bottom of the letters

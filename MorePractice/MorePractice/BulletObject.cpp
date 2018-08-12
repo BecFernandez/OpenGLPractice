@@ -13,7 +13,7 @@ BulletObject::BulletObject(ComponentPoolHelper *a_pComponentPoolHelper,
 	: GameObject(a_pComponentPoolHelper, a_startPos)
 {
 	m_spriteComponentID = a_pComponentPoolHelper->m_spriteComponentPool->Create(glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), 
-		&ResourceManager::getInstance().m_textures.GetResource(Levels::GAME_SCREEN, TextureResources::LASER),
+		ResourceManager::getInstance().m_textures.GetResource(Levels::GAME_SCREEN, TextureResources::LASER),
 		a_uiVAO, a_uiVBO, a_uiIBO, a_pShader);
 	m_physicsComponentID = a_pComponentPoolHelper->m_physicsComponentPool->Create(1, 1);
 	m_colliderComponentID = a_pComponentPoolHelper->m_colliderComponentPool->Create(BULLET_COLLIDER, glm::vec2(5.0f, 15.0f));
@@ -35,7 +35,7 @@ void BulletObject::Init(unsigned int a_uiID, ComponentPoolHelper *a_pComponentPo
 	m_pComponentPoolHelper = a_pComponentPoolHelper;
 	m_uiID = a_uiID;
 	m_spriteComponentID = a_pComponentPoolHelper->m_spriteComponentPool->Create(glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), 
-		&ResourceManager::getInstance().m_textures.GetResource(Levels::GAME_SCREEN, TextureResources::LASER),
+		ResourceManager::getInstance().m_textures.GetResource(Levels::GAME_SCREEN, TextureResources::LASER),
 		a_uiVAO, a_uiVBO, a_uiIBO, a_pShader);
 	m_physicsComponentID = a_pComponentPoolHelper->m_physicsComponentPool->Create(1, 1);
 	m_colliderComponentID = a_pComponentPoolHelper->m_colliderComponentPool->Create(BULLET_COLLIDER, glm::vec2(5.0f, 15.0f));

@@ -2,6 +2,7 @@
 #include <gtc\matrix_transform.hpp>
 #include "Vertex.h"
 #include "GameObject.h"
+#include "ResourceManager.h"
 
 void checkGLError(const char* customMessage)
 {
@@ -16,7 +17,7 @@ Screen::Screen() : m_pSounds(nullptr), m_pSpriteShader(nullptr)
 
 }
 
-Screen::Screen(const SoundSystemClass* const a_pSounds) : m_pSounds(a_pSounds), m_pSpriteShader(nullptr)
+Screen::Screen(const SoundSystemClass* const a_pSounds, Levels level) : m_pSounds(a_pSounds), m_pSpriteShader(nullptr), m_level(level)
 {
 	glGenVertexArrays(1, &m_uiSpriteVAO);
 	glBindVertexArray(m_uiSpriteVAO);
@@ -34,11 +35,13 @@ Screen::Screen(const SoundSystemClass* const a_pSounds) : m_pSounds(a_pSounds), 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
 	m_projectionMatrix = glm::ortho(0.0f, 800.0f, 0.0f, 600.0f);
+
+	ResourceManager::getInstance().LoadResources(m_level);
 }
 
 Screen::~Screen()
 {
-
+	ResourceManager::getInstance().UnloadResources(m_level);
 }
 
 Screen* Screen::Update(const double a_dDeltaTime)
